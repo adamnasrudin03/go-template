@@ -5,6 +5,10 @@ type LoginReq struct {
 	Password string `json:"password" validate:"required,min=4"`
 }
 
+func (req *LoginReq) Validate() error {
+	return nil
+}
+
 type LoginRes struct {
 	Token string `json:"token"`
 }

@@ -6,7 +6,6 @@ import (
 
 	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
-	"github.com/golang-jwt/jwt"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -16,8 +15,7 @@ func (c *userDelivery) Register(ctx *gin.Context) {
 	var (
 		input payload.RegisterReq
 	)
-	userData := ctx.MustGet("userData").(jwt.MapClaims)
-	userID := uint(userData["id"].(float64))
+	userID := ctx.MustGet("id").(uint64)
 	validate := validator.New()
 	err := ctx.ShouldBindJSON(&input)
 	if err != nil {
@@ -34,7 +32,7 @@ func (c *userDelivery) Register(ctx *gin.Context) {
 	}
 
 	input.Email = strings.TrimSpace(input.Email)
-	input.CreatedBy = uint64(userID)
+	input.CreatedBy = userID
 	res, err := c.Service.Register(ctx, input)
 	if err != nil {
 		helpers.RenderJSON(ctx.Writer, http.StatusInternalServerError, err)

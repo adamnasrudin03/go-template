@@ -2,7 +2,6 @@ package driver
 
 import (
 	"fmt"
-	"log"
 	"sync"
 	"time"
 
@@ -27,11 +26,6 @@ func Redis(config *configs.Configs) RedisClient {
 			PoolTimeout:  time.Duration(config.Redis.PoolTimeout) * time.Second,
 			MinIdleConns: config.Redis.MinIdleConn,
 		})
-
-		_, err := redisConn.Ping().Result()
-		if err != nil {
-			log.Fatal(err)
-		}
 
 		redisClient = NewRedis(redisConn)
 	})

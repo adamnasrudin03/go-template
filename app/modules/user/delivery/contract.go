@@ -10,6 +10,7 @@ type UserDelivery interface {
 	RegisterUser(ctx *gin.Context)
 	Register(ctx *gin.Context)
 	Login(ctx *gin.Context)
+	GetDetail(ctx *gin.Context)
 }
 
 type userDelivery struct {

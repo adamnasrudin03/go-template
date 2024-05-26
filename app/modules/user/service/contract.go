@@ -10,8 +10,9 @@ import (
 )
 
 type UserService interface {
-	Register(ctx *gin.Context, input payload.RegisterReq) (res models.User, err error)
-	Login(ctx *gin.Context, input payload.LoginReq) (res payload.LoginRes, err error)
+	Register(ctx *gin.Context, input payload.RegisterReq) (res *models.User, err error)
+	Login(ctx *gin.Context, input payload.LoginReq) (res *payload.LoginRes, err error)
+	GetDetail(ctx *gin.Context, input models.User) (res *models.User, err error)
 }
 
 type userService struct {

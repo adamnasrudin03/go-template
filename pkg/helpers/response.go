@@ -50,6 +50,8 @@ func FormatValidationError(err error) string {
 			errors = fmt.Sprintf("%v, ", strings.TrimSpace(errors))
 		}
 
+		b, _ := PrettyStruct(e)
+		fmt.Println("ValidationErrors: ", b)
 		if e.Tag() == "email" {
 			errors = errors + fmt.Sprintf("%v must be type %v", e.Field(), e.Tag())
 		} else {

@@ -3,7 +3,6 @@ package router
 import (
 	"net/http"
 
-	"github.com/adamnasrudin03/go-template/app/middlewares"
 	"github.com/adamnasrudin03/go-template/app/registry"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 
@@ -33,9 +32,10 @@ func NewRoutes(h registry.Deliveries) routes {
 	r.userRouter(v1, h.User)
 	r.userRouterAuth(v1, h.User)
 
-	staticFileRoutes := r.router.Group("/file")
-	staticFileRoutes.Use(middlewares.Authentication())
-	staticFileRoutes.StaticFS("/", http.Dir("public"))
+	// // Static file source
+	// staticFileRoutes := r.router.Group("/file")
+	// staticFileRoutes.Use(middlewares.Authentication())
+	// staticFileRoutes.StaticFS("/", http.Dir("public"))
 
 	r.router.NoRoute(func(c *gin.Context) {
 		err = helpers.ErrRouteNotFound()

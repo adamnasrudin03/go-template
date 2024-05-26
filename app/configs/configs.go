@@ -11,10 +11,11 @@ import (
 )
 
 type AppConfig struct {
-	Name      string
-	Env       string
-	Port      string
-	SecretKey string
+	Name         string
+	Env          string
+	Port         string
+	ExpiredToken int
+	SecretKey    string
 }
 
 type DbConfig struct {

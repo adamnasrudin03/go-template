@@ -20,6 +20,7 @@ func (r routes) userRouterAuth(rg *gin.RouterGroup, userDelivery delivery.UserDe
 	users := rg.Group("/auth-admin")
 	{
 		users.Use(middlewares.Authentication())
+		users.GET("/detail", middlewares.AuthorizationMustBe([]string{models.ALL}), userDelivery.GetDetail)
 		users.POST("/sign-up", middlewares.AuthorizationMustBe([]string{models.ROOT}), userDelivery.Register)
 	}
 }

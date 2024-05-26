@@ -12,7 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (srv *userService) Register(ctx *gin.Context, input payload.RegisterReq) (res models.User, err error) {
+func (srv *userService) Register(ctx *gin.Context, input payload.RegisterReq) (res *models.User, err error) {
 	const opName = "UserService-Register"
 	user := models.User{
 		Name:     input.Name,
@@ -25,8 +25,8 @@ func (srv *userService) Register(ctx *gin.Context, input payload.RegisterReq) (r
 		},
 	}
 
-	checkUser, _ := srv.userRepository.GetByEmail(ctx, user.Email)
-	if checkUser.Email != "" {
+	checkUser, _ := srv.userRepository.GetDetail(ctx, models.User{Email: user.Email})
+	if checkUser != nil && checkUser.Email != "" {
 		err = errors.New("email user has be registered")
 		log.Printf("%v error check email: %v \n", opName, err)
 		return res, helpers.NewError(helpers.ErrConflict, helpers.NewResponseMultiLang(
@@ -38,9 +38,9 @@ func (srv *userService) Register(ctx *gin.Context, input payload.RegisterReq) (r
 	}
 
 	res, err = srv.userRepository.Register(ctx, user)
-	if err != nil {
+	if err != nil || res == nil {
 		log.Printf("%v error create data: %+v \n", opName, err)
-		return res, err
+		return res, helpers.ErrDB()
 	}
 
 	res.Password = ""

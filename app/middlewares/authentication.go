@@ -10,7 +10,6 @@ import (
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 
 	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v5"
 	"gorm.io/gorm"
 )
 
@@ -40,9 +39,8 @@ func AuthorizationMustBe(role []string) gin.HandlerFunc {
 
 	return func(c *gin.Context) {
 		db := database.GetDB()
-		userData := c.MustGet("userData").(jwt.MapClaims)
-		userID := uint(userData["id"].(float64))
-		userEmail := userData["email"].(string)
+		userID := c.MustGet("id").(uint64)
+		userEmail := c.MustGet("email").(string)
 		user := models.User{}
 
 		err := db.Select("id", "role").Where("id = ? AND email = ?", userID, userEmail).First(&user).Error

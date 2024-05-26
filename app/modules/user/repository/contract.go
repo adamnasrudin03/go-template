@@ -9,9 +9,9 @@ import (
 )
 
 type UserRepository interface {
-	Register(ctx *gin.Context, input models.User) (res models.User, err error)
-	Login(ctx *gin.Context, input payload.LoginReq) (res models.User, er error)
-	GetByEmail(ctx *gin.Context, email string) (res models.User, err error)
+	Register(ctx *gin.Context, input models.User) (res *models.User, err error)
+	Login(ctx *gin.Context, input payload.LoginReq) (res *models.User, er error)
+	GetDetail(ctx *gin.Context, input models.User) (res *models.User, err error)
 }
 
 type userRepo struct {

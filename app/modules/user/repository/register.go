@@ -8,12 +8,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (r *userRepo) Register(ctx *gin.Context, input models.User) (res models.User, err error) {
+func (r *userRepo) Register(ctx *gin.Context, input models.User) (res *models.User, err error) {
 	const opName = "UserRepository-Register"
-	if err := r.DB.Create(&input).Error; err != nil {
+	err = r.DB.WithContext(ctx).Create(&input).Error
+	if err != nil {
 		log.Printf("%v error register new user: %v \n", opName, err)
-		return input, err
+		return nil, err
 	}
 
-	return input, nil
+	return &input, nil
 }
