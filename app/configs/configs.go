@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 	"sync"
 
 	"github.com/joho/godotenv"
@@ -89,9 +90,9 @@ func GetInstance() *Configs {
 
 func getEnv(key, fallback string) string {
 	if value, ok := os.LookupEnv(key); ok {
-		return value
+		return strings.TrimSpace(value)
 	}
-	return fallback
+	return strings.TrimSpace(fallback)
 }
 
 func BackEndUrl() string {
