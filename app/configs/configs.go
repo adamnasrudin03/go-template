@@ -58,10 +58,11 @@ func GetInstance() *Configs {
 
 		configs = &Configs{
 			App: AppConfig{
-				Name:      getEnv("APP_NAME", "movie-festival"),
-				Env:       getEnv("APP_ENV", "dev"),
-				Port:      getEnv("APP_PORT", "8000"),
-				SecretKey: getEnv("JWT_SECRET", "MySecretKey"),
+				Name:         getEnv("APP_NAME", "movie-festival"),
+				Env:          getEnv("APP_ENV", "dev"),
+				Port:         getEnv("APP_PORT", "8000"),
+				SecretKey:    getEnv("JWT_SECRET", "MySecretKey"),
+				ExpiredToken: GetExpiredToken(),
 			},
 			DB: DbConfig{
 				Host:        getEnv("DB_HOST", "localhost"),
@@ -111,6 +112,15 @@ func BackEndUrl() string {
 
 func ServiceName() string {
 	return os.Getenv("SERVICE_NAME")
+}
+
+func GetExpiredToken() int {
+	intVar, err := strconv.Atoi(getEnv("EXPIRED_TOKEN", "7"))
+	if err != nil {
+		return 1
+	}
+
+	return intVar
 }
 
 func GetRedisPort() int {

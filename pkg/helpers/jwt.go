@@ -1,7 +1,6 @@
 package helpers
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	"strings"
@@ -54,70 +53,6 @@ func GenerateToken(params JWTClaims) (string, error) {
 	return tokenString, nil
 }
 
-func VerifyToken(ctx *gin.Context) (interface{}, error) {
-	configs := configs.GetInstance()
-
-	tokenString, err := ExtractToken(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	token, err := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) {
-		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
-			err = NewError(ErrUnauthorized, NewResponseMultiLang(
-				MultiLanguages{
-					ID: "Gagal melakukan sign token",
-					EN: "Failed to get sign token",
-				},
-			))
-
-			return nil, err
-		}
-
-		return []byte(configs.App.SecretKey), nil
-	})
-	if err != nil {
-		err = NewError(ErrUnauthorized, NewResponseMultiLang(
-			MultiLanguages{
-				ID: "Token tidak valid",
-				EN: "Invalid token",
-			},
-		))
-		return nil, err
-	}
-
-	claims, ok := token.Claims.(*JWTClaims)
-	if !ok {
-		err = NewError(ErrUnauthorized, NewResponseMultiLang(
-			MultiLanguages{
-				ID: "Gagal melakukan parse claims",
-				EN: "Failed to parse claims",
-			},
-		))
-		return nil, err
-	}
-	if ok && token.Valid {
-		ctx.Set("id", claims.ID)
-		ctx.Set("name", claims.Name)
-		ctx.Set("email", claims.Email)
-		ctx.Set("role", claims.Role)
-		ctx.Set("expired_at", claims.ExpiresAt)
-	} else if ve, ok := err.(*jwt.ValidationError); ok {
-		var errorStr string
-		if ve.Errors&jwt.ValidationErrorMalformed != 0 {
-			errorStr = fmt.Sprintf("Invalid token format: %s", tokenString)
-		} else if ve.Errors&(jwt.ValidationErrorExpired|jwt.ValidationErrorNotValidYet) != 0 {
-			errorStr = "Token has been expired"
-		} else {
-			errorStr = fmt.Sprintf("Token Parsing Error: %s", err.Error())
-		}
-		return nil, errors.New(errorStr)
-	} else {
-		return nil, errors.New("unknown token error")
-	}
-
-	return token.Claims.(*JWTClaims), nil
-}
 func ExtractToken(ctx *gin.Context) (tokenString string, err error) {
 	headerToken := ctx.Request.Header.Get("Authorization")
 	bearer := strings.HasPrefix(headerToken, "Bearer")
@@ -133,4 +68,96 @@ func ExtractToken(ctx *gin.Context) (tokenString string, err error) {
 	}
 
 	return headerToken[7:], nil
+}
+
+func VerifyToken(ctx *gin.Context) (interface{}, error) {
+	configs := configs.GetInstance()
+
+	tokenString, err := ExtractToken(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	token, err := jwt.ParseWithClaims(tokenString, &JWTClaims{}, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			log.Printf("failed unexpected signing method : %v \n", err)
+			err = NewError(ErrUnauthorized, NewResponseMultiLang(
+				MultiLanguages{
+					ID: fmt.Sprintf("metode penandatanganan yang tidak terduga: %v", token.Header["alg"]),
+					EN: fmt.Sprintf("unexpected signing method: %v", token.Header["alg"]),
+				},
+			))
+			return nil, err
+		}
+		return []byte(configs.App.SecretKey), nil
+	})
+
+	claims, ok := token.Claims.(*JWTClaims)
+	if !ok {
+		err = NewError(ErrUnauthorized, NewResponseMultiLang(
+			MultiLanguages{
+				ID: "Gagal melakukan parse claims",
+				EN: "Failed to parse claims",
+			},
+		))
+		return nil, err
+	}
+
+	if ok && token.Valid {
+		ctx.Set("id", claims.ID)
+		ctx.Set("name", claims.Name)
+		ctx.Set("email", claims.Email)
+		ctx.Set("role", claims.Role)
+		ctx.Set("expired_at", claims.ExpiresAt)
+
+		return token.Claims.(*JWTClaims), nil
+	}
+
+	if _, ok := err.(*jwt.ValidationError); ok {
+		errCustom := extractErrorJwtValidation(err, tokenString)
+		if errCustom != nil {
+			return nil, errCustom
+		}
+	}
+	return nil, err
+
+}
+
+func extractErrorJwtValidation(err error, tokenString string) error {
+	if ve, ok := err.(*jwt.ValidationError); ok {
+		var errorCustom error
+		errorCustom = NewError(ErrUnauthorized, NewResponseMultiLang(
+			MultiLanguages{
+				ID: fmt.Sprintf("Gagal melakukan parsing token, Error: %s", err.Error()),
+				EN: fmt.Sprintf("Failed to parse token, Error: %s", err.Error()),
+			},
+		))
+		if ve.Errors&jwt.ValidationErrorMalformed != 0 {
+			errorCustom = NewError(ErrUnauthorized, NewResponseMultiLang(
+				MultiLanguages{
+					ID: fmt.Sprintf("Token format: %s tidak valid", tokenString),
+					EN: fmt.Sprintf("Invalid token format: %s", tokenString),
+				},
+			))
+		} else if ve.Errors&(jwt.ValidationErrorExpired|jwt.ValidationErrorNotValidYet) != 0 {
+			errorCustom = NewError(ErrUnauthorized, NewResponseMultiLang(
+				MultiLanguages{
+					ID: "Token telah kadaluarsa",
+					EN: "Token has been expired",
+				},
+			))
+		}
+
+		return errorCustom
+	}
+
+	log.Printf("unknown token error : %v \n", err)
+	err = NewError(ErrUnauthorized, NewResponseMultiLang(
+		MultiLanguages{
+			ID: "Token tidak valid",
+			EN: "Invalid token",
+		},
+	))
+	return err
+
 }

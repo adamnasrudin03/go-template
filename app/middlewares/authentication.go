@@ -17,7 +17,7 @@ func Authentication() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		claims, err := helpers.VerifyToken(c)
 		if err != nil {
-			c.JSON(http.StatusUnauthorized, helpers.APIResponse(err.Error(), http.StatusUnauthorized, nil))
+			helpers.RenderJSON(c.Writer, http.StatusUnauthorized, err)
 			c.Abort()
 			return
 		}
@@ -45,19 +45,37 @@ func AuthorizationMustBe(role []string) gin.HandlerFunc {
 
 		err := db.Select("id", "role").Where("id = ? AND email = ?", userID, userEmail).First(&user).Error
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			c.JSON(http.StatusUnauthorized, helpers.APIResponse("Log in again with registered user", http.StatusUnauthorized, nil))
+			err = helpers.NewError(helpers.ErrUnauthorized, helpers.NewResponseMultiLang(
+				helpers.MultiLanguages{
+					ID: "Masuk kembali dengan user terdaftar",
+					EN: "Log in again with registered user",
+				},
+			))
+			helpers.RenderJSON(c.Writer, http.StatusUnauthorized, err)
 			c.Abort()
 			return
 		}
 
 		if err != nil {
-			c.JSON(http.StatusUnauthorized, helpers.APIResponse("Failed to check user log in", http.StatusUnauthorized, nil))
+			err = helpers.NewError(helpers.ErrUnauthorized, helpers.NewResponseMultiLang(
+				helpers.MultiLanguages{
+					ID: "Gagal mengecek user log in",
+					EN: "Failed to check user log in",
+				},
+			))
+			helpers.RenderJSON(c.Writer, http.StatusUnauthorized, err)
 			c.Abort()
 			return
 		}
 
 		if !isAllRole && !isRoleValid[user.Role] {
-			c.JSON(http.StatusForbidden, helpers.APIResponse("You are not allowed to access this resources", http.StatusForbidden, nil))
+			err = helpers.NewError(helpers.ErrForbidden, helpers.NewResponseMultiLang(
+				helpers.MultiLanguages{
+					ID: "Anda tidak diizinkan untuk mengakses sumber daya ini",
+					EN: "You are not allowed to access this resources",
+				},
+			))
+			helpers.RenderJSON(c.Writer, http.StatusForbidden, err)
 			c.Abort()
 			return
 		}
