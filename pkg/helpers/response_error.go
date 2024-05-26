@@ -1,0 +1,62 @@
+package helpers
+
+import "net/http"
+
+type ResponseError struct {
+	Status  string         `json:"status"`
+	Code    int            `json:"code"`
+	Err     error          `json:"-"`
+	Message MultiLanguages `json:"message"`
+}
+
+func NewError(code TypeError, err error) *ResponseError {
+
+	var respErr MultiLanguages
+	if errValue, isMatch := err.(*MultiLanguages); isMatch {
+		if errValue != nil {
+			respErr = *errValue
+		} else {
+			respErr = MultiLanguages{
+				ID: err.Error(),
+				EN: err.Error(),
+			}
+		}
+	} else {
+		respErr = MultiLanguages{
+			ID: err.Error(),
+			EN: err.Error(),
+		}
+	}
+	return &ResponseError{
+		Status:  StatusMapping(int(code)),
+		Code:    int(code),
+		Err:     err,
+		Message: respErr,
+	}
+}
+
+func (e *ResponseError) Error() string {
+	return e.Err.Error()
+}
+
+func StatusErrorMapping(code int) int {
+	statusCode := code
+	switch statusCode {
+	case int(ErrForbidden):
+		statusCode = http.StatusForbidden
+	case int(ErrUnauthorized):
+		statusCode = http.StatusUnauthorized
+	case int(ErrDatabase), int(ErrFromUseCase):
+		statusCode = http.StatusUnprocessableEntity
+	case int(ErrConflict):
+		statusCode = http.StatusConflict
+	case int(ErrValidation):
+		statusCode = http.StatusBadRequest
+	case int(ErrNoFound):
+		statusCode = http.StatusNotFound
+	default:
+		statusCode = http.StatusInternalServerError
+	}
+
+	return statusCode
+}
