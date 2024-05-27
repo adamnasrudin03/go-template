@@ -2,6 +2,7 @@ package helpers
 
 import (
 	"encoding/json"
+	"net/mail"
 	"strings"
 )
 
@@ -28,4 +29,11 @@ func CheckStringValueToPointer(data string) *string {
 		return nil
 	}
 	return &data
+}
+
+// Round float generator
+// example here: https://go.dev/play/p/j4B4v01Qolw
+func IsValidEmail(email string) bool {
+	_, err := mail.ParseAddress(email)
+	return err == nil
 }
