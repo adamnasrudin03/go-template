@@ -30,6 +30,9 @@ func Authentication() gin.HandlerFunc {
 func AuthorizationMustBe(role []string) gin.HandlerFunc {
 	isRoleValid := map[string]bool{}
 	isAllRole := false
+	if len(role) == 0 {
+		isAllRole = true
+	}
 	for _, v := range role {
 		isRoleValid[strings.TrimSpace(v)] = true
 		if v == models.ALL {

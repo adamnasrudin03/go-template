@@ -9,18 +9,22 @@ import (
 )
 
 func (r routes) userRouter(rg *gin.RouterGroup, userDelivery delivery.UserDelivery) {
-	users := rg.Group("/auth")
+	auth := rg.Group("/auth")
 	{
-		users.POST("/sign-up", userDelivery.RegisterUser)
-		users.POST("/sign-in", userDelivery.Login)
+		auth.POST("/sign-up", userDelivery.RegisterUser) // Only register role user
+		auth.POST("/sign-in", userDelivery.Login)
+	}
+
+	users := rg.Group("/users")
+	{
+		users.Use(middlewares.Authentication())
+		users.GET("/detail", middlewares.AuthorizationMustBe([]string{}), userDelivery.GetDetail)
 	}
 }
 
-func (r routes) userRouterAuth(rg *gin.RouterGroup, userDelivery delivery.UserDelivery) {
-	users := rg.Group("/auth-admin")
+func (r routes) userRootRouter(rg *gin.RouterGroup, userDelivery delivery.UserDelivery) {
+	auth := rg.Group("/root/auth")
 	{
-		users.Use(middlewares.Authentication())
-		users.GET("/detail", middlewares.AuthorizationMustBe([]string{models.ALL}), userDelivery.GetDetail)
-		users.POST("/sign-up", middlewares.AuthorizationMustBe([]string{models.ROOT}), userDelivery.Register)
+		auth.POST("/sign-up", middlewares.AuthorizationMustBe([]string{models.ROOT}), userDelivery.Register) // register role Admin or User
 	}
 }
