@@ -1,16 +1,16 @@
 package repository
 
 import (
+	"context"
 	"errors"
 	"log"
 
 	"github.com/adamnasrudin03/go-template/app/models"
+	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
 	"gorm.io/gorm"
-
-	"github.com/gin-gonic/gin"
 )
 
-func (r *userRepo) GetDetail(ctx *gin.Context, input models.User) (res *models.User, err error) {
+func (r *userRepo) GetDetail(ctx context.Context, input payload.DetailReq) (res *models.User, err error) {
 	const opName = "UserRepository-GetDetail"
 
 	db := r.DB
@@ -22,6 +22,9 @@ func (r *userRepo) GetDetail(ctx *gin.Context, input models.User) (res *models.U
 	}
 	if input.Name != "" {
 		db = db.Where("name = ?", input.Name)
+	}
+	if input.Role != "" {
+		db = db.Where("role = ?", input.Role)
 	}
 
 	if err = db.WithContext(ctx).First(&res).Error; err != nil {

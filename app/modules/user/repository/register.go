@@ -1,14 +1,13 @@
 package repository
 
 import (
+	"context"
 	"log"
 
 	"github.com/adamnasrudin03/go-template/app/models"
-
-	"github.com/gin-gonic/gin"
 )
 
-func (r *userRepo) Register(ctx *gin.Context, input models.User) (res *models.User, err error) {
+func (r *userRepo) Register(ctx context.Context, input models.User) (res *models.User, err error) {
 	const opName = "UserRepository-Register"
 	err = r.DB.WithContext(ctx).Create(&input).Error
 	if err != nil {

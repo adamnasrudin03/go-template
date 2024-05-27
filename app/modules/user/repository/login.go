@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"context"
 	"errors"
 	"log"
 
@@ -8,11 +9,9 @@ import (
 	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 	"gorm.io/gorm"
-
-	"github.com/gin-gonic/gin"
 )
 
-func (r *userRepo) Login(ctx *gin.Context, input payload.LoginReq) (res *models.User, err error) {
+func (r *userRepo) Login(ctx context.Context, input payload.LoginReq) (res *models.User, err error) {
 	const opName = "UserRepository-Login"
 	err = r.DB.Where("email = ?", input.Email).WithContext(ctx).First(&res).Error
 	if err != nil {

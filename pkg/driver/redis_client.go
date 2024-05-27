@@ -14,7 +14,7 @@ type RedisClient interface {
 	HDel(key, field string) error
 	Del(key string) error
 	Set(key string, value interface{}, expDur time.Duration) error
-	Get(key string) ([]byte, error)
+	Get(key string) (string, error)
 	SetNX(key string, value string, duration time.Duration) (bool, error)
 	Keys(key string) ([]string, error)
 }

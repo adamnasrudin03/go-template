@@ -10,9 +10,9 @@ import (
 	"gorm.io/gorm"
 )
 
-func WiringRepository(db *gorm.DB) *registry.Repositories {
+func WiringRepository(db *gorm.DB, cache *driver.RedisClient) *registry.Repositories {
 	return &registry.Repositories{
-		User: userRepo.NewUserRepository(db),
+		User: userRepo.NewUserRepository(db, *cache),
 	}
 }
 

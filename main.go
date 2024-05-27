@@ -16,7 +16,7 @@ var (
 	config               = configs.GetInstance()
 	cache                = driver.Redis(config)
 	db          *gorm.DB = database.SetupDbConnection()
-	repo                 = app.WiringRepository(db)
+	repo                 = app.WiringRepository(db, &cache)
 	services             = app.WiringService(repo, &cache)
 	controllers          = app.WiringDelivery(services)
 )

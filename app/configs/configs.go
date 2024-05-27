@@ -29,14 +29,15 @@ type DbConfig struct {
 }
 
 type RedisConfig struct {
-	Host        string `json:"host"`
-	Port        int    `json:"port"`
-	Password    string `json:"password"`
-	Database    int    `json:"database"`
-	Master      string `json:"master"`
-	PoolSize    int    `json:"pool_size"`
-	PoolTimeout int    `json:"pool_timeout"`
-	MinIdleConn int    `json:"min_idle_conn"`
+	Host                string `json:"host"`
+	Port                int    `json:"port"`
+	Password            string `json:"password"`
+	Database            int    `json:"database"`
+	Master              string `json:"master"`
+	PoolSize            int    `json:"pool_size"`
+	PoolTimeout         int    `json:"pool_timeout"`
+	MinIdleConn         int    `json:"min_idle_conn"`
+	DefaultCacheTimeOut int    `json:"default_cache_time_out"`
 }
 
 type Configs struct {
@@ -74,14 +75,15 @@ func GetInstance() *Configs {
 				DebugMode:   getEnv("DEBUG_MODE", "true") == "true",
 			},
 			Redis: RedisConfig{
-				Host:        getEnv("REDIS_HOST", "localhost"),
-				Port:        GetRedisPort(),
-				Password:    getEnv("REDIS_HOST", "localhost"),
-				Database:    GetRedisDatabase(),
-				Master:      getEnv("REDIS_MASTER", "master"),
-				PoolSize:    GetRedisPoolSize(),
-				PoolTimeout: GetRedisPoolTimeout(),
-				MinIdleConn: GetRedisMinIdleConn(),
+				Host:                getEnv("REDIS_HOST", "localhost"),
+				Port:                GetRedisPort(),
+				Password:            getEnv("REDIS_PASSWORD", ""),
+				Database:            GetRedisDatabase(),
+				Master:              getEnv("REDIS_MASTER", "master"),
+				PoolSize:            GetRedisPoolSize(),
+				PoolTimeout:         GetRedisPoolTimeout(),
+				MinIdleConn:         GetRedisMinIdleConn(),
+				DefaultCacheTimeOut: GetRedisDefaultCacheTimeOut(),
 			},
 		}
 		lock.Unlock()
@@ -162,6 +164,14 @@ func GetRedisMinIdleConn() int {
 	intVar, err := strconv.Atoi(getEnv("REDIS_MIN_IDLE_CONN", "4"))
 	if err != nil {
 		return 4
+	}
+
+	return intVar
+}
+func GetRedisDefaultCacheTimeOut() int {
+	intVar, err := strconv.Atoi(getEnv("CACHE_DEFAULT_TIMEOUT", "5"))
+	if err != nil {
+		return 5
 	}
 
 	return intVar

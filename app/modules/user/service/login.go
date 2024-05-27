@@ -1,15 +1,14 @@
 package service
 
 import (
+	"context"
 	"log"
 
 	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
-
-	"github.com/gin-gonic/gin"
 )
 
-func (srv *userService) Login(ctx *gin.Context, input payload.LoginReq) (res *payload.LoginRes, err error) {
+func (srv *userService) Login(ctx context.Context, input payload.LoginReq) (res *payload.LoginRes, err error) {
 	const opName = "UserService-Login"
 
 	user, err := srv.userRepository.Login(ctx, input)

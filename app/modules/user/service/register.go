@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"errors"
 	"log"
 	"strings"
@@ -8,24 +9,24 @@ import (
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
-
-	"github.com/gin-gonic/gin"
 )
 
-func (srv *userService) Register(ctx *gin.Context, input payload.RegisterReq) (res *models.User, err error) {
+func (srv *userService) Register(ctx context.Context, input payload.RegisterReq) (res *models.User, err error) {
 	const opName = "UserService-Register"
-	user := models.User{
-		Name:     input.Name,
-		Password: input.Password,
-		Email:    input.Email,
-		Role:     input.Role,
-		DefaultModel: models.DefaultModel{
-			CreatedBy: input.CreatedBy,
-			UpdatedBy: input.CreatedBy,
-		},
-	}
+	var (
+		user = models.User{
+			Name:     input.Name,
+			Password: input.Password,
+			Email:    input.Email,
+			Role:     input.Role,
+			DefaultModel: models.DefaultModel{
+				CreatedBy: input.CreatedBy,
+				UpdatedBy: input.CreatedBy,
+			},
+		}
+	)
 
-	checkUser, _ := srv.userRepository.GetDetail(ctx, models.User{Email: user.Email})
+	checkUser, _ := srv.userRepository.GetDetail(ctx, payload.DetailReq{Email: user.Email})
 	if checkUser != nil && checkUser.Email != "" {
 		err = errors.New("email user has be registered")
 		log.Printf("%v error check email: %v \n", opName, err)
