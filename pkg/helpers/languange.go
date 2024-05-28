@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+
+	"golang.org/x/text/language"
 )
 
 const (
@@ -15,9 +17,25 @@ const (
 )
 
 // javascript "encodeURI()"
-// so we embed js to our golang programm
+// so we embed js to our golang program
 func EncodeURI(s string) string {
 	return url.QueryEscape(s)
+}
+
+func defaultSourceLang(s string) string {
+	s = strings.TrimSpace(s)
+	if s == "" {
+		return Auto
+	}
+	return s
+}
+
+func defaultTargetLang(s string) string {
+	s = strings.TrimSpace(s)
+	if s == "" {
+		return language.Indonesian.String()
+	}
+	return s
 }
 
 func Translate(source, sourceLang, targetLang string) (string, error) {
@@ -28,7 +46,7 @@ func Translate(source, sourceLang, targetLang string) (string, error) {
 
 	encodedSource := url.QueryEscape(source)
 	url := fmt.Sprintf("https://translate.googleapis.com/translate_a/single?client=gtx&sl=%s&tl=%s&dt=t&q=%s",
-		sourceLang, targetLang, encodedSource)
+		defaultSourceLang(sourceLang), defaultTargetLang(targetLang), encodedSource)
 
 	resp, err := http.Get(url)
 	if err != nil {
