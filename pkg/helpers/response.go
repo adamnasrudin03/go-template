@@ -36,15 +36,6 @@ func StatusMapping(statusCode int) string {
 	return status
 }
 
-// APIResponse is for generating template responses
-func APIResponse(message string, statusCode int, data interface{}) ResponseDefault {
-	return ResponseDefault{
-		Status:  StatusMapping(statusCode),
-		Message: message,
-		Data:    data,
-	}
-}
-
 // FormatValidationError func which holds errors during user input validation
 func FormatValidationError(err error) error {
 	var (

@@ -25,7 +25,7 @@ func NewRoutes(h registry.Deliveries) routes {
 	r.router.Use(cors.Default())
 
 	r.router.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, helpers.APIResponse("welcome its server", http.StatusOK, nil))
+		helpers.RenderJSON(c.Writer, http.StatusOK, "welcome this server")
 	})
 
 	v1 := r.router.Group("/api/v1")
