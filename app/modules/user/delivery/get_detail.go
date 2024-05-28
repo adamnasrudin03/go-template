@@ -24,5 +24,5 @@ func (c *userDelivery) GetDetail(ctx *gin.Context) {
 		return
 	}
 
-	helpers.RenderJSON(ctx.Writer, http.StatusCreated, res)
+	helpers.RenderJSON(ctx.Writer, http.StatusOK, res)
 }

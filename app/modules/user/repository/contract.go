@@ -20,6 +20,7 @@ type UserRepository interface {
 	Register(ctx context.Context, input models.User) (res *models.User, err error)
 	Login(ctx context.Context, input payload.LoginReq) (res *models.User, er error)
 	GetDetail(ctx context.Context, input payload.DetailReq) (res *models.User, err error)
+	Updates(ctx context.Context, input models.User) (res *models.User, err error)
 }
 
 type userRepo struct {

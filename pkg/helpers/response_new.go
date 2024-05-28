@@ -35,6 +35,11 @@ func RenderJSON(w http.ResponseWriter, statusCode int, v interface{}) {
 			Meta:   paginate.Meta,
 			Data:   paginate.Data,
 		}
+	case string:
+		resp = ResponseDefault{
+			Status:  StatusMapping(statusCode),
+			Message: v.(string),
+		}
 	default:
 		resp = ResponseDefault{
 			Status: StatusMapping(statusCode),

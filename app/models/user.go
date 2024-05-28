@@ -3,6 +3,7 @@ package models
 import (
 	"errors"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
@@ -29,7 +30,8 @@ func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
 
 	hashedPass, err := helpers.HashPassword(u.Password)
 	if err != nil {
-		return
+		log.Printf("failed hash password: %v \n", err)
+		return helpers.ErrHashPasswordFailed()
 	}
 
 	u.Password = hashedPass

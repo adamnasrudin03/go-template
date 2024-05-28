@@ -12,10 +12,6 @@ import (
 
 func (r *userRepo) GetDetail(ctx context.Context, input payload.DetailReq) (res *models.User, err error) {
 	const opName = "UserRepository-GetDetail"
-	err = input.Validate()
-	if err != nil {
-		return nil, err
-	}
 
 	column := "*"
 	if input.Columns != "" {

@@ -19,6 +19,7 @@ func (r routes) userRouter(rg *gin.RouterGroup, userDelivery delivery.UserDelive
 	{
 		users.Use(middlewares.Authentication())
 		users.GET("/detail", middlewares.AuthorizationMustBe([]string{}), userDelivery.GetDetail)
+		users.PATCH("/change-password/:id", middlewares.AuthorizationMustBe([]string{}), userDelivery.ChangePassword)
 	}
 }
 

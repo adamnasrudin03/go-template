@@ -11,6 +11,7 @@ type UserDelivery interface {
 	Register(ctx *gin.Context)
 	Login(ctx *gin.Context)
 	GetDetail(ctx *gin.Context)
+	ChangePassword(ctx *gin.Context)
 }
 
 type userDelivery struct {

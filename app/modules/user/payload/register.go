@@ -14,6 +14,7 @@ type RegisterReq struct {
 	Username  string `json:"username" validate:"required,min=4"`
 	Password  string `json:"password" validate:"required,min=4"`
 	CreatedBy uint64 `json:"created_by"`
+	UpdatedBy uint64 `json:"updated_by"`
 }
 
 func (m *RegisterReq) Validate() error {
