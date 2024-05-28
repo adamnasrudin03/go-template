@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"log"
-	"strings"
 
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
@@ -30,37 +29,21 @@ func (srv *userService) Register(ctx context.Context, input payload.RegisterReq)
 		},
 	}
 
-	checkUser, _ := srv.userRepository.GetDetail(ctx, payload.DetailReq{Columns: "id", Email: user.Email})
-	if checkUser != nil && checkUser.ID > 0 {
-		log.Printf("%v Email has be registered \n", opName)
-		return nil, helpers.NewError(helpers.ErrConflict, helpers.NewResponseMultiLang(
-			helpers.MultiLanguages{
-				ID: "Surel Sudah Terdafar",
-				EN: "Email Already Registered",
-			},
-		))
-	}
-
-	checkUser, _ = srv.userRepository.GetDetail(ctx, payload.DetailReq{Columns: "id", Username: user.Username})
-	if checkUser != nil && checkUser.ID > 0 {
-		log.Printf("%v Username has be registered \n", opName)
-		return nil, helpers.NewError(helpers.ErrConflict, helpers.NewResponseMultiLang(
-			helpers.MultiLanguages{
-				ID: "Username Sudah Terdafar",
-				EN: "Username Already Registered",
-			},
-		))
+	err = srv.checkIsNotDuplicate(ctx, payload.DetailReq{
+		Email:    input.Email,
+		Username: input.Username,
+	})
+	if err != nil {
+		return nil, err
 	}
 
 	res, err = srv.userRepository.Register(ctx, user)
 	if err != nil || res == nil {
 		log.Printf("%v error create data: %+v \n", opName, err)
-		return nil, helpers.ErrDB()
+		return nil, helpers.ErrCreatedDB()
 	}
 
-	res.Password = ""
-	res.Salt = ""
-	res.Role = strings.ReplaceAll(strings.ToLower(res.Role), "_", " ")
+	res.ConvertToResponse()
 
 	return res, nil
 }

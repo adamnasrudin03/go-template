@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"strings"
 
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
@@ -25,6 +24,7 @@ func (srv *userService) GetDetail(ctx context.Context, input payload.DetailReq) 
 
 	srv.userRepository.GetCache(ctx, key, &res)
 	if res != nil && res.ID > 0 {
+		res.ConvertToResponse()
 		return res, nil
 	}
 
@@ -37,8 +37,6 @@ func (srv *userService) GetDetail(ctx context.Context, input payload.DetailReq) 
 	key = fmt.Sprintf("%v-%d", models.CacheUserDetail, res.ID)
 	srv.userRepository.CreateCache(ctx, key, res)
 
-	res.Password = ""
-	res.Salt = ""
-	res.Role = strings.ReplaceAll(strings.ToLower(res.Role), "_", " ")
+	res.ConvertToResponse()
 	return res, nil
 }

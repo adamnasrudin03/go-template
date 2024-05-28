@@ -38,6 +38,9 @@ func (r *userRepo) whereGetDetail(db *gorm.DB, input payload.DetailReq) *gorm.DB
 	if input.ID > 0 {
 		db = db.Where("id = ?", input.ID)
 	}
+	if input.NotID > 0 {
+		db = db.Where("id != ?", input.NotID)
+	}
 	if input.Email != "" {
 		db = db.Where("email = ?", input.Email)
 	}

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"strings"
 	"time"
 
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
@@ -41,4 +42,10 @@ func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
 	}
 
 	return
+}
+
+func (u *User) ConvertToResponse() {
+	u.Password = ""
+	u.Salt = ""
+	u.Role = strings.ReplaceAll(strings.ToLower(u.Role), "_", " ")
 }

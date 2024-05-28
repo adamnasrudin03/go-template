@@ -43,5 +43,9 @@ func ToLower(input string) string {
 }
 
 func ToTitle(input string) string {
-	return strings.TrimSpace(strings.Title(input))
+	return strings.TrimSpace(strings.ToTitle(input))
+}
+
+func ToUpper(input string) string {
+	return strings.TrimSpace(strings.ToUpper(input))
 }

@@ -14,6 +14,7 @@ type UserService interface {
 	Login(ctx context.Context, input payload.LoginReq) (res *payload.LoginRes, err error)
 	GetDetail(ctx context.Context, input payload.DetailReq) (*models.User, error)
 	ChangePassword(ctx context.Context, input payload.ChangePasswordReq) error
+	Update(ctx context.Context, input payload.UpdateReq) (res *models.User, err error)
 }
 
 type userService struct {

@@ -8,6 +8,7 @@ import (
 
 type DetailReq struct {
 	ID       uint64 `json:"id"`
+	NotID    uint64 `json:"not_id"`
 	Name     string `json:"name"`
 	Role     string `json:"role"`
 	Email    string `json:"email"`
@@ -21,7 +22,7 @@ func (m *DetailReq) Validate() error {
 	m.Role = strings.TrimSpace(m.Role)
 	m.Username = strings.TrimSpace(m.Username)
 
-	isNotRequired := m.ID == 0 && m.Email == "" && m.Name == "" && m.Role == "" && m.Username == ""
+	isNotRequired := m.ID == 0 && m.NotID == 0 && m.Email == "" && m.Name == "" && m.Role == "" && m.Username == ""
 	if isNotRequired {
 		return helpers.NewError(helpers.ErrValidation, helpers.NewResponseMultiLang(
 			helpers.MultiLanguages{
