@@ -25,6 +25,7 @@ func (srv *userService) Login(ctx context.Context, input payload.LoginReq) (res 
 	res.Token, err = helpers.GenerateToken(helpers.JWTClaims{
 		ID:       user.ID,
 		Name:     user.Name,
+		Role:     user.Role,
 		Email:    user.Email,
 		Username: user.Username,
 	})
