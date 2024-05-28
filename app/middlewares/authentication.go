@@ -81,12 +81,7 @@ func authorizationMustBeValidation(c *gin.Context, isRoleValid map[string]bool, 
 	}
 
 	if !isAllRole && !isRoleValid[user.Role] {
-		err = helpers.NewError(helpers.ErrForbidden, helpers.NewResponseMultiLang(
-			helpers.MultiLanguages{
-				ID: "Anda tidak diizinkan untuk mengakses sumber daya ini",
-				EN: "You are not allowed to access this resources",
-			},
-		))
+		err = helpers.ErrCannotHaveAccessResources()
 		helpers.RenderJSON(c.Writer, http.StatusForbidden, err)
 		c.Abort()
 		return

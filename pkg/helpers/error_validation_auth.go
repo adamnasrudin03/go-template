@@ -26,3 +26,17 @@ func ErrHashPasswordFailed() error {
 		},
 	))
 }
+
+func ErrCannotHaveAccessUpdateData() *ResponseError {
+	return NewError(ErrForbidden, NewResponseMultiLang(MultiLanguages{
+		ID: "Tidak memiliki akses untuk mengubah data",
+		EN: "Does not have access to change data",
+	}))
+}
+
+func ErrCannotHaveAccessResources() *ResponseError {
+	return NewError(ErrForbidden, NewResponseMultiLang(MultiLanguages{
+		ID: "Anda tidak diizinkan untuk mengakses sumber daya ini",
+		EN: "You are not allowed to access this resources",
+	}))
+}

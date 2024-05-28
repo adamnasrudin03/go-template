@@ -11,7 +11,7 @@ func ErrGetRequest() *ResponseError {
 func ErrCannotUpdateData() *ResponseError {
 	errMsg := MultiLanguages{
 		ID: "Tidak diperbolehkan mengubah data",
-		EN: "Cannot update data",
+		EN: "Changing data is not allowed",
 	}
 	return NewError(ErrValidation, NewResponseMultiLang(errMsg))
 }

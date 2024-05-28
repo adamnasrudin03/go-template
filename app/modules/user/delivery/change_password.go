@@ -35,7 +35,7 @@ func (c *userDelivery) ChangePassword(ctx *gin.Context) {
 	}
 
 	if userRole != models.ROOT && userID != ID {
-		helpers.RenderJSON(ctx.Writer, http.StatusBadRequest, helpers.ErrCannotUpdateData())
+		helpers.RenderJSON(ctx.Writer, http.StatusForbidden, helpers.ErrCannotHaveAccessUpdateData())
 		return
 	}
 
