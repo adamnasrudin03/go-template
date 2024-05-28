@@ -1,6 +1,7 @@
 package delivery
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
@@ -12,21 +13,22 @@ import (
 
 func (c *userDelivery) Login(ctx *gin.Context) {
 	var (
-		input payload.LoginReq
+		opName = "UserDelivery-Login"
+		input  payload.LoginReq
 	)
 
 	validate := validator.New()
 	err := ctx.ShouldBindJSON(&input)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, helpers.APIResponse(err.Error(), http.StatusBadRequest, nil))
+		log.Printf("%v error bind json: %v \n", opName, err)
+		helpers.RenderJSON(ctx.Writer, http.StatusBadRequest, helpers.ErrGetRequest())
 		return
 	}
 
 	err = validate.Struct(input)
 	if err != nil {
-		errors := helpers.FormatValidationError(err)
-
-		ctx.JSON(http.StatusBadRequest, helpers.APIResponse(errors, http.StatusBadRequest, nil))
+		log.Printf("%v error validate struct: %v \n", opName, err)
+		helpers.RenderJSON(ctx.Writer, http.StatusBadRequest, helpers.FormatValidationError(err))
 		return
 	}
 

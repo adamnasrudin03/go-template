@@ -1,6 +1,7 @@
 package delivery
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
@@ -11,13 +12,15 @@ import (
 
 func (c *userDelivery) Register(ctx *gin.Context) {
 	var (
-		input payload.RegisterReq
+		opName = "UserDelivery-Register"
+		input  payload.RegisterReq
 	)
 
 	userID := ctx.MustGet("id").(uint64)
 	err := ctx.ShouldBindJSON(&input)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, helpers.APIResponse(err.Error(), http.StatusBadRequest, nil))
+		log.Printf("%v error bind json: %v \n", opName, err)
+		helpers.RenderJSON(ctx.Writer, http.StatusBadRequest, helpers.ErrGetRequest())
 		return
 	}
 

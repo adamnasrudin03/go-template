@@ -31,9 +31,17 @@ func CheckStringValueToPointer(data string) *string {
 	return &data
 }
 
-// Round float generator
+// validation email format
 // example here: https://go.dev/play/p/j4B4v01Qolw
 func IsValidEmail(email string) bool {
 	_, err := mail.ParseAddress(email)
 	return err == nil
+}
+
+func ToLower(input string) string {
+	return strings.TrimSpace(strings.ToLower(input))
+}
+
+func ToTitle(input string) string {
+	return strings.TrimSpace(strings.Title(input))
 }
