@@ -25,6 +25,7 @@ func (r routes) userRouter(rg *gin.RouterGroup, userDelivery delivery.UserDelive
 func (r routes) userRootRouter(rg *gin.RouterGroup, userDelivery delivery.UserDelivery) {
 	auth := rg.Group("/root/auth")
 	{
+		auth.Use(middlewares.Authentication())
 		auth.POST("/sign-up", middlewares.AuthorizationMustBe([]string{models.ROOT}), userDelivery.Register) // register role Admin or User
 	}
 }
