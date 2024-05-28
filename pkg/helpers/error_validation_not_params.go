@@ -1,7 +1,7 @@
 package helpers
 
 func ErrGetRequest() *ResponseError {
-	return NewError(ErrDatabase, NewResponseMultiLang(
+	return NewError(ErrValidation, NewResponseMultiLang(
 		MultiLanguages{
 			ID: "Gagal membaca request data",
 			EN: "Failed to parse data",

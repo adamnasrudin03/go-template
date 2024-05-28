@@ -40,13 +40,15 @@ func (e *ResponseError) Error() string {
 }
 
 func StatusErrorMapping(code int) int {
-	statusCode := code
-	switch statusCode {
+	statusCode := 0
+	switch code {
 	case int(ErrForbidden):
 		statusCode = http.StatusForbidden
 	case int(ErrUnauthorized):
 		statusCode = http.StatusUnauthorized
-	case int(ErrDatabase), int(ErrFromUseCase):
+	case int(ErrDatabase):
+		statusCode = http.StatusUnprocessableEntity
+	case int(ErrFromUseCase):
 		statusCode = http.StatusUnprocessableEntity
 	case int(ErrConflict):
 		statusCode = http.StatusConflict

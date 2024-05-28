@@ -25,9 +25,11 @@ func StatusMapping(statusCode int) string {
 	}
 	status := mappings[statusCode]
 	if status == "" {
-		status = mappings[StatusErrorMapping(statusCode)]
+		statusCode = StatusErrorMapping(statusCode)
+		status = mappings[statusCode]
 	}
 
+	status = strings.TrimSpace(status)
 	if status == "" {
 		status = http.StatusText(statusCode)
 	}
