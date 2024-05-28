@@ -32,7 +32,7 @@ func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
 	}
 
 	u.Password = hashedPass
-	if !IsUserRoleValid[u.Role] {
+	if u.Role != ROOT && !IsUserRoleValid[u.Role] {
 		err = errors.New("role is invalid, must be 'ADMIN' or 'USER'")
 		return
 	}
