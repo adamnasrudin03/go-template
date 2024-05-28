@@ -3,7 +3,6 @@ package delivery
 import (
 	"log"
 	"net/http"
-	"strings"
 
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
@@ -33,13 +32,8 @@ func (c *userDelivery) RegisterUser(ctx *gin.Context) {
 		return
 	}
 
-	input.Email = strings.TrimSpace(input.Email)
-	req := payload.RegisterReq{
-		Name:     input.Name,
-		Email:    input.Email,
-		Password: input.Password,
-		Role:     models.USER,
-	}
+	input.Role = models.USER
+	req := input.ConvertToRegisterReq()
 	res, err := c.Service.Register(ctx, req)
 	if err != nil {
 		helpers.RenderJSON(ctx.Writer, http.StatusInternalServerError, err)

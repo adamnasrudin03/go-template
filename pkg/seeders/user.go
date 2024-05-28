@@ -14,6 +14,7 @@ func InitUser(db *gorm.DB) {
 		user := models.User{
 			Name:     "Super Admin",
 			Password: "password123",
+			Username: "super-admin",
 			Email:    "superadmin@gmail.com",
 			Role:     models.ROOT,
 		}

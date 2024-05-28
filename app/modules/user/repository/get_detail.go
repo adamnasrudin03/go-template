@@ -12,20 +12,17 @@ import (
 
 func (r *userRepo) GetDetail(ctx context.Context, input payload.DetailReq) (res *models.User, err error) {
 	const opName = "UserRepository-GetDetail"
+	err = input.Validate()
+	if err != nil {
+		return nil, err
+	}
 
-	db := r.DB
-	if input.ID > 0 {
-		db = db.Where("id = ?", input.ID)
+	column := "*"
+	if input.Columns != "" {
+		column = input.Columns
 	}
-	if input.Email != "" {
-		db = db.Where("email = ?", input.Email)
-	}
-	if input.Name != "" {
-		db = db.Where("name = ?", input.Name)
-	}
-	if input.Role != "" {
-		db = db.Where("role = ?", input.Role)
-	}
+
+	db := r.whereGetDetail(r.DB.Select(column), input)
 
 	if err = db.WithContext(ctx).First(&res).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -36,4 +33,27 @@ func (r *userRepo) GetDetail(ctx context.Context, input payload.DetailReq) (res 
 		return
 	}
 	return res, nil
+}
+
+// whereGetDetail sets the where clause for the GetDetail function based on the
+// input payload.
+func (r *userRepo) whereGetDetail(db *gorm.DB, input payload.DetailReq) *gorm.DB {
+	// Input is strongly typed
+	if input.ID > 0 {
+		db = db.Where("id = ?", input.ID)
+	}
+	if input.Email != "" {
+		db = db.Where("email = ?", input.Email)
+	}
+	if input.Username != "" {
+		db = db.Where("username = ?", input.Username)
+	}
+	if input.Name != "" {
+		db = db.Where("name = ?", input.Name)
+	}
+	if input.Role != "" {
+		db = db.Where("role = ?", input.Role)
+	}
+
+	return db
 }

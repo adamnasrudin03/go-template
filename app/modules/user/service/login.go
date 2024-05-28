@@ -23,10 +23,10 @@ func (srv *userService) Login(ctx context.Context, input payload.LoginReq) (res 
 
 	res = &payload.LoginRes{}
 	res.Token, err = helpers.GenerateToken(helpers.JWTClaims{
-		ID:    user.ID,
-		Name:  user.Name,
-		Email: user.Email,
-		Role:  user.Role,
+		ID:       user.ID,
+		Name:     user.Name,
+		Email:    user.Email,
+		Username: user.Username,
 	})
 	if err != nil {
 		log.Printf("%v failed generate token: %v \n", opName, err)

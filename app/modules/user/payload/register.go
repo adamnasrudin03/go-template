@@ -11,13 +11,13 @@ type RegisterReq struct {
 	Name      string `json:"name" validate:"required"`
 	Role      string `json:"role"  validate:"required"`
 	Email     string `json:"email" validate:"required,email"`
+	Username  string `json:"username" validate:"required,min=4"`
 	Password  string `json:"password" validate:"required,min=4"`
 	CreatedBy uint64 `json:"created_by"`
 }
 
 func (m *RegisterReq) Validate() error {
-	m.Name = strings.TrimSpace(m.Name)
-	if len(m.Name) == 0 {
+	if len(strings.TrimSpace(m.Name)) == 0 {
 		return helpers.ErrIsRequired("Nama", "Name")
 	}
 
@@ -38,11 +38,14 @@ func (m *RegisterReq) Validate() error {
 	}
 
 	m.Password = strings.TrimSpace(m.Password)
-	if len(m.Password) == 0 {
-		return helpers.ErrIsRequired("Kata Sandi", "Password")
-	}
 	if len(m.Password) < 4 {
 		return helpers.ErrMinCharacters("Kata Sandi", "Password", "4")
 	}
+
+	m.Username = strings.TrimSpace(m.Username)
+	if len(m.Username) < 4 {
+		return helpers.ErrMinCharacters("Nama pengguna", "Username", "4")
+	}
+
 	return nil
 }

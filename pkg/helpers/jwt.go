@@ -13,10 +13,10 @@ import (
 )
 
 type JWTClaims struct {
-	ID    uint64 `json:"id"`
-	Email string `json:"email"`
-	Name  string `json:"name"`
-	Role  string `json:"role"`
+	ID       uint64 `json:"id"`
+	Name     string `json:"name"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
 	jwt.StandardClaims
 }
 
@@ -26,9 +26,10 @@ func GenerateToken(params JWTClaims) (string, error) {
 	expired := time.Now().AddDate(0, 0, configs.App.ExpiredToken).Unix()
 
 	claims := &JWTClaims{
-		Email: params.Email,
-		Name:  params.Name,
-		ID:    params.ID,
+		ID:       params.ID,
+		Name:     params.Name,
+		Username: params.Username,
+		Email:    params.Email,
 		StandardClaims: jwt.StandardClaims{
 			Id:        fmt.Sprintf("%d", params.ID),
 			IssuedAt:  now,
@@ -106,8 +107,8 @@ func VerifyToken(ctx *gin.Context) (interface{}, error) {
 	if ok && token.Valid {
 		ctx.Set("id", claims.ID)
 		ctx.Set("name", claims.Name)
+		ctx.Set("username", claims.Username)
 		ctx.Set("email", claims.Email)
-		ctx.Set("role", claims.Role)
 		ctx.Set("expired_at", claims.ExpiresAt)
 
 		return token.Claims.(*JWTClaims), nil

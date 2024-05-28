@@ -13,7 +13,7 @@ import (
 
 func (r *userRepo) Login(ctx context.Context, input payload.LoginReq) (res *models.User, err error) {
 	const opName = "UserRepository-Login"
-	err = r.DB.Where("email = ?", input.Email).WithContext(ctx).First(&res).Error
+	err = r.DB.Where("email = ? OR username = ?", input.Username, input.Username).WithContext(ctx).First(&res).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, nil
@@ -24,8 +24,7 @@ func (r *userRepo) Login(ctx context.Context, input payload.LoginReq) (res *mode
 	}
 
 	if !helpers.PasswordValid(res.Password, input.Password) {
-		err = errors.New("invalid password")
-		log.Printf("%v error cek pass: %v \n", opName, err)
+		log.Printf("%v invalid password \n", opName)
 		return nil, helpers.ErrInvalid("Kata Sandi", "Password")
 	}
 

@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"errors"
 	"log"
 	"strings"
 
@@ -23,20 +22,32 @@ func (srv *userService) Register(ctx context.Context, input payload.RegisterReq)
 		Name:     input.Name,
 		Password: input.Password,
 		Email:    input.Email,
+		Username: input.Username,
 		Role:     input.Role,
 		DefaultModel: models.DefaultModel{
 			CreatedBy: input.CreatedBy,
 			UpdatedBy: input.CreatedBy,
 		},
 	}
-	checkUser, _ := srv.userRepository.GetDetail(ctx, payload.DetailReq{Email: user.Email})
-	if checkUser != nil && checkUser.Email != "" {
-		err = errors.New("email user has be registered")
-		log.Printf("%v error check email: %v \n", opName, err)
+
+	checkUser, _ := srv.userRepository.GetDetail(ctx, payload.DetailReq{Columns: "id", Email: user.Email})
+	if checkUser != nil && checkUser.ID > 0 {
+		log.Printf("%v Email has be registered \n", opName)
 		return nil, helpers.NewError(helpers.ErrConflict, helpers.NewResponseMultiLang(
 			helpers.MultiLanguages{
-				ID: "Alamat Surel Sudah Terdafar",
+				ID: "Surel Sudah Terdafar",
 				EN: "Email Already Registered",
+			},
+		))
+	}
+
+	checkUser, _ = srv.userRepository.GetDetail(ctx, payload.DetailReq{Columns: "id", Username: user.Username})
+	if checkUser != nil && checkUser.ID > 0 {
+		log.Printf("%v Username has be registered \n", opName)
+		return nil, helpers.NewError(helpers.ErrConflict, helpers.NewResponseMultiLang(
+			helpers.MultiLanguages{
+				ID: "Username Sudah Terdafar",
+				EN: "Username Already Registered",
 			},
 		))
 	}
