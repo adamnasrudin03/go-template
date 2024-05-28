@@ -54,6 +54,17 @@ func (srv *userService) ChangePassword(ctx context.Context, input payload.Change
 		return helpers.ErrUpdatedDB()
 	}
 
-	srv.userRepository.CreateCache(ctx, key, user)
+	go func(dataLog models.User) {
+		newCtx := context.Background()
+		srv.userRepository.CreateCache(newCtx, key, dataLog)
+		srv.userRepository.InsertLog(newCtx, models.Log{
+			Name:        fmt.Sprintf("Change Password User %s(%s)", dataLog.Name, dataLog.Email),
+			Action:      models.Updated,
+			TableNameID: dataLog.ID,
+			TableName:   "user",
+			UserID:      dataLog.UpdatedBy,
+		})
+	}(*user)
+
 	return nil
 }

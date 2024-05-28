@@ -1,5 +1,12 @@
 package models
 
+const (
+	Updated = `Updated`
+	Deleted = `Deleted`
+	Created = `Created`
+	Read    = `Read`
+)
+
 // Log represents the model for an log
 type Log struct {
 	ID          uint64       `json:"id" gorm:"primaryKey"`

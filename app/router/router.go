@@ -31,6 +31,7 @@ func NewRoutes(h registry.Deliveries) routes {
 	v1 := r.router.Group("/api/v1")
 	r.userRouter(v1, h.User)
 	r.userRootRouter(v1, h.User)
+	r.LogRouter(v1, h.Log)
 
 	// // Static file source
 	// staticFileRoutes := r.router.Group("/file")

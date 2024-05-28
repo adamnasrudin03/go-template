@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"github.com/adamnasrudin03/go-template/app/models"
@@ -44,6 +45,17 @@ func (srv *userService) Register(ctx context.Context, input payload.RegisterReq)
 	}
 
 	res.ConvertToResponse()
+
+	go func(dataLog models.User) {
+		newCtx := context.Background()
+		srv.userRepository.InsertLog(newCtx, models.Log{
+			Name:        fmt.Sprintf("Registered user %s(%s) with %s role", dataLog.Name, dataLog.Email, dataLog.Role),
+			Action:      models.Created,
+			TableNameID: dataLog.ID,
+			TableName:   "user",
+			UserID:      dataLog.CreatedBy,
+		})
+	}(*res)
 
 	return res, nil
 }

@@ -21,7 +21,7 @@ func (srv *userService) Update(ctx context.Context, input payload.UpdateReq) (re
 	_, err = srv.getDetail(ctx, payload.DetailReq{ID: input.ID, Columns: "id"})
 	if err != nil {
 		log.Printf("%v error check data: %+v \n", opName, err)
-		return nil, helpers.ErrDB()
+		return nil, err
 	}
 
 	err = srv.checkIsNotDuplicate(ctx, payload.DetailReq{
@@ -45,8 +45,19 @@ func (srv *userService) Update(ctx context.Context, input payload.UpdateReq) (re
 		return nil, helpers.ErrDB()
 	}
 
-	srv.userRepository.CreateCache(ctx, fmt.Sprintf("%v-%d", models.CacheUserDetail, res.ID), res)
 	res.ConvertToResponse()
+
+	go func(dataLog models.User) {
+		newCtx := context.Background()
+		srv.userRepository.CreateCache(newCtx, fmt.Sprintf("%v-%d", models.CacheUserDetail, dataLog.ID), dataLog)
+		srv.userRepository.InsertLog(newCtx, models.Log{
+			Name:        fmt.Sprintf("Updated data user %s(%s)", dataLog.Name, dataLog.Email),
+			Action:      models.Updated,
+			TableNameID: dataLog.ID,
+			TableName:   "user",
+			UserID:      dataLog.CreatedBy,
+		})
+	}(*res)
 
 	return res, nil
 }

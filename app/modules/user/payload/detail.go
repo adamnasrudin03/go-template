@@ -14,6 +14,7 @@ type DetailReq struct {
 	Email    string `json:"email"`
 	Username string `json:"username"`
 	Columns  string `json:"columns"`
+	UserID   uint64 `json:"user_id"` // user id for checking by token
 }
 
 func (m *DetailReq) Validate() error {

@@ -3,7 +3,9 @@ package delivery
 import (
 	"log"
 	"net/http"
+	"strconv"
 
+	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 
@@ -11,11 +13,28 @@ import (
 )
 
 func (c *userDelivery) GetDetail(ctx *gin.Context) {
-	const opName = "UserDelivery-GetDetail"
-	userID := ctx.MustGet("id").(uint64)
+	var (
+		opName   = "UserDelivery-GetDetail"
+		userID   = ctx.MustGet("id").(uint64)
+		userRole = ctx.MustGet("role").(string)
+		err      error
+	)
+
+	ID, err := strconv.ParseUint(ctx.Param("id"), 10, 32)
+	if err != nil {
+		log.Printf("%v error parse param: %v \n", opName, err)
+		helpers.RenderJSON(ctx.Writer, http.StatusBadRequest, helpers.ErrInvalid("ID Pengguna", "User ID"))
+		return
+	}
+
+	if userRole != models.ROOT && userID != ID {
+		helpers.RenderJSON(ctx.Writer, http.StatusForbidden, helpers.ErrCannotHaveAccessUpdateData())
+		return
+	}
 
 	res, err := c.Service.GetDetail(ctx, payload.DetailReq{
-		ID: userID,
+		ID:     ID,
+		UserID: userID,
 	})
 
 	if err != nil {

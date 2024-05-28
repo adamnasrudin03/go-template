@@ -17,6 +17,21 @@ func (srv *userService) GetDetail(ctx context.Context, input payload.DetailReq) 
 		err error
 	)
 
+	defer func() {
+		res.ConvertToResponse()
+		go func(dataLog payload.DetailReq) {
+			newCtx := context.Background()
+			srv.userRepository.InsertLog(newCtx, models.Log{
+				Name:        fmt.Sprintf("Read data user with id %d", dataLog.ID),
+				Action:      models.Read,
+				TableNameID: dataLog.ID,
+				TableName:   "user",
+				UserID:      dataLog.UserID,
+			})
+		}(input)
+
+	}()
+
 	err = input.Validate()
 	if err != nil {
 		return nil, err
@@ -24,7 +39,6 @@ func (srv *userService) GetDetail(ctx context.Context, input payload.DetailReq) 
 
 	srv.userRepository.GetCache(ctx, key, &res)
 	if res != nil && res.ID > 0 {
-		res.ConvertToResponse()
 		return res, nil
 	}
 
@@ -35,8 +49,7 @@ func (srv *userService) GetDetail(ctx context.Context, input payload.DetailReq) 
 	}
 
 	key = fmt.Sprintf("%v-%d", models.CacheUserDetail, res.ID)
-	srv.userRepository.CreateCache(ctx, key, res)
+	go srv.userRepository.CreateCache(context.Background(), key, res)
 
-	res.ConvertToResponse()
 	return res, nil
 }
