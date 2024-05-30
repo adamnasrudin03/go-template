@@ -22,14 +22,14 @@ var (
 )
 
 type BasedFilter struct {
-	Limit             int    `json:"limit"`
-	Offset            int    `json:"offset"`
-	Page              int    `json:"page"`
-	OrderBy           string `json:"order_by"`
-	SortBy            string `json:"sort_by"`
-	IsNoLimit         bool   `json:"is_no_limit"`
-	IsNotDefaultQuery bool   `json:"is_not_default_query"`
-	CustomColumns     string `json:"custom_columns"`
+	Limit             int    `json:"limit" form:"limit"`
+	Offset            int    `json:"offset" form:"offset"`
+	Page              int    `json:"page" form:"page"`
+	OrderBy           string `json:"order_by" form:"order_by"`
+	SortBy            string `json:"sort_by" form:"sort_by"`
+	IsNoLimit         bool   `json:"is_no_limit" form:"is_no_limit"`
+	IsNotDefaultQuery bool   `json:"is_not_default_query" form:"is_not_default_query"`
+	CustomColumns     string `json:"custom_columns" form:"custom_columns"`
 }
 
 func (c *BasedFilter) DefaultQuery() BasedFilter {

@@ -11,5 +11,6 @@ func (r routes) LogRouter(rg *gin.RouterGroup, logDelivery delivery.LogDelivery)
 	logs := rg.Group("/logs")
 	{
 		logs.Use(middlewares.Authentication())
+		logs.GET("", middlewares.AuthorizationMustBe([]string{}), logDelivery.GetList)
 	}
 }
