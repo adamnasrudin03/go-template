@@ -28,7 +28,7 @@ func (c *userDelivery) GetDetail(ctx *gin.Context) {
 	}
 
 	if userRole != models.ROOT && userID != ID {
-		helpers.RenderJSON(ctx.Writer, http.StatusForbidden, helpers.ErrCannotHaveAccessUpdateData())
+		helpers.RenderJSON(ctx.Writer, http.StatusForbidden, helpers.ErrCannotHaveAccessResources())
 		return
 	}
 

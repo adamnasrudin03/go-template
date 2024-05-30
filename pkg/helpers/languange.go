@@ -16,6 +16,10 @@ const (
 	Auto = "auto"
 )
 
+var (
+	LangID = language.Indonesian.String()
+)
+
 // javascript "encodeURI()"
 // so we embed js to our golang program
 func EncodeURI(s string) string {

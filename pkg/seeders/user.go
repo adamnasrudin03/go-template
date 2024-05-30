@@ -15,7 +15,7 @@ func InitUser(db *gorm.DB) {
 			Name:     "Super Admin",
 			Password: "password123",
 			Username: "super-admin",
-			Email:    "superadmin@gmail.com",
+			Email:    "superadmin@email.com",
 			Role:     models.ROOT,
 		}
 		tx.Create(&user)

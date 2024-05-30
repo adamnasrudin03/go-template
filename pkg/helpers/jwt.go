@@ -21,10 +21,11 @@ type JWTClaims struct {
 	jwt.StandardClaims
 }
 
+var cfg = configs.GetInstance()
+
 func GenerateToken(params JWTClaims) (string, error) {
-	configs := configs.GetInstance()
 	now := time.Now().Unix()
-	expired := time.Now().AddDate(0, 0, configs.App.ExpiredToken).Unix()
+	expired := time.Now().AddDate(0, 0, cfg.App.ExpiredToken).Unix()
 
 	claims := &JWTClaims{
 		ID:       params.ID,
@@ -41,7 +42,7 @@ func GenerateToken(params JWTClaims) (string, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := token.SignedString([]byte(configs.App.SecretKey))
+	tokenString, err := token.SignedString([]byte(cfg.App.SecretKey))
 	if err != nil {
 		log.Printf("failed generate token: %v \n", err)
 		err = NewError(ErrUnauthorized, NewResponseMultiLang(
@@ -70,12 +71,20 @@ func ExtractToken(ctx *gin.Context) (tokenString string, err error) {
 		return "", err
 	}
 
+	if len(headerToken) <= 7 {
+		err = NewError(ErrUnauthorized, NewResponseMultiLang(
+			MultiLanguages{
+				ID: "Token tidak ditemukan",
+				EN: "Token not found",
+			},
+		))
+		return "", err
+	}
+
 	return headerToken[7:], nil
 }
 
 func VerifyToken(ctx *gin.Context) (interface{}, error) {
-	configs := configs.GetInstance()
-
 	tokenString, err := ExtractToken(ctx)
 	if err != nil {
 		return nil, err
@@ -92,8 +101,15 @@ func VerifyToken(ctx *gin.Context) (interface{}, error) {
 			))
 			return nil, err
 		}
-		return []byte(configs.App.SecretKey), nil
+		return []byte(cfg.App.SecretKey), nil
 	})
+
+	if _, ok := err.(*jwt.ValidationError); ok {
+		errCustom := extractErrorJwtValidation(err, tokenString)
+		if errCustom != nil {
+			return nil, errCustom
+		}
+	}
 
 	claims, ok := token.Claims.(*JWTClaims)
 	if !ok {
@@ -117,12 +133,6 @@ func VerifyToken(ctx *gin.Context) (interface{}, error) {
 		return token.Claims.(*JWTClaims), nil
 	}
 
-	if _, ok := err.(*jwt.ValidationError); ok {
-		errCustom := extractErrorJwtValidation(err, tokenString)
-		if errCustom != nil {
-			return nil, errCustom
-		}
-	}
 	return nil, err
 
 }
@@ -130,16 +140,22 @@ func VerifyToken(ctx *gin.Context) (interface{}, error) {
 func extractErrorJwtValidation(err error, tokenString string) error {
 	if ve, ok := err.(*jwt.ValidationError); ok {
 		var errorCustom error
+		msgErr := err.Error()
+		msgErrID, errTrs := Translate(err.Error(), Auto, LangID)
+		if errTrs != nil || msgErrID == "" {
+			msgErrID = msgErr
+		}
+
 		errorCustom = NewError(ErrUnauthorized, NewResponseMultiLang(
 			MultiLanguages{
-				ID: fmt.Sprintf("Gagal melakukan parsing token, Error: %s", err.Error()),
-				EN: fmt.Sprintf("Failed to parse token, Error: %s", err.Error()),
+				ID: fmt.Sprintf("Gagal melakukan parsing token, Error: %s", msgErrID),
+				EN: fmt.Sprintf("Failed to parse token, Error: %s", msgErr),
 			},
 		))
 		if ve.Errors&jwt.ValidationErrorMalformed != 0 {
 			errorCustom = NewError(ErrUnauthorized, NewResponseMultiLang(
 				MultiLanguages{
-					ID: fmt.Sprintf("Token format: %s tidak valid", tokenString),
+					ID: fmt.Sprintf("Format token tidak benar: %s ", tokenString),
 					EN: fmt.Sprintf("Invalid token format: %s", tokenString),
 				},
 			))
@@ -158,7 +174,7 @@ func extractErrorJwtValidation(err error, tokenString string) error {
 	log.Printf("unknown token error : %v \n", err)
 	err = NewError(ErrUnauthorized, NewResponseMultiLang(
 		MultiLanguages{
-			ID: "Token tidak valid",
+			ID: "Token tidak benar",
 			EN: "Invalid token",
 		},
 	))

@@ -18,7 +18,6 @@ func (srv *userService) GetDetail(ctx context.Context, input payload.DetailReq) 
 	)
 
 	defer func() {
-		res.ConvertToResponse()
 		go func(dataLog payload.DetailReq) {
 			newCtx := context.Background()
 			srv.userRepository.InsertLog(newCtx, models.Log{
@@ -51,5 +50,6 @@ func (srv *userService) GetDetail(ctx context.Context, input payload.DetailReq) 
 	key = fmt.Sprintf("%v-%d", models.CacheUserDetail, res.ID)
 	go srv.userRepository.CreateCache(context.Background(), key, res)
 
+	res.ConvertToResponse()
 	return res, nil
 }
