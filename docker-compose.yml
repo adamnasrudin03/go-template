@@ -1,0 +1,85 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:14-alpine
+    container_name: postgresDB
+    ports:
+      - 5432:5432
+    volumes:
+      - ~/apps/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=my_db
+    networks:
+      - my_network
+
+  cache:
+    image: redis:latest
+    container_name: redisCache
+    restart: always
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_volume_data:/data
+    networks:
+      - my_network
+
+  queue:
+    container_name: rabbitMQ
+    image: "rabbitmq:3.8-management"
+    environment:
+      RABBITMQ_DEFAULT_USER: "rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    networks:
+      - my_network
+
+  go_api:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: go_api
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - cache
+      - queue
+    networks:
+      - my_network
+    environment:
+      - APP_NAME=go-template
+      - APP_ENV=dev
+      - APP_PORT=8000
+      - JWT_SECRET=MySecretKey
+      - EXPIRED_TOKEN=7 # In Days
+      - DB_USER=postgres
+      - DB_PASS=postgres
+      - DB_HOST=localhost # Change IP address
+      - DB_PORT=5432
+      - DB_NAME=my_db
+      - DB_ISMIGRATE=true
+      - DEBUG_MODE=true
+      - REDIS_HOST=localhost # Change IP address
+      - REDIS_PORT=6379
+      - REDIS_MASTER=master
+      - REDIS_PASSWORD=
+      - REDIS_DATABASE=0
+      - REDIS_POOL_SIZE=128
+      - REDIS_POOL_TIMEOUT=10
+      - REDIS_MIN_IDLE_CONN=4
+      - CACHE_DEFAULT_TIMEOUT=5 # In Minutes
+      - RABBIT_HOST=localhost # Change IP address
+      - RABBIT_PORT=5672
+      - RABBIT_USERNAME=rabbitmq
+      - RABBIT_PASSWORD=rabbitmq
+
+networks:
+  my_network:
+    driver: bridge
+volumes:
+  redis_volume_data:

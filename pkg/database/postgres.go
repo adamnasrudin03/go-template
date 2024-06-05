@@ -29,9 +29,12 @@ func SetupDbConnection() *gorm.DB {
 		cfg.DB.DbName,
 		cfg.DB.Port)
 
-	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
+		Logger: gormLogger.Default.LogMode(gormLogger.Silent),
+	})
 	if err != nil {
 		logger.Panicf("Failed to create a connection to database , %v", err)
+		return nil
 	}
 
 	if cfg.DB.DebugMode {
@@ -61,6 +64,7 @@ func CloseDbConnection(db *gorm.DB) {
 	dbSQL, err := db.DB()
 	if err != nil {
 		logger.Panicf("Failed to close connection from database, %v", err)
+		return
 	}
 
 	dbSQL.Close()

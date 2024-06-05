@@ -40,11 +40,13 @@ func ConnectMQ(config *configs.Configs) (*amqp.Connection, *amqp.Channel) {
 	conn, err := amqp.Dial(addrs)
 	if err != nil {
 		logger.Panicf("Failed to connect to RabbitMQ: %v", err)
+		return nil, nil
 	}
 
 	ch, err := conn.Channel()
 	if err != nil {
 		logger.Panicf("Failed to open a channel: %v", err)
+		return nil, nil
 	}
 
 	logger.Info("Connection RabbitMQ Success!")
