@@ -1,5 +1,5 @@
 # go-template
- This basic REST API service uses the main features of Golang: user, log, [translate message](https://github.com/adamnasrudin03/go-template/blob/main/pkg/helpers/languange.go#L45) and auth with bearer tokens.
+ This basic REST API service uses the main features of Golang: user, log, translate message and auth with bearer tokens.
 
 ## Technology Used
 - Versioning using Git (See <a href="https://git-scm.com/book/en/v2/Getting-Started-Installing-Git" target="_blank">Git Installation</a>)
