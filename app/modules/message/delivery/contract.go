@@ -9,6 +9,7 @@ import (
 
 type MessageDelivery interface {
 	Consume(ctx *gin.Context)
+	TranslateLangID(ctx *gin.Context)
 }
 
 type msgDelivery struct {

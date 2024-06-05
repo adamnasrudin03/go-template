@@ -9,6 +9,7 @@ import (
 func (r routes) MessageRouter(rg *gin.RouterGroup, messageDelivery delivery.MessageDelivery) {
 	logs := rg.Group("/message")
 	{
+		logs.GET("/translate/id", messageDelivery.TranslateLangID)
 		logs.GET("/consumer", messageDelivery.Consume)
 	}
 }
