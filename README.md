@@ -2,7 +2,7 @@
  This basic REST API service uses the main features of Golang: user, log, and auth with bearer tokens.
 
 ## Technology Used
-- Versioning using Git (See [Git Installation](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git))
+- Versioning using Git (See [Git Installation](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git){:target="_blank"} )
 - Programming Language using Go 1.22 or later. (See [Golang Installation](https://golang.org/doc/install))
 - DB using PostgreSQL 14 or later. (See [PostgreSQL Installation](https://www.postgresql.org/download/))
 - Migration using ORM GORM. (See [Documentation](https://gorm.io/docs/migration.html))
