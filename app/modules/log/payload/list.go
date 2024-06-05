@@ -30,6 +30,7 @@ func (m *ListLogReq) Validate() error {
 
 type LogRes struct {
 	ID        uint64    `json:"id"`
+	DateTime  time.Time `json:"date_time"`
 	Name      string    `json:"name"`
 	Action    string    `json:"action"`
 	UserID    uint64    `json:"user_id"`

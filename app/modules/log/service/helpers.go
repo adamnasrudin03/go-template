@@ -12,6 +12,7 @@ func (srv *logSrv) convertModelsToListResponse(data []models.Log) []payload.LogR
 	for i := 0; i < len(data); i++ {
 		temp := payload.LogRes{
 			ID:        data[i].ID,
+			DateTime:  data[i].LogDateTime,
 			Name:      data[i].Name,
 			Action:    data[i].Action,
 			UserID:    data[i].UserID,
