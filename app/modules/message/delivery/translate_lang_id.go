@@ -17,17 +17,15 @@ func (c *msgDelivery) TranslateLangID(ctx *gin.Context) {
 
 	err = ctx.ShouldBindJSON(&input)
 	if err != nil {
-		c.Logger.Errorf("%v error bind json: %v ", opName, err)
+		c.Logger.Infof("%v bind Body json: %v ", opName, err)
+		if input.OriginalText == "" {
+			err = ctx.ShouldBindQuery(&input)
+			c.Logger.Infof("%v bind Query json: %v ", opName, err)
+		}
+	}
+	if err != nil {
 		helpers.RenderJSON(ctx.Writer, http.StatusBadRequest, helpers.ErrGetRequest())
 		return
-	}
-	if input.OriginalText == "" {
-		err = ctx.ShouldBindQuery(&input)
-		if err != nil {
-			c.Logger.Errorf("%v error bind Query json: %v ", opName, err)
-			helpers.RenderJSON(ctx.Writer, http.StatusBadRequest, helpers.ErrGetRequest())
-			return
-		}
 	}
 
 	input.TargetLanguage = helpers.LangID
