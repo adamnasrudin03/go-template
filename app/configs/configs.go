@@ -74,7 +74,7 @@ func GetInstance() *Configs {
 				ExpiredToken: GetExpiredToken(),
 			},
 			DB: DbConfig{
-				Host:        getEnv("DB_HOST", "localhost"),
+				Host:        getEnv("DB_HOST", "127.0.0.1"),
 				Port:        getEnv("DB_PORT", "5432"),
 				DbName:      getEnv("DB_NAME", "movie_festival_db"),
 				Username:    getEnv("DB_USER", "postgres"),
@@ -83,7 +83,7 @@ func GetInstance() *Configs {
 				DebugMode:   getEnv("DEBUG_MODE", "true") == "true",
 			},
 			Redis: RedisConfig{
-				Host:                getEnv("REDIS_HOST", "localhost"),
+				Host:                getEnv("REDIS_HOST", "127.0.0.1"),
 				Port:                GetRedisPort(),
 				Password:            getEnv("REDIS_PASSWORD", ""),
 				Database:            GetRedisDatabase(),
@@ -94,7 +94,7 @@ func GetInstance() *Configs {
 				DefaultCacheTimeOut: GetRedisDefaultCacheTimeOut(),
 			},
 			RabbitMQ: RabbitMQConfig{
-				Host:     getEnv("RABBIT_HOST", "localhost"),
+				Host:     getEnv("RABBIT_HOST", "127.0.0.1"),
 				Port:     GetRabbitPort(),
 				Username: getEnv("RABBIT_USERNAME", "GUEST"),
 				Password: getEnv("RABBIT_PASSWORD", "GUEST"),
