@@ -4,9 +4,11 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
+	"github.com/adamnasrudin03/go-template/pkg/driver"
 )
 
 func (srv *userService) GetDetail(ctx context.Context, input payload.DetailReq) (*models.User, error) {
@@ -19,14 +21,18 @@ func (srv *userService) GetDetail(ctx context.Context, input payload.DetailReq) 
 
 	defer func() {
 		go func(dataLog payload.DetailReq) {
-			newCtx := context.Background()
-			srv.userRepository.InsertLog(newCtx, models.Log{
+			now := time.Now()
+			logData := models.Log{
 				Name:        fmt.Sprintf("Read data user with id %d", dataLog.ID),
 				Action:      models.Read,
 				TableNameID: dataLog.ID,
 				TableName:   "user",
 				UserID:      dataLog.UserID,
-			})
+				LogDateTime: now,
+			}
+			rabbit := driver.RabbitMQ{Body: logData.ToString(), QueueName: "insert_log"}
+			rabbit.Publish()
+
 		}(input)
 
 	}()

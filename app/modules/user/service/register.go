@@ -4,9 +4,11 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
+	"github.com/adamnasrudin03/go-template/pkg/driver"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
@@ -47,14 +49,18 @@ func (srv *userService) Register(ctx context.Context, input payload.RegisterReq)
 	res.ConvertToResponse()
 
 	go func(dataLog models.User) {
-		newCtx := context.Background()
-		srv.userRepository.InsertLog(newCtx, models.Log{
+		now := time.Now()
+		logData := models.Log{
 			Name:        fmt.Sprintf("Registered user %s(%s) with %s role", dataLog.Name, dataLog.Email, dataLog.Role),
 			Action:      models.Created,
 			TableNameID: dataLog.ID,
 			TableName:   "user",
 			UserID:      dataLog.CreatedBy,
-		})
+			LogDateTime: now,
+		}
+		rabbit := driver.RabbitMQ{Body: logData.ToString(), QueueName: "insert_log"}
+		rabbit.Publish()
+
 	}(*res)
 
 	return res, nil

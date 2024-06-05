@@ -40,10 +40,18 @@ type RedisConfig struct {
 	DefaultCacheTimeOut int    `json:"default_cache_time_out"`
 }
 
+type RabbitMQConfig struct {
+	Username string `json:"username"`
+	Host     string `json:"host"`
+	Port     int    `json:"port"`
+	Password string `json:"password"`
+}
+
 type Configs struct {
-	App   AppConfig
-	DB    DbConfig
-	Redis RedisConfig
+	App      AppConfig
+	DB       DbConfig
+	Redis    RedisConfig
+	RabbitMQ RabbitMQConfig
 }
 
 var lock = &sync.Mutex{}
@@ -84,6 +92,12 @@ func GetInstance() *Configs {
 				PoolTimeout:         GetRedisPoolTimeout(),
 				MinIdleConn:         GetRedisMinIdleConn(),
 				DefaultCacheTimeOut: GetRedisDefaultCacheTimeOut(),
+			},
+			RabbitMQ: RabbitMQConfig{
+				Host:     getEnv("RABBIT_HOST", "localhost"),
+				Port:     GetRabbitPort(),
+				Username: getEnv("RABBIT_USERNAME", "GUEST"),
+				Password: getEnv("RABBIT_PASSWORD", "GUEST"),
 			},
 		}
 		lock.Unlock()
@@ -172,6 +186,15 @@ func GetRedisDefaultCacheTimeOut() int {
 	intVar, err := strconv.Atoi(getEnv("CACHE_DEFAULT_TIMEOUT", "5"))
 	if err != nil {
 		return 5
+	}
+
+	return intVar
+}
+
+func GetRabbitPort() int {
+	intVar, err := strconv.Atoi(getEnv("RABBIT_PORT", "5672"))
+	if err != nil {
+		return 5672
 	}
 
 	return intVar

@@ -2,9 +2,13 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"log"
+	"time"
 
+	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
+	"github.com/adamnasrudin03/go-template/pkg/driver"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
@@ -34,5 +38,19 @@ func (srv *userService) Login(ctx context.Context, input payload.LoginReq) (res 
 		return res, err
 	}
 
+	go func(dataLog models.User) {
+		now := time.Now()
+		logData := models.Log{
+			Name:        fmt.Sprintf("Login user %s(%s)", dataLog.Name, dataLog.Email),
+			Action:      models.Read,
+			TableNameID: dataLog.ID,
+			TableName:   "user",
+			UserID:      dataLog.ID,
+			LogDateTime: now,
+		}
+		rabbit := driver.RabbitMQ{Body: logData.ToString(), QueueName: "insert_log"}
+		rabbit.Publish()
+
+	}(*user)
 	return res, nil
 }
