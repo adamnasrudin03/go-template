@@ -21,7 +21,7 @@ func (c *msgDelivery) TranslateLangID(ctx *gin.Context) {
 		helpers.RenderJSON(ctx.Writer, http.StatusBadRequest, helpers.ErrGetRequest())
 		return
 	}
-	if input.Text == "" {
+	if input.OriginalText == "" {
 		err = ctx.ShouldBindQuery(&input)
 		if err != nil {
 			c.Logger.Errorf("%v error bind Query json: %v ", opName, err)
@@ -31,13 +31,13 @@ func (c *msgDelivery) TranslateLangID(ctx *gin.Context) {
 	}
 
 	input.TargetLanguage = helpers.LangID
-	text, err := helpers.Translate(input.Text, helpers.Auto, input.TargetLanguage)
+	text, err := helpers.Translate(input.OriginalText, helpers.Auto, input.TargetLanguage)
 	if err != nil {
 		c.Logger.Errorf("%v error translate: %v ", opName, err)
 		helpers.RenderJSON(ctx.Writer, http.StatusInternalServerError, helpers.ErrFailedTranslateText())
 		return
 	}
 
-	input.Text = text
+	input.TranslatedText = text
 	helpers.RenderJSON(ctx.Writer, http.StatusOK, input)
 }

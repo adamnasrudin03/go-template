@@ -2,5 +2,6 @@ package payload
 
 type Translate struct {
 	TargetLanguage string `json:"target_language"`
-	Text           string `json:"text" form:"text"`
+	OriginalText   string `json:"original_text" form:"original_text"`
+	TranslatedText string `json:"translated_text"`
 }
