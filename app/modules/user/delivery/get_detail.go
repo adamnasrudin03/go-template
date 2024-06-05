@@ -3,6 +3,7 @@ package delivery
 import (
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
@@ -16,14 +17,20 @@ func (c *userDelivery) GetDetail(ctx *gin.Context) {
 		opName   = "UserDelivery-GetDetail"
 		userID   = ctx.MustGet("id").(uint64)
 		userRole = ctx.MustGet("role").(string)
+		idParam  = strings.TrimSpace(ctx.Param("id"))
 		err      error
+		ID       uint64
 	)
 
-	ID, err := strconv.ParseUint(ctx.Param("id"), 10, 32)
-	if err != nil {
-		c.Logger.Errorf("%v error parse param: %v ", opName, err)
-		helpers.RenderJSON(ctx.Writer, http.StatusBadRequest, helpers.ErrInvalid("ID Pengguna", "User ID"))
-		return
+	ID = userID
+	if idParam != "" {
+		tmp, err := strconv.ParseUint(idParam, 10, 32)
+		if err != nil {
+			c.Logger.Errorf("%v error parse param: %v ", opName, err)
+			helpers.RenderJSON(ctx.Writer, http.StatusBadRequest, helpers.ErrInvalid("ID Pengguna", "User ID"))
+			return
+		}
+		ID = tmp
 	}
 
 	if userRole != models.ROOT && userID != ID {
