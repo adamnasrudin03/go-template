@@ -2,16 +2,16 @@
  This basic REST API service uses the main features of Golang: user, log, and auth with bearer tokens.
 
 ## Technology Used
-- Versioning using Git (See [Git Installation](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git){:target="_blank"} )
-- Programming Language using Go 1.22 or later. (See [Golang Installation](https://golang.org/doc/install))
-- DB using PostgreSQL 14 or later. (See [PostgreSQL Installation](https://www.postgresql.org/download/))
-- Migration using ORM GORM. (See [Documentation](https://gorm.io/docs/migration.html))
-- Cache Using Redis. (See [Redis Installation](https://redis.io/docs/latest/operate/oss_and_stack/install/install-redis/) )
-- Routing Using Gin (See [Gin Framework Doc](https://gin-gonic.com/docs/quickstart/))
-- ORM Library using GORM. (See [GORM Guides](https://gorm.io/docs/index.html) )
-- Auth using Golang-JWT. (See [Golang-JWT Guides](https://github.com/golang-jwt/jwt))
-- Message Broker using RabbitMQ. (See [RabbitMQ Installation](https://www.rabbitmq.com/docs/download/) )
-- Deploy using Docker. (See [Docker Installation](https://docs.docker.com/desktop/) )
+- Versioning using Git (See <a href="https://git-scm.com/book/en/v2/Getting-Started-Installing-Git" target="_blank">Git Installation</a>)
+- Programming Language using Go 1.22 or later. (See <a href="https://golang.org/doc/install" target="_blank">Golang Installation</a>)
+- DB using PostgreSQL 14 or later. (See <a href="https://www.postgresql.org/download/" target="_blank">PostgreSQL Installation</a>)
+- Migration using ORM GORM. (See <a href="https://gorm.io/docs/migration.html" target="_blank">Documentation</a>)
+- Cache Using Redis. (See <a href="https://redis.io/docs/latest/operate/oss_and_stack/install/install-redis/" target="_blank">Redis Installation</a>)
+- Routing Using Gin (See <a href="https://gin-gonic.com/docs/quickstart/" target="_blank">Gin Framework Doc</a>)
+- ORM Library using GORM. (See <a href="https://gorm.io/docs/index.html" target="_blank">GORM Guides</a>)
+- Auth using Golang-JWT. (See <a href="https://github.com/golang-jwt/jwt" target="_blank">Golang-JWT Guides</a>)
+- Message Broker using RabbitMQ. (See <a href="https://www.rabbitmq.com/docs/download/" target="_blank">RabbitMQ Installation</a>)
+- Deploy using Docker. (See <a href="https://docs.docker.com/desktop/" target="_blank">Docker Installation</a>)
 
 
 ## Development Guide
