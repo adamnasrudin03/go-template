@@ -10,52 +10,10 @@ import (
 	"github.com/joho/godotenv"
 )
 
-type AppConfig struct {
-	Name         string
-	Env          string
-	Port         string
-	ExpiredToken int
-	SecretKey    string
-}
-
-type DbConfig struct {
-	Host        string
-	Port        string
-	DbName      string
-	Username    string
-	Password    string
-	DbIsMigrate bool
-	DebugMode   bool
-}
-
-type RedisConfig struct {
-	Host                string `json:"host"`
-	Port                int    `json:"port"`
-	Password            string `json:"password"`
-	Database            int    `json:"database"`
-	Master              string `json:"master"`
-	PoolSize            int    `json:"pool_size"`
-	PoolTimeout         int    `json:"pool_timeout"`
-	MinIdleConn         int    `json:"min_idle_conn"`
-	DefaultCacheTimeOut int    `json:"default_cache_time_out"`
-}
-
-type RabbitMQConfig struct {
-	Username string `json:"username"`
-	Host     string `json:"host"`
-	Port     int    `json:"port"`
-	Password string `json:"password"`
-}
-
-type Configs struct {
-	App      AppConfig
-	DB       DbConfig
-	Redis    RedisConfig
-	RabbitMQ RabbitMQConfig
-}
-
-var lock = &sync.Mutex{}
-var configs *Configs
+var (
+	lock    = &sync.Mutex{}
+	configs *Configs
+)
 
 func GetInstance() *Configs {
 	if configs == nil {
@@ -72,6 +30,7 @@ func GetInstance() *Configs {
 				Port:         getEnv("APP_PORT", "8000"),
 				SecretKey:    getEnv("JWT_SECRET", "MySecretKey"),
 				ExpiredToken: GetExpiredToken(),
+				UseRabbitMQ:  UseRabbitMQ(),
 			},
 			DB: DbConfig{
 				Host:        getEnv("DB_HOST", "127.0.0.1"),
@@ -198,4 +157,13 @@ func GetRabbitPort() int {
 	}
 
 	return intVar
+}
+
+func UseRabbitMQ() bool {
+	res, err := strconv.ParseBool(getEnv("USE_RABBIT", "true"))
+	if err != nil {
+		return true
+	}
+
+	return res
 }

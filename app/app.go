@@ -27,7 +27,7 @@ func WiringRepository(db *gorm.DB, cache *driver.RedisClient, cfg *configs.Confi
 
 func WiringService(repo *registry.Repositories, cache *driver.RedisClient, cfg *configs.Configs, logger *logrus.Logger) *registry.Services {
 	return &registry.Services{
-		User: userSrv.NewUserService(repo.User, *cache, logger),
+		User: userSrv.NewUserService(repo.User, cfg, logger),
 		Log:  logSrv.NewLogService(repo.Log, logger),
 	}
 }

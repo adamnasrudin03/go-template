@@ -26,7 +26,10 @@ var (
 func main() {
 	defer database.CloseDbConnection(db)
 
-	go controllers.Message.Consume(&gin.Context{})
+	if cfg.App.UseRabbitMQ {
+		go controllers.Message.Consume(&gin.Context{})
+	}
+
 	r := router.NewRoutes(*controllers)
 
 	listen := fmt.Sprintf(":%v", cfg.App.Port)

@@ -7,7 +7,6 @@ import (
 
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
-	"github.com/adamnasrudin03/go-template/pkg/driver"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
@@ -66,8 +65,7 @@ func (srv *userService) ChangePassword(ctx context.Context, input payload.Change
 			UserID:      dataLog.UpdatedBy,
 			LogDateTime: now,
 		}
-		rabbit := driver.RabbitMQ{Body: logData.ToString(), QueueName: models.QueueInsertLog}
-		rabbit.Publish()
+		srv.createLogActivity(newCtx, logData)
 	}(*user)
 
 	return nil

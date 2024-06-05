@@ -7,7 +7,6 @@ import (
 
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
-	"github.com/adamnasrudin03/go-template/pkg/driver"
 )
 
 func (srv *userService) GetDetail(ctx context.Context, input payload.DetailReq) (*models.User, error) {
@@ -29,8 +28,7 @@ func (srv *userService) GetDetail(ctx context.Context, input payload.DetailReq) 
 				UserID:      dataLog.UserID,
 				LogDateTime: now,
 			}
-			rabbit := driver.RabbitMQ{Body: logData.ToString(), QueueName: models.QueueInsertLog}
-			rabbit.Publish()
+			srv.createLogActivity(context.Background(), logData)
 
 		}(input)
 
