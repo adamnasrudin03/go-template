@@ -33,8 +33,12 @@ func (c *msgDelivery) consumeRabbitMQ(queueName string) {
 	go func() {
 		ctx := context.Background()
 		for d := range msgs {
-			if d.RoutingKey == models.QueueInsertLog {
+			switch d.RoutingKey {
+			case models.QueueInsertLog:
 				c.createLog(ctx, d, string(d.Body))
+			default:
+				c.Logger.Warnf("Unknown queue: %s", d.RoutingKey)
+				d.Nack(false, false)
 			}
 		}
 	}()
