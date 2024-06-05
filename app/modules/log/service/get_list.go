@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"log"
 
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/log/payload"
@@ -23,7 +22,7 @@ func (srv *logSrv) GetList(ctx context.Context, params *payload.ListLogReq) (*he
 
 	dataDB, err := srv.Repo.GetList(ctx, *params)
 	if err != nil {
-		log.Printf("%v error get records: %v \n", opName, err)
+		srv.Logger.Errorf("%v error get records: %v \n", opName, err)
 		return nil, helpers.ErrDB()
 	}
 
@@ -52,7 +51,7 @@ func (srv *logSrv) GetList(ctx context.Context, params *payload.ListLogReq) (*he
 
 		totalData, err := srv.Repo.GetList(ctx, *params)
 		if err != nil {
-			log.Printf("%v error get total records: %v \n", opName, err)
+			srv.Logger.Errorf("%v error get total records: %v \n", opName, err)
 			return nil, helpers.ErrDB()
 		}
 

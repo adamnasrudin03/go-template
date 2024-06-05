@@ -8,6 +8,7 @@ import (
 	"github.com/adamnasrudin03/go-template/app/modules/log/payload"
 	"github.com/adamnasrudin03/go-template/pkg/driver"
 
+	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
 
@@ -21,15 +22,19 @@ type LogRepository interface {
 }
 
 type logRepo struct {
-	DB    *gorm.DB
-	Cache driver.RedisClient
+	DB     *gorm.DB
+	Cache  driver.RedisClient
+	Logger *logrus.Logger
 }
 
 func NewLogRepository(
 	db *gorm.DB,
-	cache driver.RedisClient) LogRepository {
+	cache driver.RedisClient,
+	logger *logrus.Logger,
+) LogRepository {
 	return &logRepo{
-		DB:    db,
-		Cache: cache,
+		DB:     db,
+		Cache:  cache,
+		Logger: logger,
 	}
 }

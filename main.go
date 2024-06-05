@@ -14,11 +14,12 @@ import (
 
 var (
 	config               = configs.GetInstance()
+	logger               = driver.Logger(config)
 	cache                = driver.Redis(config)
 	db          *gorm.DB = database.SetupDbConnection()
-	repo                 = app.WiringRepository(db, &cache)
-	services             = app.WiringService(repo, &cache)
-	controllers          = app.WiringDelivery(services)
+	repo                 = app.WiringRepository(db, &cache, logger)
+	services             = app.WiringService(repo, &cache, logger)
+	controllers          = app.WiringDelivery(services, logger)
 )
 
 func main() {

@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"fmt"
-	"log"
 
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/log/payload"
@@ -39,7 +38,7 @@ func (r *logRepo) GetList(ctx context.Context, params payload.ListLogReq) (res [
 
 	err = db.WithContext(ctx).Preload("User").Find(&res).Error
 	if err != nil {
-		log.Printf("%v error: %v \n", opName, err)
+		r.Logger.Errorf("%v error: %v \n", opName, err)
 		return []models.Log{}, err
 	}
 

@@ -1,7 +1,6 @@
 package delivery
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
@@ -19,7 +18,7 @@ func (c *userDelivery) Register(ctx *gin.Context) {
 	userID := ctx.MustGet("id").(uint64)
 	err := ctx.ShouldBindJSON(&input)
 	if err != nil {
-		log.Printf("%v error bind json: %v \n", opName, err)
+		c.Logger.Errorf("%v error bind json: %v \n", opName, err)
 		helpers.RenderJSON(ctx.Writer, http.StatusBadRequest, helpers.ErrGetRequest())
 		return
 	}

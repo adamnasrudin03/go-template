@@ -6,6 +6,7 @@ import (
 	"github.com/adamnasrudin03/go-template/app/modules/log/payload"
 	"github.com/adamnasrudin03/go-template/app/modules/log/repository"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
+	"github.com/sirupsen/logrus"
 )
 
 type LogService interface {
@@ -13,13 +14,16 @@ type LogService interface {
 }
 
 type logSrv struct {
-	Repo repository.LogRepository
+	Repo   repository.LogRepository
+	Logger *logrus.Logger
 }
 
 func NewLogService(
 	logRepo repository.LogRepository,
+	logger *logrus.Logger,
 ) LogService {
 	return &logSrv{
-		Repo: logRepo,
+		Repo:   logRepo,
+		Logger: logger,
 	}
 }

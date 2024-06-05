@@ -4,6 +4,7 @@ import (
 	"github.com/adamnasrudin03/go-template/app/modules/user/service"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 )
 
 type UserDelivery interface {
@@ -17,10 +18,12 @@ type UserDelivery interface {
 
 type userDelivery struct {
 	Service service.UserService
+	Logger  *logrus.Logger
 }
 
-func NewUserDelivery(srv service.UserService) UserDelivery {
+func NewUserDelivery(srv service.UserService, logger *logrus.Logger) UserDelivery {
 	return &userDelivery{
 		Service: srv,
+		Logger:  logger,
 	}
 }

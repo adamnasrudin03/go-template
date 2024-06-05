@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/adamnasrudin03/go-template/app/models"
@@ -49,7 +48,7 @@ func (srv *userService) GetDetail(ctx context.Context, input payload.DetailReq) 
 
 	res, err = srv.getDetail(ctx, input)
 	if err != nil {
-		log.Printf("%v error: %v \n", opName, err)
+		srv.Logger.Errorf("%v error: %v \n", opName, err)
 		return nil, err
 	}
 
