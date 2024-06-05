@@ -19,6 +19,9 @@
 ### Documentations
 - not done
 
+### Collection Using Insomnia
+- ./go-template-{date_export}.json
+  
 ### Installation
 - Clone this repo
 
