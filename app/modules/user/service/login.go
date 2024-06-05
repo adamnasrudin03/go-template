@@ -47,7 +47,7 @@ func (srv *userService) Login(ctx context.Context, input payload.LoginReq) (res 
 			UserID:      dataLog.ID,
 			LogDateTime: now,
 		}
-		rabbit := driver.RabbitMQ{Body: logData.ToString(), QueueName: "insert_log"}
+		rabbit := driver.RabbitMQ{Body: logData.ToString(), QueueName: models.QueueInsertLog}
 		rabbit.Publish()
 
 	}(*user)

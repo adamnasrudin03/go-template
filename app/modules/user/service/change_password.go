@@ -66,7 +66,7 @@ func (srv *userService) ChangePassword(ctx context.Context, input payload.Change
 			UserID:      dataLog.UpdatedBy,
 			LogDateTime: now,
 		}
-		rabbit := driver.RabbitMQ{Body: logData.ToString(), QueueName: "insert_log"}
+		rabbit := driver.RabbitMQ{Body: logData.ToString(), QueueName: models.QueueInsertLog}
 		rabbit.Publish()
 	}(*user)
 

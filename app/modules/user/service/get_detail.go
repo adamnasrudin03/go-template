@@ -29,7 +29,7 @@ func (srv *userService) GetDetail(ctx context.Context, input payload.DetailReq) 
 				UserID:      dataLog.UserID,
 				LogDateTime: now,
 			}
-			rabbit := driver.RabbitMQ{Body: logData.ToString(), QueueName: "insert_log"}
+			rabbit := driver.RabbitMQ{Body: logData.ToString(), QueueName: models.QueueInsertLog}
 			rabbit.Publish()
 
 		}(input)

@@ -57,7 +57,7 @@ func (srv *userService) Register(ctx context.Context, input payload.RegisterReq)
 			UserID:      dataLog.CreatedBy,
 			LogDateTime: now,
 		}
-		rabbit := driver.RabbitMQ{Body: logData.ToString(), QueueName: "insert_log"}
+		rabbit := driver.RabbitMQ{Body: logData.ToString(), QueueName: models.QueueInsertLog}
 		rabbit.Publish()
 
 	}(*res)
