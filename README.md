@@ -5,6 +5,7 @@
 - Versioning using Git (See [Git Installation](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git))
 - Programming Language using Go 1.22 or later. (See [Golang Installation](https://golang.org/doc/install))
 - DB using PostgreSQL 14 or later. (See [PostgreSQL Installation](https://www.postgresql.org/download/))
+- Migration using ORM GORM. (See [Documentation](https://gorm.io/docs/migration.html))
 - Cache Using Redis. (See [Redis Installation](https://redis.io/docs/latest/operate/oss_and_stack/install/install-redis/) )
 - Routing Using Gin (See [Gin Framework Doc](https://gin-gonic.com/docs/quickstart/))
 - ORM Library using GORM. (See [GORM Guides](https://gorm.io/docs/index.html) )
