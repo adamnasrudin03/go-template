@@ -32,6 +32,7 @@ func NewRoutes(h registry.Deliveries) routes {
 	r.userRouter(v1, h.User)
 	r.userRootRouter(v1, h.User)
 	r.LogRouter(v1, h.Log)
+	r.MessageRouter(v1, h.Message)
 
 	// // Static file source
 	// staticFileRoutes := r.router.Group("/file")

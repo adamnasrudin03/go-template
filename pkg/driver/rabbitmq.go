@@ -2,6 +2,7 @@ package driver
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/adamnasrudin03/go-template/app/configs"
@@ -54,13 +55,13 @@ func (r *RabbitMQ) Consume() {
 	defer CloseMQ(conn, ch)
 
 	msgs, err := ch.Consume(
-		r.QueueName, // queue
-		"",          // consumer
-		true,        // auto-ack
-		false,       // exclusive
-		false,       // no-local
-		false,       // no-wait
-		nil,         // args
+		r.QueueName,                             // queue
+		fmt.Sprintf("consumer_%s", r.QueueName), // consumer
+		true,                                    // auto-ack
+		false,                                   // exclusive
+		false,                                   // no-local
+		false,                                   // no-wait
+		nil,                                     // args
 	)
 	if err != nil {
 		logger.Panicf("Failed to consume a queue: %v", err)
@@ -71,8 +72,9 @@ func (r *RabbitMQ) Consume() {
 
 	go func() {
 		for d := range msgs {
-			logger.Printf("1.Received a message: %s", d.Body)
-			// d.Ack(false)
+			logger.Printf("Keys: %s", d.RoutingKey)
+			logger.Printf("message: %s", d.Body)
+			d.Nack(false, false)
 		}
 	}()
 
@@ -83,6 +85,6 @@ func (r *RabbitMQ) Consume() {
 	// 	}
 	// }()
 
-	logger.Info(" [*] Waiting for messages. To exit press CTRL+C")
+	logger.Info(" RabbitMQ Waiting for messages. To exit press CTRL+C")
 	<-k
 }

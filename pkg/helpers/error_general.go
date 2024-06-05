@@ -33,3 +33,10 @@ func ErrNotAccess() *ResponseError {
 	}
 	return NewError(ErrForbidden, NewResponseMultiLang(errMsg))
 }
+
+func ErrUnmarshalJSON() *ResponseError {
+	return NewError(ErrUnknown, NewResponseMultiLang(MultiLanguages{
+		ID: "Gagal membatalkan marshal JSON",
+		EN: "Failed to unmarshal JSON",
+	}))
+}

@@ -12,7 +12,7 @@ func (r *userRepo) CreateCache(ctx context.Context, key string, data interface{}
 		err    error
 	)
 
-	err = r.Cache.Set(key, data, time.Duration(config.Redis.DefaultCacheTimeOut)*time.Minute)
+	err = r.Cache.Set(key, data, time.Duration(r.Cfg.Redis.DefaultCacheTimeOut)*time.Minute)
 	if err != nil {
 		r.Logger.Errorf("%v error: %v ", opName, err)
 		return

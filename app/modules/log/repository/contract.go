@@ -12,29 +12,31 @@ import (
 	"gorm.io/gorm"
 )
 
-var config = configs.GetInstance()
-
 type LogRepository interface {
 	CreateCache(ctx context.Context, key string, data interface{})
 	GetCache(ctx context.Context, key string, res interface{})
 	DelCache(ctx context.Context, key string) error
 	GetList(ctx context.Context, params payload.ListLogReq) (res []models.Log, err error)
+	Create(ctx context.Context, input models.Log) (err error)
 }
 
 type logRepo struct {
 	DB     *gorm.DB
 	Cache  driver.RedisClient
+	Cfg    *configs.Configs
 	Logger *logrus.Logger
 }
 
 func NewLogRepository(
 	db *gorm.DB,
 	cache driver.RedisClient,
+	cfg *configs.Configs,
 	logger *logrus.Logger,
 ) LogRepository {
 	return &logRepo{
 		DB:     db,
 		Cache:  cache,
+		Cfg:    cfg,
 		Logger: logger,
 	}
 }

@@ -11,6 +11,7 @@ import (
 
 type LogService interface {
 	GetList(ctx context.Context, params *payload.ListLogReq) (*helpers.Pagination, error)
+	CreateByMessage(ctx context.Context, message string) (err error)
 }
 
 type logSrv struct {

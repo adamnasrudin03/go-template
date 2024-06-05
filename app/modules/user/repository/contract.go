@@ -12,8 +12,6 @@ import (
 	"gorm.io/gorm"
 )
 
-var config = configs.GetInstance()
-
 type UserRepository interface {
 	CreateCache(ctx context.Context, key string, data interface{})
 	GetCache(ctx context.Context, key string, res interface{})
@@ -29,17 +27,20 @@ type UserRepository interface {
 type userRepo struct {
 	DB     *gorm.DB
 	Cache  driver.RedisClient
+	Cfg    *configs.Configs
 	Logger *logrus.Logger
 }
 
 func NewUserRepository(
 	db *gorm.DB,
 	cache driver.RedisClient,
+	cfg *configs.Configs,
 	logger *logrus.Logger,
 ) UserRepository {
 	return &userRepo{
 		DB:     db,
 		Cache:  cache,
+		Cfg:    cfg,
 		Logger: logger,
 	}
 }
