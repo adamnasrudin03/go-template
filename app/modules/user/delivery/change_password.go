@@ -1,7 +1,6 @@
 package delivery
 
 import (
-	"log"
 	"net/http"
 	"strconv"
 
@@ -22,14 +21,14 @@ func (c *userDelivery) ChangePassword(ctx *gin.Context) {
 
 	ID, err := strconv.ParseUint(ctx.Param("id"), 10, 32)
 	if err != nil {
-		log.Printf("%v error parse param: %v \n", opName, err)
+		c.Logger.Errorf("%v error parse param: %v ", opName, err)
 		helpers.RenderJSON(ctx.Writer, http.StatusBadRequest, helpers.ErrInvalid("ID Pengguna", "User ID"))
 		return
 	}
 
 	err = ctx.ShouldBindJSON(&input)
 	if err != nil {
-		log.Printf("%v error bind json: %v \n", opName, err)
+		c.Logger.Errorf("%v error bind json: %v ", opName, err)
 		helpers.RenderJSON(ctx.Writer, http.StatusBadRequest, helpers.ErrGetRequest())
 		return
 	}

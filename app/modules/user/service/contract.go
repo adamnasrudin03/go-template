@@ -7,6 +7,7 @@ import (
 	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
 	"github.com/adamnasrudin03/go-template/app/modules/user/repository"
 	"github.com/adamnasrudin03/go-template/pkg/driver"
+	"github.com/sirupsen/logrus"
 )
 
 type UserService interface {
@@ -19,13 +20,16 @@ type UserService interface {
 
 type userService struct {
 	userRepository repository.UserRepository
+	Logger         *logrus.Logger
 }
 
 func NewUserService(
 	userRepo repository.UserRepository,
 	cache driver.RedisClient,
+	logger *logrus.Logger,
 ) UserService {
 	return &userService{
 		userRepository: userRepo,
+		Logger:         logger,
 	}
 }

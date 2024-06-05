@@ -2,7 +2,6 @@ package driver
 
 import (
 	"encoding/json"
-	"log"
 	"time"
 
 	"github.com/go-redis/redis"
@@ -33,7 +32,7 @@ func NewRedis(redisClient redis.Cmdable) RedisClient {
 func (c *redisCtx) HGet(key, field string) ([]byte, error) {
 	data, err := c.redisClient.HGet(key, field).Result()
 	if err != nil {
-		log.Print(err)
+		logger.Error(err)
 		return nil, err
 	}
 	return []byte(data), nil
@@ -43,20 +42,19 @@ func (c *redisCtx) HGet(key, field string) ([]byte, error) {
 func (c *redisCtx) HSet(key, field string, value interface{}, expDur time.Duration) error {
 	payload, err := json.Marshal(value)
 	if err != nil {
-		log.Print(err)
+		logger.Error(err)
 		return err
 	}
 
 	err = c.redisClient.HSet(key, field, payload).Err()
 	if err != nil {
-		log.Print(err)
 		return err
 	}
 
 	if expDur > 0 {
 		err = c.redisClient.Expire(key, expDur).Err()
 		if err != nil {
-			log.Print(err)
+			logger.Error(err)
 			return err
 		}
 	}
@@ -68,7 +66,7 @@ func (c *redisCtx) HSet(key, field string, value interface{}, expDur time.Durati
 func (c *redisCtx) HDel(key, field string) error {
 	err := c.redisClient.HDel(key, field).Err()
 	if err != nil {
-		log.Print(err)
+		logger.Error(err)
 		return err
 	}
 	return nil

@@ -1,7 +1,6 @@
 package delivery
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/adamnasrudin03/go-template/app/modules/log/payload"
@@ -20,7 +19,7 @@ func (c *logDel) GetList(ctx *gin.Context) {
 
 	err = ctx.ShouldBindQuery(&input)
 	if err != nil {
-		log.Printf("%v error bind json: %v \n", opName, err)
+		c.Logger.Errorf("%v error bind json: %v ", opName, err)
 		helpers.RenderJSON(ctx.Writer, http.StatusBadRequest, helpers.ErrGetRequest())
 		return
 	}
@@ -28,7 +27,7 @@ func (c *logDel) GetList(ctx *gin.Context) {
 	input.UserID = userID
 	res, err := c.Service.GetList(ctx, &input)
 	if err != nil {
-		log.Printf("%v error: %v \n", opName, err)
+		c.Logger.Errorf("%v error: %v ", opName, err)
 		helpers.RenderJSON(ctx.Writer, http.StatusInternalServerError, err)
 		return
 	}

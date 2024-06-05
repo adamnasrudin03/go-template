@@ -2,16 +2,22 @@ package middlewares
 
 import (
 	"errors"
-	"log"
 	"net/http"
 	"strings"
 
+	"github.com/adamnasrudin03/go-template/app/configs"
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/pkg/database"
+	"github.com/adamnasrudin03/go-template/pkg/driver"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
+)
+
+var (
+	cfg    = configs.GetInstance()
+	logger = driver.Logger(cfg)
 )
 
 func Authentication() gin.HandlerFunc {
@@ -69,7 +75,7 @@ func authorizationMustBeValidation(c *gin.Context, isRoleValid map[string]bool, 
 	}
 
 	if err != nil {
-		log.Printf("Failed to check user log in: %v \n", err)
+		logger.Errorf("Failed to check user log in: %v ", err)
 		helpers.RenderJSON(c.Writer, http.StatusUnauthorized, helpers.NewError(helpers.ErrUnauthorized, helpers.NewResponseMultiLang(
 			helpers.MultiLanguages{
 				ID: "Gagal mengecek user log in",

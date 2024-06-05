@@ -1,7 +1,6 @@
 package delivery
 
 import (
-	"log"
 	"net/http"
 	"strconv"
 
@@ -22,7 +21,7 @@ func (c *userDelivery) GetDetail(ctx *gin.Context) {
 
 	ID, err := strconv.ParseUint(ctx.Param("id"), 10, 32)
 	if err != nil {
-		log.Printf("%v error parse param: %v \n", opName, err)
+		c.Logger.Errorf("%v error parse param: %v ", opName, err)
 		helpers.RenderJSON(ctx.Writer, http.StatusBadRequest, helpers.ErrInvalid("ID Pengguna", "User ID"))
 		return
 	}
@@ -38,7 +37,7 @@ func (c *userDelivery) GetDetail(ctx *gin.Context) {
 	})
 
 	if err != nil {
-		log.Printf("%v error: %v \n", opName, err)
+		c.Logger.Errorf("%v error: %v ", opName, err)
 		helpers.RenderJSON(ctx.Writer, http.StatusInternalServerError, err)
 		return
 	}

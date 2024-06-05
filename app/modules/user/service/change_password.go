@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/adamnasrudin03/go-template/app/models"
@@ -30,19 +29,19 @@ func (srv *userService) ChangePassword(ctx context.Context, input payload.Change
 	if !useCache {
 		user, err = srv.getDetail(ctx, payload.DetailReq{ID: input.ID})
 		if err != nil {
-			log.Printf("%v error: %v \n", opName, err)
+			srv.Logger.Errorf("%v error: %v ", opName, err)
 			return err
 		}
 	}
 
 	if !helpers.PasswordValid(user.Password, input.Password) {
-		log.Printf("%v invalid password current \n", opName)
+		srv.Logger.Errorf("%v invalid password current ", opName)
 		return helpers.ErrPasswordNotMatch()
 	}
 
 	newPass, err := helpers.HashPassword(input.NewPassword)
 	if err != nil {
-		log.Printf("%v error hash password: %v \n", opName, err)
+		srv.Logger.Errorf("%v error hash password: %v ", opName, err)
 		return helpers.ErrHashPasswordFailed()
 	}
 	user.UpdatedBy = input.UpdatedBy
@@ -51,7 +50,7 @@ func (srv *userService) ChangePassword(ctx context.Context, input payload.Change
 
 	user, err = srv.userRepository.Updates(ctx, *user)
 	if err != nil {
-		log.Printf("%v error: %v \n", opName, err)
+		srv.Logger.Errorf("%v error: %v ", opName, err)
 		return helpers.ErrUpdatedDB()
 	}
 

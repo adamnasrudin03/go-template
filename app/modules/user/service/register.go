@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/adamnasrudin03/go-template/app/models"
@@ -42,7 +41,7 @@ func (srv *userService) Register(ctx context.Context, input payload.RegisterReq)
 
 	res, err = srv.userRepository.Register(ctx, user)
 	if err != nil || res == nil {
-		log.Printf("%v error create data: %+v \n", opName, err)
+		srv.Logger.Errorf("%v error create data: %v", opName, err)
 		return nil, helpers.ErrCreatedDB()
 	}
 

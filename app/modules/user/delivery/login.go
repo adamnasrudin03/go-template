@@ -1,7 +1,6 @@
 package delivery
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
@@ -20,14 +19,14 @@ func (c *userDelivery) Login(ctx *gin.Context) {
 	validate := validator.New()
 	err := ctx.ShouldBindJSON(&input)
 	if err != nil {
-		log.Printf("%v error bind json: %v \n", opName, err)
+		c.Logger.Errorf("%v error bind json: %v ", opName, err)
 		helpers.RenderJSON(ctx.Writer, http.StatusBadRequest, helpers.ErrGetRequest())
 		return
 	}
 
 	err = validate.Struct(input)
 	if err != nil {
-		log.Printf("%v error validate struct: %v \n", opName, err)
+		c.Logger.Errorf("%v error validate struct: %v ", opName, err)
 		helpers.RenderJSON(ctx.Writer, http.StatusBadRequest, helpers.FormatValidationError(err))
 		return
 	}

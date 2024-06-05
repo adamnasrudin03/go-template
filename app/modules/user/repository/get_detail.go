@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"errors"
-	"log"
 
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
@@ -25,7 +24,7 @@ func (r *userRepo) GetDetail(ctx context.Context, input payload.DetailReq) (res 
 			return nil, nil
 		}
 
-		log.Printf("%v error get db: %v \n", opName, err)
+		r.Logger.Errorf("%v error get db: %v ", opName, err)
 		return
 	}
 	return res, nil

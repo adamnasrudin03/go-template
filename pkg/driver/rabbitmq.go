@@ -2,7 +2,6 @@ package driver
 
 import (
 	"context"
-	"log"
 	"time"
 
 	"github.com/adamnasrudin03/go-template/app/configs"
@@ -14,7 +13,10 @@ type RabbitMQ struct {
 	QueueName string
 }
 
-var cfg = configs.GetInstance()
+var (
+	cfg    = configs.GetInstance()
+	logger = Logger(cfg)
+)
 
 func (r *RabbitMQ) Publish() {
 
@@ -39,10 +41,11 @@ func (r *RabbitMQ) Publish() {
 	)
 
 	if err != nil {
-		log.Printf("Failed to publish a message: %s", err.Error())
+		logger.Panicf("Failed to publish a message: %v", err)
 		return
 	}
-	log.Printf(" [x] Sent %s\n", body)
+
+	logger.Infof("Sent Queue %s body %s ", r.QueueName, body)
 }
 
 func (r *RabbitMQ) Consume() {
@@ -60,7 +63,7 @@ func (r *RabbitMQ) Consume() {
 		nil,         // args
 	)
 	if err != nil {
-		log.Printf("Failed to consume a queue: %s", err.Error())
+		logger.Panicf("Failed to consume a queue: %v", err)
 		return
 	}
 
@@ -68,7 +71,7 @@ func (r *RabbitMQ) Consume() {
 
 	go func() {
 		for d := range msgs {
-			log.Printf("1.Received a message: %s", d.Body)
+			logger.Printf("1.Received a message: %s", d.Body)
 			// d.Ack(false)
 		}
 	}()
@@ -80,6 +83,6 @@ func (r *RabbitMQ) Consume() {
 	// 	}
 	// }()
 
-	log.Printf(" [*] Waiting for messages. To exit press CTRL+C")
+	logger.Info(" [*] Waiting for messages. To exit press CTRL+C")
 	<-k
 }

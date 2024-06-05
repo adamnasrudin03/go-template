@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"errors"
-	"log"
 
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
@@ -19,12 +18,12 @@ func (r *userRepo) Login(ctx context.Context, input payload.LoginReq) (res *mode
 			return nil, nil
 		}
 
-		log.Printf("%v error get db: %v \n", opName, err)
+		r.Logger.Errorf("%v error get db: %v ", opName, err)
 		return nil, helpers.ErrDB()
 	}
 
 	if !helpers.PasswordValid(res.Password, input.Password) {
-		log.Printf("%v invalid password \n", opName)
+		r.Logger.Errorf("%v invalid password ", opName)
 		return nil, helpers.ErrInvalid("Kata Sandi", "Password")
 	}
 

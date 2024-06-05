@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"encoding/json"
-	"log"
 	"time"
 )
 
@@ -15,7 +14,7 @@ func (r *userRepo) CreateCache(ctx context.Context, key string, data interface{}
 
 	err = r.Cache.Set(key, data, time.Duration(config.Redis.DefaultCacheTimeOut)*time.Minute)
 	if err != nil {
-		log.Printf("%v error: %v \n", opName, err)
+		r.Logger.Errorf("%v error: %v ", opName, err)
 		return
 	}
 }
@@ -28,13 +27,13 @@ func (r *userRepo) GetCache(ctx context.Context, key string, res interface{}) {
 
 	data, err := r.Cache.Get(key)
 	if err != nil {
-		log.Printf("%v error: %v \n", opName, err)
+		r.Logger.Errorf("%v error: %v ", opName, err)
 		return
 	}
 
 	err = json.Unmarshal([]byte(data), &res)
 	if err != nil {
-		log.Printf("%v Unmarshal error: %v \n", opName, err)
+		r.Logger.Errorf("%v Unmarshal error: %v ", opName, err)
 		return
 	}
 }
@@ -47,7 +46,7 @@ func (r *userRepo) DelCache(ctx context.Context, key string) error {
 
 	err = r.Cache.Del(key)
 	if err != nil {
-		log.Printf("%v error: %v \n", opName, err)
+		r.Logger.Errorf("%v error: %v ", opName, err)
 		return err
 	}
 

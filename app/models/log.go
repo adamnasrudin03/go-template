@@ -57,7 +57,7 @@ func (m *Log) BeforeCreate(tx *gorm.DB) (err error) {
 func (m *Log) ToString() string {
 	temp, err := helpers.SafeJsonMarshal(m)
 	if err != nil {
-		log.Printf("models.Log.ToString() error: %v \n", err)
+		log.Printf("models.Log.ToString() error: %v ", err)
 		return ""
 	}
 

@@ -31,7 +31,7 @@ func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
 
 	hashedPass, err := helpers.HashPassword(u.Password)
 	if err != nil {
-		log.Printf("failed hash password: %v \n", err)
+		log.Printf("failed hash password: %v ", err)
 		return helpers.ErrHashPasswordFailed()
 	}
 

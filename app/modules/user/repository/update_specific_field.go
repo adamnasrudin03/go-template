@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"log"
 	"time"
 
 	"github.com/adamnasrudin03/go-template/app/models"
@@ -31,7 +30,7 @@ func (r *userRepo) UpdateSpecificField(ctx context.Context, input models.User) (
 	update["updated_at"] = time.Now()
 	err = r.DB.WithContext(ctx).Model(&models.User{}).Where("id = ?", input.ID).Updates(update).Error
 	if err != nil {
-		log.Printf("%v error: %v \n", opName, err)
+		r.Logger.Errorf("%v error: %v ", opName, err)
 		return err
 	}
 

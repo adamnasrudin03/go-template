@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"log"
 
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
@@ -23,7 +22,7 @@ func (srv *userService) getDetail(ctx context.Context, input payload.DetailReq) 
 
 	res, err = srv.userRepository.GetDetail(ctx, input)
 	if err != nil {
-		log.Printf("%v error: %v \n", opName, err)
+		srv.Logger.Errorf("%v error: %v", opName, err)
 		return nil, helpers.ErrDB()
 	}
 
@@ -60,7 +59,7 @@ func (srv *userService) checkIsExistEmail(ctx context.Context, input payload.Det
 	if len(input.Email) > 0 {
 		checkUser, _ = srv.userRepository.GetDetail(ctx, payload.DetailReq{Columns: "id", Email: input.Email})
 		if checkUser != nil && checkUser.ID > 0 {
-			log.Printf("%v Email has be registered \n", opName)
+			srv.Logger.Errorf("%v Email has be registered", opName)
 			return helpers.NewError(helpers.ErrConflict, helpers.NewResponseMultiLang(
 				helpers.MultiLanguages{
 					ID: "Surel Sudah Terdafar",
@@ -79,7 +78,7 @@ func (srv *userService) checkIsExistUsername(ctx context.Context, input payload.
 	if len(input.Username) > 0 {
 		checkUser, _ = srv.userRepository.GetDetail(ctx, payload.DetailReq{Columns: "id", Username: input.Username})
 		if checkUser != nil && checkUser.ID > 0 {
-			log.Printf("%v Username has be registered \n", opName)
+			srv.Logger.Errorf("%v Username has be registered", opName)
 			return helpers.NewError(helpers.ErrConflict, helpers.NewResponseMultiLang(
 				helpers.MultiLanguages{
 					ID: "Username Sudah Terdafar",

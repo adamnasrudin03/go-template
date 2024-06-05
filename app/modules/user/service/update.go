@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/adamnasrudin03/go-template/app/models"
@@ -22,7 +21,7 @@ func (srv *userService) Update(ctx context.Context, input payload.UpdateReq) (re
 
 	_, err = srv.getDetail(ctx, payload.DetailReq{ID: input.ID, Columns: "id"})
 	if err != nil {
-		log.Printf("%v error check data: %+v \n", opName, err)
+		srv.Logger.Errorf("%v error check data: %v", opName, err)
 		return nil, err
 	}
 
@@ -37,13 +36,13 @@ func (srv *userService) Update(ctx context.Context, input payload.UpdateReq) (re
 
 	err = srv.userRepository.UpdateSpecificField(ctx, input.ConvertToUser())
 	if err != nil {
-		log.Printf("%v error update data: %+v \n", opName, err)
+		srv.Logger.Errorf("%v error update data: %v", opName, err)
 		return nil, helpers.ErrUpdatedDB()
 	}
 
 	res, err = srv.getDetail(ctx, payload.DetailReq{ID: input.ID})
 	if err != nil {
-		log.Printf("%v error get data: %+v \n", opName, err)
+		srv.Logger.Errorf("%v error get data: %v", opName, err)
 		return nil, helpers.ErrDB()
 	}
 
