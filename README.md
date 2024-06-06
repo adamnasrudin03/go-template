@@ -17,10 +17,13 @@
 ## Development Guide
 
 ### Documentations
-- not done
+- [Postman Documentation](https://documenter.getpostman.com/view/10619265/2sA3Qzaooy)
 
+### Collection Using Postman
+- ./go-template.postman_collection.json
+  
 ### Collection Using Insomnia
-- ./go-template-{date_export}.json
+- ./go-template.insomnia_collection.json
   
 ### Installation
 - Clone this repo
