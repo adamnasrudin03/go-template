@@ -16,13 +16,12 @@ func (c *msgDelivery) TranslateLangID(ctx *gin.Context) {
 	)
 
 	err = ctx.ShouldBindJSON(&input)
-	if err != nil {
-		c.Logger.Infof("%v bind Body json: %v ", opName, err)
-		if input.OriginalText == "" {
-			err = ctx.ShouldBindQuery(&input)
-			c.Logger.Infof("%v bind Query json: %v ", opName, err)
-		}
+	c.Logger.Tracef("%v bind Body json: %v ", opName, err)
+	if err != nil || input.OriginalText == "" {
+		err = ctx.ShouldBindQuery(&input)
+		c.Logger.Tracef("%v bind Query json: %v ", opName, err)
 	}
+
 	if err != nil {
 		helpers.RenderJSON(ctx.Writer, http.StatusBadRequest, helpers.ErrGetRequest())
 		return
