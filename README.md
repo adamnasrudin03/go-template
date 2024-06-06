@@ -13,11 +13,30 @@
 - Message Broker using RabbitMQ. (See <a href="https://www.rabbitmq.com/docs/download/" target="_blank">RabbitMQ Installation</a>)
 - Deploy using Docker. (See <a href="https://docs.docker.com/desktop/" target="_blank">Docker Installation</a>)
 
+## Feature
+| Method | Auth | Endpoint                          | Dec                                                                   |
+| ------ | ---- | --------------------------------- | --------------------------------------------------------------------- |
+| GET    | no   | /                                 | Welcome API                                                           |
+| POST   | no   | /api/v1/auth/sign-up              | Register user with role USER                                          |
+| POST   | yes  | /api/v1/root/auth/sign-up         | Register user with role USER or ADMIN, auth with super admin (root)   |
+| POST   | no   | /api/v1/auth/sign-in              | Login                                                                 |
+| PATCH  | yes  | /api/v1/users/:id                 | Update User                                                           |
+| GET    | yes  | /api/v1/users/:id                 | Detail User                                                           |
+| GET    | yes  | /api/v1/users                     | List User, auth only admin or super admin (root)                      |
+| PATCH  | yes  | /api/v1/users/change-password/:id | Change Password                                                       |
+| GET    | yes  | /api/v1/logs                      | List log activity history                                             |
+| GET    | no   | /api/v1/message/translate/id      | Translate text to language id (indonesia)                             |
+| GET    | no   | /api/v1/message/consumer          | Trigger manual consume queue rabbitMQ                                 |
+
+### Role
+- ROOT  (role super admin) = create a user the first time the project is run, [check here](https://github.com/adamnasrudin03/go-template/blob/main/pkg/seeders/user.go#L14)
+- ADMIN (role admin)
+- USER (role user)
 
 ## Development Guide
 
 ### Documentations
-- [Postman Documentation](https://documenter.getpostman.com/view/10619265/2sA3Qzaooy)
+- [Postman API Documentation](https://documenter.getpostman.com/view/10619265/2sA3Qzaooy)
 
 ### Collection Using Postman
 - ./go-template.postman_collection.json
