@@ -57,7 +57,7 @@ func (srv *userService) checkIsExistEmail(ctx context.Context, input payload.Det
 	const opName = "UserService-checkIsExistEmail"
 	checkUser := new(models.User)
 	if len(input.Email) > 0 {
-		checkUser, _ = srv.userRepository.GetDetail(ctx, payload.DetailReq{Columns: "id", Email: input.Email})
+		checkUser, _ = srv.userRepository.GetDetail(ctx, payload.DetailReq{Columns: "id", NotID: input.NotID, Email: input.Email})
 		if checkUser != nil && checkUser.ID > 0 {
 			srv.Logger.Errorf("%v Email has be registered", opName)
 			return helpers.NewError(helpers.ErrConflict, helpers.NewResponseMultiLang(
@@ -76,7 +76,7 @@ func (srv *userService) checkIsExistUsername(ctx context.Context, input payload.
 	const opName = "UserService-checkIsExistUsername"
 	checkUser := new(models.User)
 	if len(input.Username) > 0 {
-		checkUser, _ = srv.userRepository.GetDetail(ctx, payload.DetailReq{Columns: "id", Username: input.Username})
+		checkUser, _ = srv.userRepository.GetDetail(ctx, payload.DetailReq{Columns: "id", NotID: input.NotID, Username: input.Username})
 		if checkUser != nil && checkUser.ID > 0 {
 			srv.Logger.Errorf("%v Username has be registered", opName)
 			return helpers.NewError(helpers.ErrConflict, helpers.NewResponseMultiLang(
