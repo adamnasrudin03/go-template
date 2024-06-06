@@ -1,6 +1,8 @@
 # go-template
  This basic REST API service uses the main features of Golang: user, log, translate message and auth with bearer tokens.
 
+</br>
+
 ## Technology Used
 - Versioning using Git (See <a href="https://git-scm.com/book/en/v2/Getting-Started-Installing-Git" target="_blank">Git Installation</a>)
 - Programming Language using Go 1.22 or later. (See <a href="https://golang.org/doc/install" target="_blank">Golang Installation</a>)
@@ -29,14 +31,16 @@
 | GET    | no   | /api/v1/message/consumer          | Trigger manual consume queue rabbitMQ                                 |
 
 ### Role
-- ROOT  (role super admin) = create a user the first time the project is run, [check here](https://github.com/adamnasrudin03/go-template/blob/main/pkg/seeders/user.go#L14)
+- ROOT  (role super admin) = create a user the first time the project is run, <a href="https://github.com/adamnasrudin03/go-template/blob/main/pkg/seeders/user.go#L14" target="_blank"> check here </a> 
 - ADMIN (role admin)
 - USER (role user)
+  
+</br>
 
 ## Development Guide
 
 ### Documentations
-- [Postman API Documentation](https://documenter.getpostman.com/view/10619265/2sA3Qzaooy)
+  <a href="https://documenter.getpostman.com/view/10619265/2sA3Qzaooy" target="_blank"> Postman API Documentation </a>
 
 ### Collection Using Postman
 - ./go-template.postman_collection.json
@@ -57,7 +61,7 @@
         cp .env.example .env
     ```
 - Setup local database
-- If you using RabbitMQ, Please check or create queue for [./app/models/queue.go](https://github.com/adamnasrudin03/go-template/blob/main/app/models/queue.go#L8)
+- If you using RabbitMQ, Please check or create queue for <a href="https://github.com/adamnasrudin03/go-template/blob/main/app/models/queue.go#L8" target="_blank"> ./app/models/queue.go </a>
 - Start service API
     ```sh
         go run main.go
