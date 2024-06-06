@@ -24,7 +24,7 @@ func (c *msgDelivery) consumeRabbitMQ(queueName string) {
 		nil,                                   // argsW
 	)
 	if err != nil {
-		c.Logger.Panicf("Failed to consume a queue: %v", err)
+		c.Logger.Warnf("Failed to consume a queue: %v", err)
 		return
 	}
 

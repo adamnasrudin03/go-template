@@ -35,12 +35,17 @@
         cp .env.example .env
     ```
 - Setup local database
+- If you using RabbitMQ, Please check or create queue for [./app/models/queue.go](https://github.com/adamnasrudin03/go-template/blob/main/app/models/queue.go#L8)
 - Start service API
     ```sh
         go run main.go
     ```
 
 ## Build project by docker
+- check ip address in terminal
+    ```sh
+        ipconfig
+    ```
 - change data environment in file ./docker-compose.yml
 - build with docker compose
 
