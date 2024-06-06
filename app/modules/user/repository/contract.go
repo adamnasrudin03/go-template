@@ -22,6 +22,7 @@ type UserRepository interface {
 	Updates(ctx context.Context, input models.User) (res *models.User, err error)
 	UpdateSpecificField(ctx context.Context, input models.User) (err error)
 	InsertLog(ctx context.Context, input models.Log) (err error)
+	GetList(ctx context.Context, params payload.ListUserReq) (res []models.User, err error)
 }
 
 type userRepo struct {

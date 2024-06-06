@@ -89,3 +89,22 @@ func (srv *userService) checkIsExistUsername(ctx context.Context, input payload.
 	}
 	return nil
 }
+
+func (srv *userService) convertModelsToListResponse(data []models.User) []payload.UserRes {
+	var records = []payload.UserRes{}
+
+	for i := 0; i < len(data); i++ {
+		temp := payload.UserRes{
+			ID:        data[i].ID,
+			Name:      data[i].Name,
+			Role:      helpers.ToTitle(data[i].Role),
+			Username:  data[i].Username,
+			Email:     data[i].Email,
+			CreatedAt: data[i].CreatedAt,
+			UpdatedAt: data[i].UpdatedAt,
+		}
+		records = append(records, temp)
+	}
+
+	return records
+}

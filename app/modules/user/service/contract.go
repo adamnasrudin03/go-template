@@ -7,6 +7,7 @@ import (
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
 	"github.com/adamnasrudin03/go-template/app/modules/user/repository"
+	"github.com/adamnasrudin03/go-template/pkg/helpers"
 	"github.com/sirupsen/logrus"
 )
 
@@ -16,6 +17,7 @@ type UserService interface {
 	GetDetail(ctx context.Context, input payload.DetailReq) (*models.User, error)
 	ChangePassword(ctx context.Context, input payload.ChangePasswordReq) error
 	Update(ctx context.Context, input payload.UpdateReq) (res *models.User, err error)
+	GetList(ctx context.Context, params *payload.ListUserReq) (*helpers.Pagination, error)
 }
 
 type userService struct {

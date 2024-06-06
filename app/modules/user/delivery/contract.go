@@ -14,6 +14,7 @@ type UserDelivery interface {
 	GetDetail(ctx *gin.Context)
 	ChangePassword(ctx *gin.Context)
 	Update(ctx *gin.Context)
+	GetList(ctx *gin.Context)
 }
 
 type userDelivery struct {
