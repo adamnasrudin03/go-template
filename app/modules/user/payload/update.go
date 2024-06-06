@@ -27,7 +27,7 @@ func (m *UpdateReq) Validate() error {
 	}
 
 	m.Role = helpers.ToUpper(m.Role)
-	if m.Role != "" && models.IsUserRoleValid[m.Role] {
+	if m.Role != "" && !models.IsUserRoleValid[m.Role] {
 		return helpers.ErrInvalidFormat("Peran", "Role")
 	}
 
