@@ -2,6 +2,9 @@ package database
 
 import (
 	"fmt"
+	"log"
+	"os"
+	"time"
 
 	"github.com/adamnasrudin03/go-template/app/configs"
 	"github.com/adamnasrudin03/go-template/app/models"
@@ -22,6 +25,26 @@ var (
 
 // SetupDbConnection is creating a new connection to our database
 func SetupDbConnection() *gorm.DB {
+	logLevel := gormLogger.Silent
+	if cfg.App.Env == "dev" {
+		logLevel = gormLogger.Info
+	}
+
+	dbLogger := gormLogger.New(
+		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
+		gormLogger.Config{
+			SlowThreshold: time.Second, // Slow SQL threshold
+			LogLevel:      logLevel,    // Log level
+			Colorful:      true,        // Disable color
+		},
+	)
+	gormConfig := &gorm.Config{
+		// enhance performance config
+		PrepareStmt:            true,
+		SkipDefaultTransaction: true,
+		Logger:                 dbLogger,
+	}
+
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
 		cfg.DB.Host,
 		cfg.DB.Username,
@@ -29,18 +52,10 @@ func SetupDbConnection() *gorm.DB {
 		cfg.DB.DbName,
 		cfg.DB.Port)
 
-	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
-		Logger: gormLogger.Default.LogMode(gormLogger.Silent),
-	})
+	db, err = gorm.Open(postgres.Open(dsn), gormConfig)
 	if err != nil {
 		logger.Panicf("Failed to create a connection to database , %v", err)
 		return nil
-	}
-
-	if cfg.DB.DebugMode {
-		if cfg.App.Env == "dev" {
-			db.Config.Logger = db.Config.Logger.LogMode(gormLogger.Info)
-		}
 	}
 
 	if cfg.DB.DbIsMigrate {

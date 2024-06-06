@@ -39,7 +39,6 @@ func GetInstance() *Configs {
 				Username:    getEnv("DB_USER", "postgres"),
 				Password:    getEnv("DB_PASS", "postgres"),
 				DbIsMigrate: getEnv("DB_IS_MIGRATE", "true") == "true",
-				DebugMode:   getEnv("DEBUG_MODE", "true") == "true",
 			},
 			Redis: RedisConfig{
 				Host:                getEnv("REDIS_HOST", "127.0.0.1"),
