@@ -9,7 +9,7 @@ import (
 func InitUser(db *gorm.DB) {
 	tx := db.Begin()
 	var users = []models.User{}
-	tx.Select("id").Where("role = ? ", models.ROOT).Find(&users)
+	tx.Select("id").Where("role = ? ", models.ROOT).Limit(1).Find(&users)
 	if len(users) == 0 {
 		user := models.User{
 			Name:     "Super Admin",
