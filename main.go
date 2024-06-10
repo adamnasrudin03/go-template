@@ -2,12 +2,14 @@ package main
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/adamnasrudin03/go-template/app"
 	"github.com/adamnasrudin03/go-template/app/configs"
 	"github.com/adamnasrudin03/go-template/app/router"
 	"github.com/adamnasrudin03/go-template/pkg/database"
 	"github.com/adamnasrudin03/go-template/pkg/driver"
+	"github.com/adamnasrudin03/go-template/pkg/helpers"
 	"github.com/gin-gonic/gin"
 
 	"gorm.io/gorm"
@@ -22,6 +24,11 @@ var (
 	services             = app.WiringService(repo, &cache, cfg, logger)
 	controllers          = app.WiringDelivery(services, cfg, logger)
 )
+
+func init() {
+	// set timezone local
+	time.Local = helpers.TimeZoneJakarta()
+}
 
 func main() {
 	defer database.CloseDbConnection(db)

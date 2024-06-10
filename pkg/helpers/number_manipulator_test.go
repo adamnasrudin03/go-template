@@ -1,6 +1,9 @@
 package helpers
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func TestRoundFloat(t *testing.T) {
 	type args struct {
@@ -73,6 +76,74 @@ func TestRoundFloat(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := RoundFloat(tt.args.val, tt.args.precision); got != tt.want {
 				t.Errorf("RoundFloat() got = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestCheckArrayIntNil(t *testing.T) {
+	input := []int{5, 4, 3, 2, 1, 0}
+	type args struct {
+		data []int
+	}
+	tests := []struct {
+		name string
+		args args
+		want []int
+	}{
+		{
+			name: "empty value",
+			args: args{
+				data: []int{},
+			},
+			want: []int{},
+		},
+		{
+			name: "success",
+			args: args{
+				data: input,
+			},
+			want: input,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := CheckArrayIntNil(tt.args.data); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("CheckArrayIntNil() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestCheckIntValue(t *testing.T) {
+	input := 5
+	type args struct {
+		data *int
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{
+			name: "nil value",
+			args: args{
+				data: nil,
+			},
+			want: 0,
+		},
+		{
+			name: "success",
+			args: args{
+				data: &input,
+			},
+			want: input,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := CheckIntValue(tt.args.data); got != tt.want {
+				t.Errorf("CheckIntValue() = %v, want %v", got, tt.want)
 			}
 		})
 	}

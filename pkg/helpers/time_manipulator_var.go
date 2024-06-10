@@ -1,9 +1,5 @@
 package helpers
 
-import (
-	"time"
-)
-
 const (
 	// Format date time
 	FormatDateTime             = `2006-01-02 15:04:05`
@@ -46,7 +42,7 @@ const (
 var (
 
 	// loc
-	loc, _ = time.LoadLocation(AsiaJakarta)
+	loc = TimeZoneJakarta()
 
 	// Mapping Timezone ToT imeLocation ...
 	MappingTimezoneToTimeLocation = map[string]string{

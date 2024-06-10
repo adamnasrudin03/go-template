@@ -7,8 +7,10 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -128,4 +130,9 @@ func StreamToByte(stream io.Reader) []byte {
 	buf := new(bytes.Buffer)
 	buf.ReadFrom(stream)
 	return buf.Bytes()
+}
+
+// encode value param url
+func QueryEscape(s string) string {
+	return url.QueryEscape(strings.TrimSpace(s))
 }
