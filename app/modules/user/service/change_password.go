@@ -17,15 +17,15 @@ func (srv *userService) ChangePassword(ctx context.Context, input payload.Change
 		user = new(models.User)
 		err  error
 	)
+	defer helpers.PanicRecover(opName)
 
 	err = input.Validate()
 	if err != nil {
 		return err
 	}
 
-	srv.userRepository.GetCache(ctx, key, &user)
-	useCache := user != nil && user.ID > 0
-	if !useCache {
+	srv.userRepository.GetCache(ctx, key, user)
+	if user != nil && user.ID > 0 {
 		user, err = srv.getDetail(ctx, payload.DetailReq{ID: input.ID})
 		if err != nil {
 			srv.Logger.Errorf("%v error: %v ", opName, err)

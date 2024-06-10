@@ -12,6 +12,7 @@ import (
 
 func (srv *userService) Login(ctx context.Context, input payload.LoginReq) (res *payload.LoginRes, err error) {
 	const opName = "UserService-Login"
+	defer helpers.PanicRecover(opName)
 
 	user, err := srv.userRepository.Login(ctx, input)
 	if err != nil {

@@ -29,7 +29,7 @@ func (r *RabbitMQ) Publish() {
 
 	body := r.Body
 	message := amqp.Publishing{
-		ContentType: "text/plain",
+		ContentType: "application/json",
 		Body:        []byte(body),
 	}
 
@@ -42,7 +42,7 @@ func (r *RabbitMQ) Publish() {
 	)
 
 	if err != nil {
-		logger.Panicf("Failed to publish a message: %v", err)
+		logger.Errorf("Failed to publish a message: %v", err)
 		return
 	}
 
@@ -64,7 +64,7 @@ func (r *RabbitMQ) Consume() {
 		nil,                                     // args
 	)
 	if err != nil {
-		logger.Panicf("Failed to consume a queue: %v", err)
+		logger.Errorf("Failed to consume a queue: %v", err)
 		return
 	}
 

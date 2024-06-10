@@ -1,6 +1,9 @@
 package helpers
 
-import "net/http"
+import (
+	"log"
+	"net/http"
+)
 
 type ResponseError struct {
 	Status  string         `json:"status"`
@@ -61,4 +64,10 @@ func StatusErrorMapping(code int) int {
 	}
 
 	return statusCode
+}
+
+func PanicRecover(opName string) {
+	if r := recover(); r != nil {
+		log.Printf("%v panic recover: %v \n", opName, r)
+	}
 }

@@ -12,6 +12,7 @@ import (
 
 func (srv *userService) Register(ctx context.Context, input payload.RegisterReq) (res *models.User, err error) {
 	const opName = "UserService-Register"
+	defer helpers.PanicRecover(opName)
 
 	err = input.Validate()
 	if err != nil {

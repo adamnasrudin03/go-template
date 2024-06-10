@@ -34,8 +34,6 @@ func (srv *LogServiceTestSuite) Test_logSrv_CreateByMessage() {
 	}{
 		{
 			name: "params message is empty",
-			mockFunc: func() {
-			},
 			args: args{
 				message: "",
 			},
@@ -43,8 +41,6 @@ func (srv *LogServiceTestSuite) Test_logSrv_CreateByMessage() {
 		},
 		{
 			name: "err unmarshal message when params message is invalid",
-			mockFunc: func() {
-			},
 			args: args{
 				message: "invalid message",
 			},
@@ -73,7 +69,9 @@ func (srv *LogServiceTestSuite) Test_logSrv_CreateByMessage() {
 	}
 	for _, tt := range tests {
 		srv.T().Run(tt.name, func(t *testing.T) {
-			tt.mockFunc()
+			if tt.mockFunc != nil {
+				tt.mockFunc()
+			}
 
 			if err := srv.service.CreateByMessage(srv.ctx, tt.args.message); (err != nil) != tt.wantErr {
 				t.Errorf("logSrv.CreateByMessage() error = %v, wantErr %v", err, tt.wantErr)

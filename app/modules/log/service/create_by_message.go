@@ -10,6 +10,7 @@ import (
 
 func (srv *logSrv) CreateByMessage(ctx context.Context, message string) (err error) {
 	const opName = "LogService-CreateByMessage"
+	defer helpers.PanicRecover(opName)
 	if message == "" {
 		return helpers.ErrIsRequired("Pesan", "Message")
 	}

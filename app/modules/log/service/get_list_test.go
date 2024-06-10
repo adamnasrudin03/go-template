@@ -91,8 +91,6 @@ func (srv *LogServiceTestSuite) Test_logSrv_GetList() {
 	}{
 		{
 			name: "invalid params user id",
-			mockFunc: func() {
-			},
 			params: &payload.ListLogReq{
 				UserID: 0,
 			},
@@ -101,8 +99,6 @@ func (srv *LogServiceTestSuite) Test_logSrv_GetList() {
 		},
 		{
 			name: "invalid order_by",
-			mockFunc: func() {
-			},
 			params: &payload.ListLogReq{
 				UserID: 1,
 				BasedFilter: models.BasedFilter{
@@ -185,7 +181,9 @@ func (srv *LogServiceTestSuite) Test_logSrv_GetList() {
 	}
 	for _, tt := range tests {
 		srv.T().Run(tt.name, func(t *testing.T) {
-			tt.mockFunc()
+			if tt.mockFunc != nil {
+				tt.mockFunc()
+			}
 
 			got, err := srv.service.GetList(srv.ctx, tt.params)
 			if (err != nil) != tt.wantErr {

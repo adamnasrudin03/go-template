@@ -159,7 +159,7 @@ func GetRabbitPort() int {
 }
 
 func UseRabbitMQ() bool {
-	res, err := strconv.ParseBool(getEnv("USE_RABBIT", "true"))
+	res, err := strconv.ParseBool(getEnv("USE_RABBIT", "false"))
 	if err != nil {
 		return true
 	}

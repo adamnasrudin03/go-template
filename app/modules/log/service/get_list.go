@@ -14,6 +14,7 @@ func (srv *logSrv) GetList(ctx context.Context, params *payload.ListLogReq) (*he
 		records      = []payload.LogRes{}
 		totalRecords = len(records)
 	)
+	defer helpers.PanicRecover(opName)
 
 	err := params.Validate()
 	if err != nil {

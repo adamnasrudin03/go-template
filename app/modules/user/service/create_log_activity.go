@@ -10,6 +10,7 @@ import (
 
 func (srv *userService) createLogActivity(ctx context.Context, input models.Log) (err error) {
 	const opName = "UserService-createLogActivity"
+	defer helpers.PanicRecover(opName)
 
 	if srv.Cfg.App.UseRabbitMQ {
 		srv.Logger.Info("Using insert log activity by rabbitMQ...")

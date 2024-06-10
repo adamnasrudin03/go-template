@@ -14,6 +14,7 @@ func (srv *userService) GetList(ctx context.Context, params *payload.ListUserReq
 		records      = []payload.UserRes{}
 		totalRecords = len(records)
 	)
+	defer helpers.PanicRecover(opName)
 
 	err := params.Validate()
 	if err != nil {

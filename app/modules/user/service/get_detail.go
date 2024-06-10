@@ -7,6 +7,7 @@ import (
 
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
+	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
 func (srv *userService) GetDetail(ctx context.Context, input payload.DetailReq) (*models.User, error) {
@@ -18,6 +19,7 @@ func (srv *userService) GetDetail(ctx context.Context, input payload.DetailReq) 
 	)
 
 	defer func() {
+		helpers.PanicRecover(opName)
 		go func(dataLog payload.DetailReq) {
 			now := time.Now()
 			logData := models.Log{
@@ -39,7 +41,7 @@ func (srv *userService) GetDetail(ctx context.Context, input payload.DetailReq) 
 		return nil, err
 	}
 
-	srv.userRepository.GetCache(ctx, key, &res)
+	srv.userRepository.GetCache(ctx, key, res)
 	if res != nil && res.ID > 0 {
 		return res, nil
 	}

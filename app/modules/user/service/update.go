@@ -12,6 +12,7 @@ import (
 
 func (srv *userService) Update(ctx context.Context, input payload.UpdateReq) (res *models.User, err error) {
 	const opName = "UserService-Update"
+	defer helpers.PanicRecover(opName)
 
 	err = input.Validate()
 	if err != nil {
