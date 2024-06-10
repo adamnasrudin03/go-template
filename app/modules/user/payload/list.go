@@ -22,7 +22,7 @@ func (m *ListUserReq) Validate() error {
 	m.SortBy = helpers.ToLower(m.SortBy)
 	m.OrderBy = helpers.ToUpper(m.OrderBy)
 	if len(m.OrderBy) > 0 && !models.IsValidOrderBy[m.OrderBy] {
-		return helpers.ErrInvalid("sort_by", "sort_by")
+		return helpers.ErrInvalid("order_by", "order_by")
 	}
 
 	m.BasedFilter.DefaultQuery()

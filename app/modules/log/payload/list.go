@@ -21,7 +21,7 @@ func (m *ListLogReq) Validate() error {
 	m.SortBy = strings.TrimSpace(strings.ToLower(m.SortBy))
 	m.OrderBy = strings.TrimSpace(strings.ToUpper(m.OrderBy))
 	if len(m.OrderBy) > 0 && !models.IsValidOrderBy[m.OrderBy] {
-		return helpers.ErrInvalid("sort_by", "sort_by")
+		return helpers.ErrInvalid("order_by", "order_by")
 	}
 
 	m.BasedFilter.DefaultQuery()
