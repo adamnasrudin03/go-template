@@ -78,6 +78,16 @@
     ```sh
         docker-compose -f "docker-compose.yml" up -d --build 
     ```
+    - with make file
+    ```sh
+        make docker
+    ```
+
+## Coverage Unit Test
+  - with make file
+  ```sh
+      make cover
+  ```
 
 
 ###

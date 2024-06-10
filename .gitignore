@@ -26,3 +26,4 @@ db/
 .DS_Store
 .vscode
 __debug*
+coverage.txt
