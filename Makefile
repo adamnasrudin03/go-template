@@ -22,7 +22,7 @@ dependency:
 	@go get -v ./...
 
 unit-test: dependency
-	@go test -v -short ./src/usecase/... ./shared/...
+	@go test -v -short ./app/modules/.../service ./pkg/helpers
 
 cover :
 	@echo "\x1b[32;1m>>> running unit test and calculate coverage \x1b[0m"
