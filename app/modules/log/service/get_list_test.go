@@ -13,7 +13,8 @@ import (
 
 func (srv *LogServiceTestSuite) Test_logSrv_GetList() {
 	input := &payload.ListLogReq{
-		UserID: 1,
+		UserID:     1,
+		UsePreload: true,
 		BasedFilter: models.BasedFilter{
 			Page:  1,
 			Limit: 2,
@@ -22,7 +23,8 @@ func (srv *LogServiceTestSuite) Test_logSrv_GetList() {
 	input.BasedFilter = input.BasedFilter.DefaultQuery()
 
 	inputErr := &payload.ListLogReq{
-		UserID: 1,
+		UserID:     1,
+		UsePreload: true,
 		BasedFilter: models.BasedFilter{
 			Page:  1,
 			Limit: 2,
@@ -140,6 +142,7 @@ func (srv *LogServiceTestSuite) Test_logSrv_GetList() {
 
 				paramsTotal := payload.ListLogReq{
 					UserID:      inputErr.UserID,
+					UsePreload:  inputErr.UsePreload,
 					BasedFilter: inputErr.BasedFilter,
 				}
 				paramsTotal.CustomColumns = "id"
@@ -159,6 +162,7 @@ func (srv *LogServiceTestSuite) Test_logSrv_GetList() {
 
 				paramsTotal := payload.ListLogReq{
 					UserID:      input.UserID,
+					UsePreload:  inputErr.UsePreload,
 					BasedFilter: input.BasedFilter,
 				}
 				paramsTotal.CustomColumns = "id"
