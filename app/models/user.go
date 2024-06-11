@@ -47,5 +47,5 @@ func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
 func (u *User) ConvertToResponse() {
 	u.Password = ""
 	u.Salt = ""
-	u.Role = strings.ReplaceAll(strings.ToLower(u.Role), "_", " ")
+	u.Role = strings.ReplaceAll(helpers.ToLower(u.Role), "_", " ")
 }
