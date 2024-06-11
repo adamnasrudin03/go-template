@@ -18,7 +18,7 @@ func (r *logRepo) GetList(ctx context.Context, params payload.ListLogReq) (res [
 		column = params.CustomColumns
 	}
 
-	db := r.DB.Select(column).Model(models.Log{})
+	db := r.DB.Select(column).Model(models.Log{}).WithContext(ctx)
 
 	if params.UserID > 0 {
 		db = db.Where(`user_id = ?`, params.UserID)
@@ -36,7 +36,11 @@ func (r *logRepo) GetList(ctx context.Context, params payload.ListLogReq) (res [
 		db = db.Offset(params.Offset).Limit(params.Limit)
 	}
 
-	err = db.WithContext(ctx).Preload("User").Find(&res).Error
+	if params.UsePreload {
+		db = db.Preload("User")
+	}
+
+	err = db.Find(&res).Error
 	if err != nil {
 		r.Logger.Errorf("%v error: %v ", opName, err)
 		return []models.Log{}, err

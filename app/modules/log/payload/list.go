@@ -9,7 +9,8 @@ import (
 )
 
 type ListLogReq struct {
-	UserID uint64 `json:"user_id"`
+	UserID     uint64 `json:"user_id"`
+	UsePreload bool
 	models.BasedFilter
 }
 
@@ -25,6 +26,7 @@ func (m *ListLogReq) Validate() error {
 	}
 
 	m.BasedFilter.DefaultQuery()
+	m.UsePreload = true
 	return nil
 }
 

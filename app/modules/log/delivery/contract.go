@@ -8,6 +8,7 @@ import (
 
 type LogDelivery interface {
 	GetList(ctx *gin.Context)
+	Download(ctx *gin.Context)
 }
 
 type logDel struct {
