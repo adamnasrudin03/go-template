@@ -25,7 +25,8 @@ func (srv *userService) ChangePassword(ctx context.Context, input payload.Change
 	}
 
 	srv.userRepository.GetCache(ctx, key, user)
-	if user != nil && user.ID > 0 {
+	useCache := user != nil && user.ID > 0
+	if !useCache {
 		user, err = srv.getDetail(ctx, payload.DetailReq{ID: input.ID})
 		if err != nil {
 			srv.Logger.Errorf("%v error: %v ", opName, err)
@@ -44,7 +45,6 @@ func (srv *userService) ChangePassword(ctx context.Context, input payload.Change
 		return helpers.ErrHashPasswordFailed()
 	}
 	user.UpdatedBy = input.UpdatedBy
-	user.UpdatedAt = time.Now()
 	user.Password = newPass
 
 	user, err = srv.userRepository.Updates(ctx, *user)
