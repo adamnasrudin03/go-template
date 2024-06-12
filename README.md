@@ -1,7 +1,6 @@
 # go-template
  This basic REST API service uses the main features of Golang: user, log, translate message and auth with bearer tokens.
 
-</br>
 
 ## Technology Used
 - Versioning using Git (See <a href="https://git-scm.com/book/en/v2/Getting-Started-Installing-Git" target="_blank">Git Installation</a>)
@@ -27,6 +26,7 @@
 | GET    | yes  | /api/v1/users                     | List User, auth only admin or super admin (root)                      |
 | PATCH  | yes  | /api/v1/users/change-password/:id | Change Password                                                       |
 | GET    | yes  | /api/v1/logs                      | List log activity history                                             |
+| GET    | yes  | /api/v1/logs/download             | Download xlx List log activity history                                |
 | GET    | no   | /api/v1/message/translate/id      | Translate text to language id (indonesia)                             |
 | GET    | no   | /api/v1/message/consumer          | Trigger manual consume queue rabbitMQ                                 |
 
@@ -35,7 +35,6 @@
 - ADMIN (role admin)
 - USER (role user)
   
-</br>
 
 ## Development Guide
 
