@@ -8,9 +8,6 @@ import (
 )
 
 type UserDelivery interface {
-	RegisterUser(ctx *gin.Context)
-	Register(ctx *gin.Context)
-	Login(ctx *gin.Context)
 	GetDetail(ctx *gin.Context)
 	ChangePassword(ctx *gin.Context)
 	Update(ctx *gin.Context)

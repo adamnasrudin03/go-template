@@ -6,15 +6,15 @@ import (
 	"time"
 
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
+	"github.com/adamnasrudin03/go-template/app/modules/auth/dto"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
-func (srv *userService) Login(ctx context.Context, input dto.LoginReq) (res *dto.LoginRes, err error) {
-	const opName = "UserService-Login"
+func (srv *AuthSrv) Login(ctx context.Context, input dto.LoginReq) (res *dto.LoginRes, err error) {
+	const opName = "AuthService-Login"
 	defer helpers.PanicRecover(opName)
 
-	user, err := srv.userRepository.Login(ctx, input)
+	user, err := srv.Repo.Login(ctx, input)
 	if err != nil {
 		srv.Logger.Errorf("%v error: %v", opName, err)
 		return res, err
@@ -47,7 +47,7 @@ func (srv *userService) Login(ctx context.Context, input dto.LoginReq) (res *dto
 			UserID:      dataLog.ID,
 			LogDateTime: now,
 		}
-		srv.createLogActivity(context.Background(), logData)
+		srv.RepoLog.CreateLogActivity(context.Background(), logData)
 
 	}(*user)
 	return res, nil

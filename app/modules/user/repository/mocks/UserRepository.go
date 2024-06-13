@@ -140,66 +140,6 @@ func (_m *UserRepository) InsertLog(ctx context.Context, input models.Log) error
 	return r0
 }
 
-// Login provides a mock function with given fields: ctx, input
-func (_m *UserRepository) Login(ctx context.Context, input dto.LoginReq) (*models.User, error) {
-	ret := _m.Called(ctx, input)
-
-	if len(ret) == 0 {
-		panic("no return value specified for Login")
-	}
-
-	var r0 *models.User
-	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, dto.LoginReq) (*models.User, error)); ok {
-		return rf(ctx, input)
-	}
-	if rf, ok := ret.Get(0).(func(context.Context, dto.LoginReq) *models.User); ok {
-		r0 = rf(ctx, input)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*models.User)
-		}
-	}
-
-	if rf, ok := ret.Get(1).(func(context.Context, dto.LoginReq) error); ok {
-		r1 = rf(ctx, input)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
-// Register provides a mock function with given fields: ctx, input
-func (_m *UserRepository) Register(ctx context.Context, input models.User) (*models.User, error) {
-	ret := _m.Called(ctx, input)
-
-	if len(ret) == 0 {
-		panic("no return value specified for Register")
-	}
-
-	var r0 *models.User
-	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, models.User) (*models.User, error)); ok {
-		return rf(ctx, input)
-	}
-	if rf, ok := ret.Get(0).(func(context.Context, models.User) *models.User); ok {
-		r0 = rf(ctx, input)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*models.User)
-		}
-	}
-
-	if rf, ok := ret.Get(1).(func(context.Context, models.User) error); ok {
-		r1 = rf(ctx, input)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
 // UpdateSpecificField provides a mock function with given fields: ctx, input
 func (_m *UserRepository) UpdateSpecificField(ctx context.Context, input models.User) error {
 	ret := _m.Called(ctx, input)

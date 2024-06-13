@@ -3,19 +3,19 @@ package delivery
 import (
 	"net/http"
 
-	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
+	"github.com/adamnasrudin03/go-template/app/modules/auth/dto"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 )
 
-func (c *userDelivery) RegisterUser(ctx *gin.Context) {
+func (c *authDelivery) Login(ctx *gin.Context) {
 	var (
-		opName = "UserDelivery-RegisterUser"
-		input  dto.RegisterUserReq
+		opName = "AuthDelivery-Login"
+		input  dto.LoginReq
 	)
+
 	validate := validator.New()
 	err := ctx.ShouldBindJSON(&input)
 	if err != nil {
@@ -31,12 +31,11 @@ func (c *userDelivery) RegisterUser(ctx *gin.Context) {
 		return
 	}
 
-	input.Role = models.USER
-	req := input.ConvertToRegisterReq()
-	res, err := c.Service.Register(ctx, req)
+	res, err := c.Service.Login(ctx, input)
 	if err != nil {
 		helpers.RenderJSON(ctx.Writer, http.StatusInternalServerError, err)
 		return
 	}
-	helpers.RenderJSON(ctx.Writer, http.StatusCreated, res)
+
+	helpers.RenderJSON(ctx.Writer, http.StatusOK, res)
 }

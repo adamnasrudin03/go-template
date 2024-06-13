@@ -16,8 +16,6 @@ type UserRepository interface {
 	CreateCache(ctx context.Context, key string, data interface{})
 	GetCache(ctx context.Context, key string, res interface{})
 	DelCache(ctx context.Context, key string) error
-	Register(ctx context.Context, input models.User) (res *models.User, err error)
-	Login(ctx context.Context, input dto.LoginReq) (res *models.User, er error)
 	GetDetail(ctx context.Context, input dto.DetailReq) (res *models.User, err error)
 	Updates(ctx context.Context, input models.User) (res *models.User, err error)
 	UpdateSpecificField(ctx context.Context, input models.User) (err error)

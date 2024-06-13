@@ -3,19 +3,19 @@ package delivery
 import (
 	"net/http"
 
-	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
+	"github.com/adamnasrudin03/go-template/app/modules/auth/dto"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 
 	"github.com/gin-gonic/gin"
 )
 
-func (c *userDelivery) Register(ctx *gin.Context) {
+func (c *authDelivery) Register(ctx *gin.Context) {
 	var (
-		opName = "UserDelivery-Register"
+		opName = "AuthDelivery-Register"
 		input  dto.RegisterReq
 	)
 
-	userID := ctx.MustGet("id").(uint64)
+	AuthID := ctx.MustGet("id").(uint64)
 	err := ctx.ShouldBindJSON(&input)
 	if err != nil {
 		c.Logger.Errorf("%v error bind json: %v ", opName, err)
@@ -23,7 +23,7 @@ func (c *userDelivery) Register(ctx *gin.Context) {
 		return
 	}
 
-	input.CreatedBy = userID
+	input.CreatedBy = AuthID
 	res, err := c.Service.Register(ctx, input)
 	if err != nil {
 		helpers.RenderJSON(ctx.Writer, http.StatusInternalServerError, err)

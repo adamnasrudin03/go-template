@@ -6,13 +6,13 @@ import (
 	"testing"
 
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
+	"github.com/adamnasrudin03/go-template/app/modules/auth/dto"
+	userDto "github.com/adamnasrudin03/go-template/app/modules/user/dto"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 	"github.com/stretchr/testify/mock"
 )
 
-func (srv *UserServiceTestSuite) Test_userService_Register() {
-
+func (srv *AuthServiceTestSuite) TestAuthSrv_Register() {
 	reqEnv := map[string]string{
 		"USE_RABBIT": "false",
 	}
@@ -47,7 +47,7 @@ func (srv *UserServiceTestSuite) Test_userService_Register() {
 			},
 			mockFunc: func(params dto.RegisterReq) {
 
-				srv.repo.On("CheckIsDuplicate", mock.Anything, dto.DetailReq{
+				srv.repoUser.On("CheckIsDuplicate", mock.Anything, userDto.DetailReq{
 					Email:    params.Email,
 					Username: params.Username}).Return(errors.New("duplicated username")).Once()
 
@@ -68,7 +68,7 @@ func (srv *UserServiceTestSuite) Test_userService_Register() {
 				UpdatedBy: 1,
 			},
 			mockFunc: func(params dto.RegisterReq) {
-				srv.repo.On("CheckIsDuplicate", mock.Anything, dto.DetailReq{
+				srv.repoUser.On("CheckIsDuplicate", mock.Anything, userDto.DetailReq{
 					Email:    params.Email,
 					Username: params.Username}).Return(nil).Once()
 
@@ -101,7 +101,7 @@ func (srv *UserServiceTestSuite) Test_userService_Register() {
 				UpdatedBy: 1,
 			},
 			mockFunc: func(params dto.RegisterReq) {
-				srv.repo.On("CheckIsDuplicate", mock.Anything, dto.DetailReq{
+				srv.repoUser.On("CheckIsDuplicate", mock.Anything, userDto.DetailReq{
 					Email:    params.Email,
 					Username: params.Username}).Return(nil).Once()
 
@@ -117,7 +117,7 @@ func (srv *UserServiceTestSuite) Test_userService_Register() {
 					},
 				}
 				srv.repo.On("Register", mock.Anything, user).Return(&user, nil).Once()
-				srv.repo.On("InsertLog", mock.Anything, mock.Anything).Return(nil).Once()
+				srv.repoLog.On("CreateLogActivity", mock.Anything, mock.Anything).Return(nil).Once()
 			},
 			wantRes: &models.User{
 				Name:     "Hello world",
@@ -143,11 +143,11 @@ func (srv *UserServiceTestSuite) Test_userService_Register() {
 
 			gotRes, err := srv.service.Register(srv.ctx, tt.input)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("userService.Register() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("AuthService.Register() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(gotRes, tt.wantRes) {
-				t.Errorf("userService.Register() = %v, want %v", gotRes, tt.wantRes)
+				t.Errorf("AuthService.Register() = %v, want %v", gotRes, tt.wantRes)
 			}
 		})
 	}

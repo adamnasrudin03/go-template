@@ -29,8 +29,8 @@ func NewRoutes(h registry.Deliveries) routes {
 	})
 
 	v1 := r.router.Group("/api/v1")
+	r.authRouter(v1, h.Auth)
 	r.userRouter(v1, h.User)
-	r.userRootRouter(v1, h.User)
 	r.LogRouter(v1, h.Log)
 	r.MessageRouter(v1, h.Message)
 

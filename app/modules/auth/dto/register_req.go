@@ -45,7 +45,7 @@ func (m *RegisterReq) Validate() error {
 
 	m.Username = strings.TrimSpace(m.Username)
 	if len(m.Username) < 4 {
-		return helpers.ErrMinCharacters("Nama pengguna", "Username", "4")
+		return helpers.ErrMinCharacters("Nama pengguna", "username", "4")
 	}
 
 	return nil
