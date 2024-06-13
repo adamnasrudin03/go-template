@@ -10,7 +10,7 @@ import (
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
-func (srv *userService) Update(ctx context.Context, input dto.UpdateReq) (res *models.User, err error) {
+func (srv *UserSrv) Update(ctx context.Context, input dto.UpdateReq) (res *models.User, err error) {
 	const opName = "UserService-Update"
 	defer helpers.PanicRecover(opName)
 
@@ -25,7 +25,7 @@ func (srv *userService) Update(ctx context.Context, input dto.UpdateReq) (res *m
 		return nil, err
 	}
 
-	err = srv.userRepository.CheckIsDuplicate(ctx, dto.DetailReq{
+	err = srv.Repo.CheckIsDuplicate(ctx, dto.DetailReq{
 		Email:    input.Email,
 		Username: input.Username,
 		NotID:    input.ID,
@@ -34,7 +34,7 @@ func (srv *userService) Update(ctx context.Context, input dto.UpdateReq) (res *m
 		return nil, err
 	}
 
-	err = srv.userRepository.UpdateSpecificField(ctx, input.ConvertToUser())
+	err = srv.Repo.UpdateSpecificField(ctx, input.ConvertToUser())
 	if err != nil {
 		srv.Logger.Errorf("%v error update data: %v", opName, err)
 		return nil, helpers.ErrUpdatedDB()
@@ -51,16 +51,16 @@ func (srv *userService) Update(ctx context.Context, input dto.UpdateReq) (res *m
 	go func(dataLog models.User) {
 		newCtx := context.Background()
 		now := time.Now()
-		srv.userRepository.CreateCache(newCtx, fmt.Sprintf("%v-%d", models.CacheUserDetail, dataLog.ID), dataLog)
+		srv.RepoCache.CreateCache(newCtx, fmt.Sprintf("%v-%d", models.CacheUserDetail, dataLog.ID), dataLog, time.Minute*5)
 		logData := models.Log{
 			Name:        fmt.Sprintf("Updated data user %s(%s)", dataLog.Name, dataLog.Email),
 			Action:      models.Updated,
 			TableNameID: dataLog.ID,
 			TableName:   "user",
-			UserID:      dataLog.CreatedBy,
+			UserID:      dataLog.UpdatedBy,
 			LogDateTime: now,
 		}
-		srv.createLogActivity(newCtx, logData)
+		srv.RepoLog.CreateLogActivity(newCtx, logData)
 
 	}(*res)
 

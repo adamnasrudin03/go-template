@@ -94,24 +94,6 @@ func (_m *UserRepository) GetList(ctx context.Context, params dto.ListUserReq) (
 	return r0, r1
 }
 
-// InsertLog provides a mock function with given fields: ctx, input
-func (_m *UserRepository) InsertLog(ctx context.Context, input models.Log) error {
-	ret := _m.Called(ctx, input)
-
-	if len(ret) == 0 {
-		panic("no return value specified for InsertLog")
-	}
-
-	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, models.Log) error); ok {
-		r0 = rf(ctx, input)
-	} else {
-		r0 = ret.Error(0)
-	}
-
-	return r0
-}
-
 // UpdateSpecificField provides a mock function with given fields: ctx, input
 func (_m *UserRepository) UpdateSpecificField(ctx context.Context, input models.User) error {
 	ret := _m.Called(ctx, input)

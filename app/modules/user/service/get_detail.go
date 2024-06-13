@@ -10,7 +10,7 @@ import (
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
-func (srv *userService) GetDetail(ctx context.Context, input dto.DetailReq) (*models.User, error) {
+func (srv *UserSrv) GetDetail(ctx context.Context, input dto.DetailReq) (*models.User, error) {
 	const opName = "UserService-GetDetail"
 	var (
 		key = fmt.Sprintf("%v-%d", models.CacheUserDetail, input.ID)
@@ -30,10 +30,8 @@ func (srv *userService) GetDetail(ctx context.Context, input dto.DetailReq) (*mo
 				UserID:      dataLog.UserID,
 				LogDateTime: now,
 			}
-			srv.createLogActivity(context.Background(), logData)
-
+			srv.RepoLog.CreateLogActivity(context.Background(), logData)
 		}(input)
-
 	}()
 
 	err = input.Validate()
@@ -41,7 +39,7 @@ func (srv *userService) GetDetail(ctx context.Context, input dto.DetailReq) (*mo
 		return nil, err
 	}
 
-	srv.userRepository.GetCache(ctx, key, res)
+	srv.RepoCache.GetCache(ctx, key, res)
 	if res != nil && res.ID > 0 {
 		return res, nil
 	}
@@ -53,7 +51,7 @@ func (srv *userService) GetDetail(ctx context.Context, input dto.DetailReq) (*mo
 	}
 
 	key = fmt.Sprintf("%v-%d", models.CacheUserDetail, res.ID)
-	go srv.userRepository.CreateCache(context.Background(), key, res)
+	go srv.RepoCache.CreateCache(context.Background(), key, res, time.Minute*5)
 
 	res.ConvertToResponse()
 	return res, nil

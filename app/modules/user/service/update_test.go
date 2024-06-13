@@ -4,6 +4,7 @@ import (
 	"errors"
 	"reflect"
 	"testing"
+	"time"
 
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
@@ -156,8 +157,8 @@ func (srv *UserServiceTestSuite) Test_userService_Update() {
 					Return(nil).Once()
 				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{ID: input.ID}).
 					Return(&user, nil).Once()
-				srv.repo.On("CreateCache", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
-				srv.repo.On("InsertLog", mock.Anything, mock.Anything).Return(nil).Once()
+				srv.repoCache.On("CreateCache", mock.Anything, mock.Anything, mock.Anything, time.Minute*5).Return(nil).Once()
+				srv.repoLog.On("CreateLogActivity", mock.Anything, mock.Anything).Return(nil).Once()
 			},
 			wantRes: &models.User{
 				ID:       1,

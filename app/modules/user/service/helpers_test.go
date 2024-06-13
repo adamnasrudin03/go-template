@@ -18,7 +18,7 @@ func Test_userService_getDetail(t *testing.T) {
 	tests := []struct {
 		name       string
 		args       args
-		beforeFunc func() *userService
+		beforeFunc func() *UserSrv
 		want       *models.User
 		wantErr    bool
 	}{
@@ -27,8 +27,8 @@ func Test_userService_getDetail(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 			},
-			beforeFunc: func() *userService {
-				return &userService{}
+			beforeFunc: func() *UserSrv {
+				return &UserSrv{}
 			},
 			want:    nil,
 			wantErr: true,

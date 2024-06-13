@@ -8,7 +8,7 @@ import (
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
-func (srv *userService) GetList(ctx context.Context, params *dto.ListUserReq) (*helpers.Pagination, error) {
+func (srv *UserSrv) GetList(ctx context.Context, params *dto.ListUserReq) (*helpers.Pagination, error) {
 	var (
 		opName       = "UserService-GetList"
 		records      = []dto.UserRes{}
@@ -21,7 +21,7 @@ func (srv *userService) GetList(ctx context.Context, params *dto.ListUserReq) (*
 		return nil, err
 	}
 
-	dataDB, err := srv.userRepository.GetList(ctx, *params)
+	dataDB, err := srv.Repo.GetList(ctx, *params)
 	if err != nil {
 		srv.Logger.Errorf("%v error get records: %v ", opName, err)
 		return nil, helpers.ErrDB()
@@ -50,7 +50,7 @@ func (srv *userService) GetList(ctx context.Context, params *dto.ListUserReq) (*
 		params.Offset = (params.Page - 1) * params.Limit
 		params.Limit = models.DefaultLimitIsTotalDataTrue * params.Limit
 
-		totalData, err := srv.userRepository.GetList(ctx, *params)
+		totalData, err := srv.Repo.GetList(ctx, *params)
 		if err != nil {
 			srv.Logger.Errorf("%v error get total records: %v ", opName, err)
 			return nil, helpers.ErrDB()

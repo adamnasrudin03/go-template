@@ -8,7 +8,7 @@ import (
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
-func (srv *userService) getDetail(ctx context.Context, input dto.DetailReq) (*models.User, error) {
+func (srv *UserSrv) getDetail(ctx context.Context, input dto.DetailReq) (*models.User, error) {
 	const opName = "UserService-getDetail"
 	var (
 		res = new(models.User)
@@ -20,7 +20,7 @@ func (srv *userService) getDetail(ctx context.Context, input dto.DetailReq) (*mo
 		return nil, err
 	}
 
-	res, err = srv.userRepository.GetDetail(ctx, input)
+	res, err = srv.Repo.GetDetail(ctx, input)
 	if err != nil {
 		srv.Logger.Errorf("%v error: %v", opName, err)
 		return nil, helpers.ErrDB()
@@ -34,7 +34,7 @@ func (srv *userService) getDetail(ctx context.Context, input dto.DetailReq) (*mo
 	return res, nil
 }
 
-func (srv *userService) convertModelsToListResponse(data []models.User) []dto.UserRes {
+func (srv *UserSrv) convertModelsToListResponse(data []models.User) []dto.UserRes {
 	var records = []dto.UserRes{}
 
 	for i := 0; i < len(data); i++ {

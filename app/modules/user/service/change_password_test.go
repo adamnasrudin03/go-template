@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"testing"
+	"time"
 
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
@@ -42,7 +43,7 @@ func (srv *UserServiceTestSuite) Test_userService_ChangePassword() {
 			},
 			mockFunc: func(input dto.ChangePasswordReq) {
 				key := fmt.Sprintf("%v-%d", models.CacheUserDetail, 1)
-				srv.repo.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(nil).Once()
+				srv.repoCache.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(nil).Once()
 				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{ID: 1}).Return(nil, nil).Once()
 
 			},
@@ -59,7 +60,7 @@ func (srv *UserServiceTestSuite) Test_userService_ChangePassword() {
 			},
 			mockFunc: func(input dto.ChangePasswordReq) {
 				key := fmt.Sprintf("%v-%d", models.CacheUserDetail, 1)
-				srv.repo.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(nil).Once()
+				srv.repoCache.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(nil).Once()
 				user := models.User{
 					ID:   1,
 					Name: "Hello World",
@@ -82,7 +83,7 @@ func (srv *UserServiceTestSuite) Test_userService_ChangePassword() {
 			},
 			mockFunc: func(input dto.ChangePasswordReq) {
 				key := fmt.Sprintf("%v-%d", models.CacheUserDetail, 1)
-				srv.repo.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(nil).Once()
+				srv.repoCache.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(nil).Once()
 
 				user := models.User{
 					ID:       1,
@@ -108,7 +109,7 @@ func (srv *UserServiceTestSuite) Test_userService_ChangePassword() {
 			},
 			mockFunc: func(input dto.ChangePasswordReq) {
 				key := fmt.Sprintf("%v-%d", models.CacheUserDetail, 1)
-				srv.repo.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(nil).Once()
+				srv.repoCache.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(nil).Once()
 
 				user := models.User{
 					ID:       1,
@@ -118,8 +119,8 @@ func (srv *UserServiceTestSuite) Test_userService_ChangePassword() {
 				user.Password, _ = helpers.HashPassword(user.Password)
 				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{ID: 1}).Return(&user, nil).Once()
 				srv.repo.On("Updates", mock.Anything, mock.Anything).Return(&user, nil).Once()
-				srv.repo.On("CreateCache", mock.Anything, key, mock.Anything).Return(nil).Once()
-				srv.repo.On("InsertLog", mock.Anything, mock.Anything).Return(nil).Once()
+				srv.repoCache.On("CreateCache", mock.Anything, key, mock.Anything, time.Minute*5).Return(nil).Once()
+				srv.repoLog.On("CreateLogActivity", mock.Anything, mock.Anything).Return(nil).Once()
 
 			},
 			wantErr: false,

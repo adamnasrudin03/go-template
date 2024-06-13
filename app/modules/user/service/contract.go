@@ -5,6 +5,8 @@ import (
 
 	"github.com/adamnasrudin03/go-template/app/configs"
 	"github.com/adamnasrudin03/go-template/app/models"
+	cacheRepo "github.com/adamnasrudin03/go-template/app/modules/cache/repository"
+	logRepo "github.com/adamnasrudin03/go-template/app/modules/log/repository"
 	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
 	"github.com/adamnasrudin03/go-template/app/modules/user/repository"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
@@ -18,20 +20,14 @@ type UserService interface {
 	GetList(ctx context.Context, params *dto.ListUserReq) (*helpers.Pagination, error)
 }
 
-type userService struct {
-	userRepository repository.UserRepository
-	Cfg            *configs.Configs
-	Logger         *logrus.Logger
+type UserSrv struct {
+	Repo      repository.UserRepository
+	RepoCache cacheRepo.CacheRepository
+	RepoLog   logRepo.LogRepository
+	Cfg       *configs.Configs
+	Logger    *logrus.Logger
 }
 
-func NewUserService(
-	userRepo repository.UserRepository,
-	cfg *configs.Configs,
-	logger *logrus.Logger,
-) UserService {
-	return &userService{
-		userRepository: userRepo,
-		Cfg:            cfg,
-		Logger:         logger,
-	}
+func NewUserService(params UserSrv) UserService {
+	return &params
 }

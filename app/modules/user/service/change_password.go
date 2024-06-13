@@ -10,7 +10,7 @@ import (
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
-func (srv *userService) ChangePassword(ctx context.Context, input dto.ChangePasswordReq) error {
+func (srv *UserSrv) ChangePassword(ctx context.Context, input dto.ChangePasswordReq) error {
 	const opName = "UserService-ChangePassword"
 	var (
 		key  = fmt.Sprintf("%v-%d", models.CacheUserDetail, input.ID)
@@ -24,7 +24,7 @@ func (srv *userService) ChangePassword(ctx context.Context, input dto.ChangePass
 		return err
 	}
 
-	srv.userRepository.GetCache(ctx, key, user)
+	srv.RepoCache.GetCache(ctx, key, user)
 	useCache := user != nil && user.ID > 0
 	if !useCache {
 		user, err = srv.getDetail(ctx, dto.DetailReq{ID: input.ID})
@@ -47,7 +47,7 @@ func (srv *userService) ChangePassword(ctx context.Context, input dto.ChangePass
 	user.UpdatedBy = input.UpdatedBy
 	user.Password = newPass
 
-	user, err = srv.userRepository.Updates(ctx, *user)
+	user, err = srv.Repo.Updates(ctx, *user)
 	if err != nil {
 		srv.Logger.Errorf("%v error: %v ", opName, err)
 		return helpers.ErrUpdatedDB()
@@ -56,7 +56,7 @@ func (srv *userService) ChangePassword(ctx context.Context, input dto.ChangePass
 	go func(dataLog models.User) {
 		newCtx := context.Background()
 		now := time.Now()
-		srv.userRepository.CreateCache(newCtx, key, dataLog)
+		srv.RepoCache.CreateCache(newCtx, key, dataLog, time.Minute*5)
 		logData := models.Log{
 			Name:        fmt.Sprintf("Change Password User %s(%s)", dataLog.Name, dataLog.Email),
 			Action:      models.Updated,
@@ -65,7 +65,7 @@ func (srv *userService) ChangePassword(ctx context.Context, input dto.ChangePass
 			UserID:      dataLog.UpdatedBy,
 			LogDateTime: now,
 		}
-		srv.createLogActivity(newCtx, logData)
+		srv.RepoLog.CreateLogActivity(newCtx, logData)
 	}(*user)
 
 	return nil

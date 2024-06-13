@@ -7,6 +7,7 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
@@ -33,8 +34,11 @@ func (srv *UserServiceTestSuite) Test_userService_GetDetail() {
 		{
 			name:    "err validate params",
 			envVars: reqEnv,
+			input: dto.DetailReq{
+				ID: 0,
+			},
 			mockFunc: func() {
-				defer srv.repo.On("InsertLog", mock.Anything, mock.Anything).Return(nil).Once()
+				defer srv.repoLog.On("CreateLogActivity", mock.Anything, mock.Anything).Return(nil).Once()
 			},
 			want:    nil,
 			wantErr: true,
@@ -46,12 +50,12 @@ func (srv *UserServiceTestSuite) Test_userService_GetDetail() {
 				ID: 1,
 			},
 			mockFunc: func() {
-				defer srv.repo.On("InsertLog", mock.Anything, mock.Anything).Return(nil).Once()
+				defer srv.repoLog.On("CreateLogActivity", mock.Anything, mock.Anything).Return(nil).Once()
 				key := fmt.Sprintf("%v-%d", models.CacheUserDetail, 1)
 				res := models.User{
 					ID: 1,
 				}
-				srv.repo.On("GetCache", mock.Anything, key, &models.User{
+				srv.repoCache.On("GetCache", mock.Anything, key, &models.User{
 					ID: 0,
 				}).Return(nil).Run(func(args mock.Arguments) {
 					target := args.Get(2).(*models.User)
@@ -71,10 +75,10 @@ func (srv *UserServiceTestSuite) Test_userService_GetDetail() {
 				ID: 101,
 			},
 			mockFunc: func() {
-				defer srv.repo.On("InsertLog", mock.Anything, mock.Anything).Return(nil).Once()
+				defer srv.repoLog.On("CreateLogActivity", mock.Anything, mock.Anything).Return(nil).Once()
 				key := fmt.Sprintf("%v-%d", models.CacheUserDetail, 101)
 
-				srv.repo.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(nil).Once()
+				srv.repoCache.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(nil).Once()
 				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{ID: 101}).Return(nil, errors.New("failed")).Once()
 
 			},
@@ -88,10 +92,10 @@ func (srv *UserServiceTestSuite) Test_userService_GetDetail() {
 				ID: 101,
 			},
 			mockFunc: func() {
-				defer srv.repo.On("InsertLog", mock.Anything, mock.Anything).Return(nil).Once()
+				defer srv.repoLog.On("CreateLogActivity", mock.Anything, mock.Anything).Return(nil).Once()
 				key := fmt.Sprintf("%v-%d", models.CacheUserDetail, 101)
 
-				srv.repo.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(nil).Once()
+				srv.repoCache.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(nil).Once()
 				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{ID: 101}).Return(nil, nil).Once()
 
 			},
@@ -105,12 +109,12 @@ func (srv *UserServiceTestSuite) Test_userService_GetDetail() {
 				ID: 1,
 			},
 			mockFunc: func() {
-				defer srv.repo.On("InsertLog", mock.Anything, mock.Anything).Return(nil).Once()
+				defer srv.repoLog.On("CreateLogActivity", mock.Anything, mock.Anything).Return(nil).Once()
 				key := fmt.Sprintf("%v-%d", models.CacheUserDetail, 1)
 
-				srv.repo.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(nil).Once()
+				srv.repoCache.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(nil).Once()
 				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{ID: 1}).Return(&user, nil).Once()
-				srv.repo.On("CreateCache", mock.Anything, key, &user).Return(nil).Once()
+				srv.repoCache.On("CreateCache", mock.Anything, key, &user, time.Minute*5).Return(nil).Once()
 			},
 			want:    &user,
 			wantErr: false,

@@ -20,7 +20,7 @@ func WiringService(repo *Repositories, cache *driver.RedisClient, cfg *configs.C
 
 	return &Services{
 		Auth: regAuthSrv(repo, cfg, logger),
-		User: userSrv.NewUserService(repo.User, cfg, logger),
+		User: regUserSrv(repo, cfg, logger),
 		Log:  logSrv.NewLogService(repo.Log, cfg, logger),
 	}
 }
@@ -35,4 +35,15 @@ func regAuthSrv(repo *Repositories, cfg *configs.Configs, logger *logrus.Logger)
 		Logger:    logger,
 	}
 	return authSrv.NewAuthService(params)
+}
+
+func regUserSrv(repo *Repositories, cfg *configs.Configs, logger *logrus.Logger) userSrv.UserService {
+	params := userSrv.UserSrv{
+		Repo:      repo.User,
+		RepoCache: repo.Cache,
+		RepoLog:   repo.Log,
+		Cfg:       cfg,
+		Logger:    logger,
+	}
+	return userSrv.NewUserService(params)
 }
