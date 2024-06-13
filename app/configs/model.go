@@ -1,22 +1,30 @@
 package configs
 
+type Configs struct {
+	App      AppConfig
+	DB       DbConfig
+	Redis    RedisConfig
+	RabbitMQ RabbitMQConfig
+	Email    EmailConfig
+}
+
 type AppConfig struct {
-	Name         string
-	Env          string
-	Port         string
-	ExpiredToken int
-	SecretKey    string
-	UseRabbitMQ  bool
+	Name         string `json:"name"`
+	Env          string `json:"env"`
+	Port         string `json:"port"`
+	ExpiredToken int    `json:"expired_token"`
+	SecretKey    string `json:"secret_key"`
+	UseRabbitMQ  bool   `json:"use_rabbit_mq"`
 }
 
 type DbConfig struct {
-	Host        string
-	Port        string
-	DbName      string
-	Username    string
-	Password    string
-	DbIsMigrate bool
-	DebugMode   bool
+	Host        string `json:"host"`
+	Port        string `json:"port"`
+	DbName      string `json:"db_name"`
+	Username    string `json:"username"`
+	Password    string `json:"password"`
+	DbIsMigrate bool   `json:"db_is_migrate"`
+	DebugMode   bool   `json:"debug_mode"`
 }
 
 type RedisConfig struct {
@@ -38,9 +46,10 @@ type RabbitMQConfig struct {
 	Password string `json:"password"`
 }
 
-type Configs struct {
-	App      AppConfig
-	DB       DbConfig
-	Redis    RedisConfig
-	RabbitMQ RabbitMQConfig
+type EmailConfig struct {
+	Host     string `json:"host"`
+	Port     int    `json:"port"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+	From     string `json:"from"`
 }

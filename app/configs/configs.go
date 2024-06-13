@@ -19,7 +19,7 @@ func GetInstance() *Configs {
 	if configs == nil {
 		lock.Lock()
 
-		if err := godotenv.Load(); err != nil {
+		if err := godotenv.Load(".env"); err != nil {
 			log.Println("Failed to load env file")
 		}
 
