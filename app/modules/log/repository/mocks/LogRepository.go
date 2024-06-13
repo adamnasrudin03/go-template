@@ -34,11 +34,6 @@ func (_m *LogRepository) Create(ctx context.Context, input models.Log) error {
 	return r0
 }
 
-// CreateCache provides a mock function with given fields: ctx, key, data
-func (_m *LogRepository) CreateCache(ctx context.Context, key string, data interface{}) {
-	_m.Called(ctx, key, data)
-}
-
 // CreateLogActivity provides a mock function with given fields: ctx, input
 func (_m *LogRepository) CreateLogActivity(ctx context.Context, input models.Log) error {
 	ret := _m.Called(ctx, input)
@@ -55,29 +50,6 @@ func (_m *LogRepository) CreateLogActivity(ctx context.Context, input models.Log
 	}
 
 	return r0
-}
-
-// DelCache provides a mock function with given fields: ctx, key
-func (_m *LogRepository) DelCache(ctx context.Context, key string) error {
-	ret := _m.Called(ctx, key)
-
-	if len(ret) == 0 {
-		panic("no return value specified for DelCache")
-	}
-
-	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, string) error); ok {
-		r0 = rf(ctx, key)
-	} else {
-		r0 = ret.Error(0)
-	}
-
-	return r0
-}
-
-// GetCache provides a mock function with given fields: ctx, key, res
-func (_m *LogRepository) GetCache(ctx context.Context, key string, res interface{}) {
-	_m.Called(ctx, key, res)
 }
 
 // GetList provides a mock function with given fields: ctx, params
