@@ -18,7 +18,7 @@ type LogRepository interface {
 	DelCache(ctx context.Context, key string) error
 	GetList(ctx context.Context, params dto.ListLogReq) (res []models.Log, err error)
 	Create(ctx context.Context, input models.Log) (err error)
-	CreateLog(ctx context.Context, input models.Log) (err error)
+	CreateLogActivity(ctx context.Context, input models.Log) (err error)
 }
 
 type logRepo struct {

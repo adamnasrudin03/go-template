@@ -39,12 +39,12 @@ func (_m *LogRepository) CreateCache(ctx context.Context, key string, data inter
 	_m.Called(ctx, key, data)
 }
 
-// CreateLog provides a mock function with given fields: ctx, input
-func (_m *LogRepository) CreateLog(ctx context.Context, input models.Log) error {
+// CreateLogActivity provides a mock function with given fields: ctx, input
+func (_m *LogRepository) CreateLogActivity(ctx context.Context, input models.Log) error {
 	ret := _m.Called(ctx, input)
 
 	if len(ret) == 0 {
-		panic("no return value specified for CreateLog")
+		panic("no return value specified for CreateLogActivity")
 	}
 
 	var r0 error
