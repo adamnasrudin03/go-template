@@ -4,14 +4,14 @@ import (
 	"context"
 
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/app/modules/log/payload"
+	"github.com/adamnasrudin03/go-template/app/modules/log/dto"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
-func (srv *logSrv) GetList(ctx context.Context, params *payload.ListLogReq) (*helpers.Pagination, error) {
+func (srv *logSrv) GetList(ctx context.Context, params *dto.ListLogReq) (*helpers.Pagination, error) {
 	var (
 		opName       = "LogService-GetList"
-		records      = []payload.LogRes{}
+		records      = []dto.LogRes{}
 		totalRecords = len(records)
 	)
 	defer helpers.PanicRecover(opName)

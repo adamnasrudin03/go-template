@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
+	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 	"github.com/gin-gonic/gin"
 )
@@ -15,7 +15,7 @@ func (c *userDelivery) Update(ctx *gin.Context) {
 		opName   = "UserDelivery-Update"
 		userID   = ctx.MustGet("id").(uint64)
 		userRole = ctx.MustGet("role").(string)
-		input    payload.UpdateReq
+		input    dto.UpdateReq
 		err      error
 	)
 

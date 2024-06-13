@@ -6,11 +6,11 @@ import (
 	"time"
 
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
+	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
-func (srv *userService) Login(ctx context.Context, input payload.LoginReq) (res *payload.LoginRes, err error) {
+func (srv *userService) Login(ctx context.Context, input dto.LoginReq) (res *dto.LoginRes, err error) {
 	const opName = "UserService-Login"
 	defer helpers.PanicRecover(opName)
 
@@ -24,7 +24,7 @@ func (srv *userService) Login(ctx context.Context, input payload.LoginReq) (res 
 		return nil, helpers.ErrDataNotFound("Pengguna", "User")
 	}
 
-	res = &payload.LoginRes{}
+	res = &dto.LoginRes{}
 	res.Token, err = helpers.GenerateToken(helpers.JWTClaims{
 		ID:       user.ID,
 		Name:     user.Name,

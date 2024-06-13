@@ -6,11 +6,11 @@ import (
 	"time"
 
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
+	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
-func (srv *userService) GetDetail(ctx context.Context, input payload.DetailReq) (*models.User, error) {
+func (srv *userService) GetDetail(ctx context.Context, input dto.DetailReq) (*models.User, error) {
 	const opName = "UserService-GetDetail"
 	var (
 		key = fmt.Sprintf("%v-%d", models.CacheUserDetail, input.ID)
@@ -20,7 +20,7 @@ func (srv *userService) GetDetail(ctx context.Context, input payload.DetailReq) 
 
 	defer func() {
 		helpers.PanicRecover(opName)
-		go func(dataLog payload.DetailReq) {
+		go func(dataLog dto.DetailReq) {
 			now := time.Now()
 			logData := models.Log{
 				Name:        fmt.Sprintf("Read data user with id %d", dataLog.ID),

@@ -3,7 +3,7 @@ package delivery
 import (
 	"net/http"
 
-	"github.com/adamnasrudin03/go-template/app/modules/log/payload"
+	"github.com/adamnasrudin03/go-template/app/modules/log/dto"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 
 	"github.com/gin-gonic/gin"
@@ -13,7 +13,7 @@ func (c *logDel) Download(ctx *gin.Context) {
 	var (
 		opName = "UserDelivery-Download"
 		userID = ctx.MustGet("id").(uint64)
-		input  payload.ListLogReq
+		input  dto.ListLogReq
 		err    error
 	)
 

@@ -5,10 +5,10 @@ import (
 	"fmt"
 
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/app/modules/log/payload"
+	"github.com/adamnasrudin03/go-template/app/modules/log/dto"
 )
 
-func (r *logRepo) GetList(ctx context.Context, params payload.ListLogReq) (res []models.Log, err error) {
+func (r *logRepo) GetList(ctx context.Context, params dto.ListLogReq) (res []models.Log, err error) {
 	var (
 		opName = "LogRepository-GetList"
 	)

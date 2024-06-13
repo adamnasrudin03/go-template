@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
+	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 
 	"github.com/gin-gonic/gin"
@@ -38,7 +38,7 @@ func (c *userDelivery) GetDetail(ctx *gin.Context) {
 		return
 	}
 
-	res, err := c.Service.GetDetail(ctx, payload.DetailReq{
+	res, err := c.Service.GetDetail(ctx, dto.DetailReq{
 		ID:     ID,
 		UserID: userID,
 	})

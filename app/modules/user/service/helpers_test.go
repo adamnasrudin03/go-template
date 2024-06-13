@@ -6,14 +6,14 @@ import (
 	"testing"
 
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
+	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
 )
 
 func Test_userService_checkIsNotDuplicate(t *testing.T) {
 
 	type args struct {
 		ctx   context.Context
-		input payload.DetailReq
+		input dto.DetailReq
 	}
 	tests := []struct {
 		name       string
@@ -46,7 +46,7 @@ func Test_userService_getDetail(t *testing.T) {
 
 	type args struct {
 		ctx   context.Context
-		input payload.DetailReq
+		input dto.DetailReq
 	}
 	tests := []struct {
 		name       string

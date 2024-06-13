@@ -5,11 +5,11 @@ import (
 	"fmt"
 
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
+	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
 	"gorm.io/gorm"
 )
 
-func (r *userRepo) GetList(ctx context.Context, params payload.ListUserReq) (res []models.User, err error) {
+func (r *userRepo) GetList(ctx context.Context, params dto.ListUserReq) (res []models.User, err error) {
 	var (
 		opName = "UserRepository-GetList"
 	)

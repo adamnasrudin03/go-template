@@ -1,4 +1,4 @@
-package payload
+package dto
 
 import (
 	"github.com/adamnasrudin03/go-template/pkg/helpers"

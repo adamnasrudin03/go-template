@@ -4,14 +4,14 @@ import (
 	"context"
 
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
+	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
-func (srv *userService) GetList(ctx context.Context, params *payload.ListUserReq) (*helpers.Pagination, error) {
+func (srv *userService) GetList(ctx context.Context, params *dto.ListUserReq) (*helpers.Pagination, error) {
 	var (
 		opName       = "UserService-GetList"
-		records      = []payload.UserRes{}
+		records      = []dto.UserRes{}
 		totalRecords = len(records)
 	)
 	defer helpers.PanicRecover(opName)

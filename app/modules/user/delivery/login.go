@@ -3,7 +3,7 @@ package delivery
 import (
 	"net/http"
 
-	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
+	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 
 	"github.com/gin-gonic/gin"
@@ -13,7 +13,7 @@ import (
 func (c *userDelivery) Login(ctx *gin.Context) {
 	var (
 		opName = "UserDelivery-Login"
-		input  payload.LoginReq
+		input  dto.LoginReq
 	)
 
 	validate := validator.New()

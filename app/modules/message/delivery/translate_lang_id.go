@@ -3,7 +3,7 @@ package delivery
 import (
 	"net/http"
 
-	"github.com/adamnasrudin03/go-template/app/modules/message/payload"
+	"github.com/adamnasrudin03/go-template/app/modules/message/dto"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 	"github.com/gin-gonic/gin"
 )
@@ -11,7 +11,7 @@ import (
 func (c *msgDelivery) TranslateLangID(ctx *gin.Context) {
 	var (
 		opName = "UserDelivery-TranslateLangID"
-		input  payload.Translate
+		input  dto.Translate
 		err    error
 	)
 

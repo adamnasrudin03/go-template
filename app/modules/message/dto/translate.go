@@ -1,4 +1,4 @@
-package payload
+package dto
 
 type Translate struct {
 	TargetLanguage string `json:"target_language"`

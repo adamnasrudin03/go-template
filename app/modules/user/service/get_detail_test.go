@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
+	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -25,7 +25,7 @@ func (srv *UserServiceTestSuite) Test_userService_GetDetail() {
 	tests := []struct {
 		name     string
 		envVars  map[string]string
-		input    payload.DetailReq
+		input    dto.DetailReq
 		mockFunc func()
 		want     *models.User
 		wantErr  bool
@@ -42,7 +42,7 @@ func (srv *UserServiceTestSuite) Test_userService_GetDetail() {
 		{
 			name:    "success with cache",
 			envVars: reqEnv,
-			input: payload.DetailReq{
+			input: dto.DetailReq{
 				ID: 1,
 			},
 			mockFunc: func() {
@@ -67,7 +67,7 @@ func (srv *UserServiceTestSuite) Test_userService_GetDetail() {
 		{
 			name:    "failed get db",
 			envVars: reqEnv,
-			input: payload.DetailReq{
+			input: dto.DetailReq{
 				ID: 101,
 			},
 			mockFunc: func() {
@@ -75,7 +75,7 @@ func (srv *UserServiceTestSuite) Test_userService_GetDetail() {
 				key := fmt.Sprintf("%v-%d", models.CacheUserDetail, 101)
 
 				srv.repo.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(nil).Once()
-				srv.repo.On("GetDetail", mock.Anything, payload.DetailReq{ID: 101}).Return(nil, errors.New("failed")).Once()
+				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{ID: 101}).Return(nil, errors.New("failed")).Once()
 
 			},
 			want:    nil,
@@ -84,7 +84,7 @@ func (srv *UserServiceTestSuite) Test_userService_GetDetail() {
 		{
 			name:    "not found",
 			envVars: reqEnv,
-			input: payload.DetailReq{
+			input: dto.DetailReq{
 				ID: 101,
 			},
 			mockFunc: func() {
@@ -92,7 +92,7 @@ func (srv *UserServiceTestSuite) Test_userService_GetDetail() {
 				key := fmt.Sprintf("%v-%d", models.CacheUserDetail, 101)
 
 				srv.repo.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(nil).Once()
-				srv.repo.On("GetDetail", mock.Anything, payload.DetailReq{ID: 101}).Return(nil, nil).Once()
+				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{ID: 101}).Return(nil, nil).Once()
 
 			},
 			want:    nil,
@@ -101,7 +101,7 @@ func (srv *UserServiceTestSuite) Test_userService_GetDetail() {
 		{
 			name:    "success",
 			envVars: reqEnv,
-			input: payload.DetailReq{
+			input: dto.DetailReq{
 				ID: 1,
 			},
 			mockFunc: func() {
@@ -109,7 +109,7 @@ func (srv *UserServiceTestSuite) Test_userService_GetDetail() {
 				key := fmt.Sprintf("%v-%d", models.CacheUserDetail, 1)
 
 				srv.repo.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(nil).Once()
-				srv.repo.On("GetDetail", mock.Anything, payload.DetailReq{ID: 1}).Return(&user, nil).Once()
+				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{ID: 1}).Return(&user, nil).Once()
 				srv.repo.On("CreateCache", mock.Anything, key, &user).Return(nil).Once()
 			},
 			want:    &user,

@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
+	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 	"github.com/stretchr/testify/mock"
 )
@@ -24,11 +24,11 @@ func (srv *UserServiceTestSuite) Test_userService_GetList() {
 			Role: models.USER,
 		},
 	}
-	var records = []payload.UserRes{}
+	var records = []dto.UserRes{}
 
 	for i := 0; i < len(users); i++ {
 		v := users[i]
-		temp := payload.UserRes{
+		temp := dto.UserRes{
 			ID:        v.ID,
 			Name:      v.Name,
 			Role:      helpers.ToTitle(v.Role),
@@ -42,14 +42,14 @@ func (srv *UserServiceTestSuite) Test_userService_GetList() {
 
 	tests := []struct {
 		name     string
-		params   *payload.ListUserReq
-		mockFunc func(params *payload.ListUserReq)
+		params   *dto.ListUserReq
+		mockFunc func(params *dto.ListUserReq)
 		want     *helpers.Pagination
 		wantErr  bool
 	}{
 		{
 			name: "invalid params",
-			params: &payload.ListUserReq{
+			params: &dto.ListUserReq{
 				BasedFilter: models.BasedFilter{
 					OrderBy: "invalid",
 				},
@@ -59,7 +59,7 @@ func (srv *UserServiceTestSuite) Test_userService_GetList() {
 		},
 		{
 			name: "failed get records",
-			params: &payload.ListUserReq{
+			params: &dto.ListUserReq{
 				UserRole:       models.ADMIN,
 				NotIncRoleRoot: true,
 				BasedFilter: models.BasedFilter{
@@ -67,7 +67,7 @@ func (srv *UserServiceTestSuite) Test_userService_GetList() {
 					Limit: 10,
 				},
 			},
-			mockFunc: func(params *payload.ListUserReq) {
+			mockFunc: func(params *dto.ListUserReq) {
 				params.BasedFilter = params.BasedFilter.DefaultQuery()
 
 				srv.repo.On("GetList", mock.Anything, *params).Return(nil, errors.New("failed get record")).Once()
@@ -77,7 +77,7 @@ func (srv *UserServiceTestSuite) Test_userService_GetList() {
 		},
 		{
 			name: "failed get total records",
-			params: &payload.ListUserReq{
+			params: &dto.ListUserReq{
 				UserRole:       models.ADMIN,
 				NotIncRoleRoot: true,
 				BasedFilter: models.BasedFilter{
@@ -85,7 +85,7 @@ func (srv *UserServiceTestSuite) Test_userService_GetList() {
 					Limit: 2,
 				},
 			},
-			mockFunc: func(params *payload.ListUserReq) {
+			mockFunc: func(params *dto.ListUserReq) {
 				params.BasedFilter = params.BasedFilter.DefaultQuery()
 
 				srv.repo.On("GetList", mock.Anything, *params).Return(users, nil).Once()
@@ -102,7 +102,7 @@ func (srv *UserServiceTestSuite) Test_userService_GetList() {
 		},
 		{
 			name: "success not get total records",
-			params: &payload.ListUserReq{
+			params: &dto.ListUserReq{
 				UserRole:       models.ADMIN,
 				NotIncRoleRoot: true,
 				BasedFilter: models.BasedFilter{
@@ -110,7 +110,7 @@ func (srv *UserServiceTestSuite) Test_userService_GetList() {
 					Limit: 10,
 				},
 			},
-			mockFunc: func(params *payload.ListUserReq) {
+			mockFunc: func(params *dto.ListUserReq) {
 				params.BasedFilter = params.BasedFilter.DefaultQuery()
 
 				srv.repo.On("GetList", mock.Anything, *params).Return(users, nil).Once()
@@ -127,7 +127,7 @@ func (srv *UserServiceTestSuite) Test_userService_GetList() {
 		},
 		{
 			name: "success with get total records",
-			params: &payload.ListUserReq{
+			params: &dto.ListUserReq{
 				UserRole:       models.ADMIN,
 				NotIncRoleRoot: true,
 				BasedFilter: models.BasedFilter{
@@ -135,7 +135,7 @@ func (srv *UserServiceTestSuite) Test_userService_GetList() {
 					Limit: 2,
 				},
 			},
-			mockFunc: func(params *payload.ListUserReq) {
+			mockFunc: func(params *dto.ListUserReq) {
 				params.BasedFilter = params.BasedFilter.DefaultQuery()
 
 				srv.repo.On("GetList", mock.Anything, *params).Return(users, nil).Once()

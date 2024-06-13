@@ -6,11 +6,11 @@ import (
 	"time"
 
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
+	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
-func (srv *userService) Update(ctx context.Context, input payload.UpdateReq) (res *models.User, err error) {
+func (srv *userService) Update(ctx context.Context, input dto.UpdateReq) (res *models.User, err error) {
 	const opName = "UserService-Update"
 	defer helpers.PanicRecover(opName)
 
@@ -19,13 +19,13 @@ func (srv *userService) Update(ctx context.Context, input payload.UpdateReq) (re
 		return nil, err
 	}
 
-	_, err = srv.getDetail(ctx, payload.DetailReq{ID: input.ID, Columns: "id"})
+	_, err = srv.getDetail(ctx, dto.DetailReq{ID: input.ID, Columns: "id"})
 	if err != nil {
 		srv.Logger.Errorf("%v error check data: %v", opName, err)
 		return nil, err
 	}
 
-	err = srv.checkIsNotDuplicate(ctx, payload.DetailReq{
+	err = srv.checkIsNotDuplicate(ctx, dto.DetailReq{
 		Email:    input.Email,
 		Username: input.Username,
 		NotID:    input.ID,
@@ -40,7 +40,7 @@ func (srv *userService) Update(ctx context.Context, input payload.UpdateReq) (re
 		return nil, helpers.ErrUpdatedDB()
 	}
 
-	res, err = srv.getDetail(ctx, payload.DetailReq{ID: input.ID})
+	res, err = srv.getDetail(ctx, dto.DetailReq{ID: input.ID})
 	if err != nil {
 		srv.Logger.Errorf("%v error get data: %v", opName, err)
 		return nil, helpers.ErrDB()

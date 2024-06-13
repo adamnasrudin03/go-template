@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
+	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -17,19 +17,19 @@ func (srv *UserServiceTestSuite) Test_userService_Login() {
 	tests := []struct {
 		name     string
 		envVars  map[string]string
-		input    payload.LoginReq
-		mockFunc func(params payload.LoginReq)
-		wantRes  *payload.LoginRes
+		input    dto.LoginReq
+		mockFunc func(params dto.LoginReq)
+		wantRes  *dto.LoginRes
 		wantErr  bool
 	}{
 		{
 			name:    "failed get user",
 			envVars: reqEnv,
-			input: payload.LoginReq{
+			input: dto.LoginReq{
 				Username: "hello-world",
 				Password: "password123",
 			},
-			mockFunc: func(params payload.LoginReq) {
+			mockFunc: func(params dto.LoginReq) {
 				srv.repo.On("Login", mock.Anything, params).Return(nil, errors.New("failed get user")).Once()
 
 			},
@@ -39,11 +39,11 @@ func (srv *UserServiceTestSuite) Test_userService_Login() {
 		{
 			name:    "user not found",
 			envVars: reqEnv,
-			input: payload.LoginReq{
+			input: dto.LoginReq{
 				Username: "hello-world",
 				Password: "password123",
 			},
-			mockFunc: func(params payload.LoginReq) {
+			mockFunc: func(params dto.LoginReq) {
 				srv.repo.On("Login", mock.Anything, params).Return(nil, nil).Once()
 
 			},

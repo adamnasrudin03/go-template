@@ -6,11 +6,11 @@ import (
 	"time"
 
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
+	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
-func (srv *userService) Register(ctx context.Context, input payload.RegisterReq) (res *models.User, err error) {
+func (srv *userService) Register(ctx context.Context, input dto.RegisterReq) (res *models.User, err error) {
 	const opName = "UserService-Register"
 	defer helpers.PanicRecover(opName)
 
@@ -31,7 +31,7 @@ func (srv *userService) Register(ctx context.Context, input payload.RegisterReq)
 		},
 	}
 
-	err = srv.checkIsNotDuplicate(ctx, payload.DetailReq{
+	err = srv.checkIsNotDuplicate(ctx, dto.DetailReq{
 		Email:    input.Email,
 		Username: input.Username,
 	})

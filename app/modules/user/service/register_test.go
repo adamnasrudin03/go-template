@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
+	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 	"github.com/stretchr/testify/mock"
 )
@@ -19,15 +19,15 @@ func (srv *UserServiceTestSuite) Test_userService_Register() {
 	tests := []struct {
 		name     string
 		envVars  map[string]string
-		input    payload.RegisterReq
-		mockFunc func(params payload.RegisterReq)
+		input    dto.RegisterReq
+		mockFunc func(params dto.RegisterReq)
 		wantRes  *models.User
 		wantErr  bool
 	}{
 		{
 			name:    "err validate params",
 			envVars: reqEnv,
-			input: payload.RegisterReq{
+			input: dto.RegisterReq{
 				Name: "",
 			},
 			wantRes: nil,
@@ -36,7 +36,7 @@ func (srv *UserServiceTestSuite) Test_userService_Register() {
 		{
 			name:    "duplicated email",
 			envVars: reqEnv,
-			input: payload.RegisterReq{
+			input: dto.RegisterReq{
 				Name:      "Hello world",
 				Role:      models.ADMIN,
 				Email:     "hello-world@email.com",
@@ -45,8 +45,8 @@ func (srv *UserServiceTestSuite) Test_userService_Register() {
 				CreatedBy: 1,
 				UpdatedBy: 1,
 			},
-			mockFunc: func(params payload.RegisterReq) {
-				srv.repo.On("GetDetail", mock.Anything, payload.DetailReq{
+			mockFunc: func(params dto.RegisterReq) {
+				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
 					Columns: "id", Email: params.Email}).
 					Return(&models.User{ID: 1}, nil).Once()
 
@@ -57,7 +57,7 @@ func (srv *UserServiceTestSuite) Test_userService_Register() {
 		{
 			name:    "duplicated username",
 			envVars: reqEnv,
-			input: payload.RegisterReq{
+			input: dto.RegisterReq{
 				Name:      "Hello world",
 				Role:      models.ADMIN,
 				Email:     "hello-world@email.com",
@@ -66,11 +66,11 @@ func (srv *UserServiceTestSuite) Test_userService_Register() {
 				CreatedBy: 1,
 				UpdatedBy: 1,
 			},
-			mockFunc: func(params payload.RegisterReq) {
-				srv.repo.On("GetDetail", mock.Anything, payload.DetailReq{
+			mockFunc: func(params dto.RegisterReq) {
+				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
 					Columns: "id", Email: params.Email}).
 					Return(nil, nil).Once()
-				srv.repo.On("GetDetail", mock.Anything, payload.DetailReq{
+				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
 					Columns: "id", Username: params.Username}).
 					Return(&models.User{ID: 1}, nil).Once()
 
@@ -81,7 +81,7 @@ func (srv *UserServiceTestSuite) Test_userService_Register() {
 		{
 			name:    "failed register user",
 			envVars: reqEnv,
-			input: payload.RegisterReq{
+			input: dto.RegisterReq{
 				Name:      "Hello world",
 				Role:      models.ADMIN,
 				Email:     "hello-world@email.com",
@@ -90,11 +90,11 @@ func (srv *UserServiceTestSuite) Test_userService_Register() {
 				CreatedBy: 1,
 				UpdatedBy: 1,
 			},
-			mockFunc: func(params payload.RegisterReq) {
-				srv.repo.On("GetDetail", mock.Anything, payload.DetailReq{
+			mockFunc: func(params dto.RegisterReq) {
+				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
 					Columns: "id", Email: params.Email}).
 					Return(nil, nil).Once()
-				srv.repo.On("GetDetail", mock.Anything, payload.DetailReq{
+				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
 					Columns: "id", Username: params.Username}).
 					Return(nil, nil).Once()
 
@@ -117,7 +117,7 @@ func (srv *UserServiceTestSuite) Test_userService_Register() {
 		{
 			name:    "success",
 			envVars: reqEnv,
-			input: payload.RegisterReq{
+			input: dto.RegisterReq{
 				Name:      "Hello world",
 				Role:      models.ADMIN,
 				Email:     "hello-world@email.com",
@@ -126,11 +126,11 @@ func (srv *UserServiceTestSuite) Test_userService_Register() {
 				CreatedBy: 1,
 				UpdatedBy: 1,
 			},
-			mockFunc: func(params payload.RegisterReq) {
-				srv.repo.On("GetDetail", mock.Anything, payload.DetailReq{
+			mockFunc: func(params dto.RegisterReq) {
+				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
 					Columns: "id", Email: params.Email}).
 					Return(nil, nil).Once()
-				srv.repo.On("GetDetail", mock.Anything, payload.DetailReq{
+				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
 					Columns: "id", Username: params.Username}).
 					Return(nil, nil).Once()
 

@@ -5,12 +5,12 @@ import (
 	"errors"
 
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
+	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 	"gorm.io/gorm"
 )
 
-func (r *userRepo) Login(ctx context.Context, input payload.LoginReq) (res *models.User, err error) {
+func (r *userRepo) Login(ctx context.Context, input dto.LoginReq) (res *models.User, err error) {
 	const opName = "UserRepository-Login"
 	err = r.DB.Where("email = ? OR username = ?", input.Username, input.Username).WithContext(ctx).First(&res).Error
 	if err != nil {

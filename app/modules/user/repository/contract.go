@@ -5,7 +5,7 @@ import (
 
 	"github.com/adamnasrudin03/go-template/app/configs"
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
+	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
 	"github.com/adamnasrudin03/go-template/pkg/driver"
 
 	"github.com/sirupsen/logrus"
@@ -17,12 +17,12 @@ type UserRepository interface {
 	GetCache(ctx context.Context, key string, res interface{})
 	DelCache(ctx context.Context, key string) error
 	Register(ctx context.Context, input models.User) (res *models.User, err error)
-	Login(ctx context.Context, input payload.LoginReq) (res *models.User, er error)
-	GetDetail(ctx context.Context, input payload.DetailReq) (res *models.User, err error)
+	Login(ctx context.Context, input dto.LoginReq) (res *models.User, er error)
+	GetDetail(ctx context.Context, input dto.DetailReq) (res *models.User, err error)
 	Updates(ctx context.Context, input models.User) (res *models.User, err error)
 	UpdateSpecificField(ctx context.Context, input models.User) (err error)
 	InsertLog(ctx context.Context, input models.Log) (err error)
-	GetList(ctx context.Context, params payload.ListUserReq) (res []models.User, err error)
+	GetList(ctx context.Context, params dto.ListUserReq) (res []models.User, err error)
 }
 
 type userRepo struct {

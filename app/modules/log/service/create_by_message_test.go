@@ -12,7 +12,7 @@ import (
 func (srv *LogServiceTestSuite) Test_logSrv_CreateByMessage() {
 	now := time.Now()
 
-	payload := models.Log{
+	dto := models.Log{
 		Name:        "Login user hello world(helloworld@email.com)",
 		Action:      models.Read,
 		TableNameID: 1,
@@ -20,8 +20,8 @@ func (srv *LogServiceTestSuite) Test_logSrv_CreateByMessage() {
 		UserID:      1,
 		LogDateTime: time.Date(now.Year(), now.Month(), now.Day(), 00, 00, 00, 0, time.UTC),
 	}
-	payloadByte, _ := helpers.SafeJsonMarshal(payload)
-	inputMessage := string(payloadByte)
+	dtoByte, _ := helpers.SafeJsonMarshal(dto)
+	inputMessage := string(dtoByte)
 
 	type args struct {
 		message string
@@ -49,7 +49,7 @@ func (srv *LogServiceTestSuite) Test_logSrv_CreateByMessage() {
 		{
 			name: "err create data to db",
 			mockFunc: func() {
-				srv.repoLog.On("Create", mock.Anything, payload).Return(helpers.ErrCreatedDB()).Once()
+				srv.repoLog.On("Create", mock.Anything, dto).Return(helpers.ErrCreatedDB()).Once()
 			},
 			args: args{
 				message: inputMessage,
@@ -59,7 +59,7 @@ func (srv *LogServiceTestSuite) Test_logSrv_CreateByMessage() {
 		{
 			name: "success",
 			mockFunc: func() {
-				srv.repoLog.On("Create", mock.Anything, payload).Return(nil).Once()
+				srv.repoLog.On("Create", mock.Anything, dto).Return(nil).Once()
 			},
 			args: args{
 				message: inputMessage,

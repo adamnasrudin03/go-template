@@ -6,13 +6,13 @@ import (
 	"testing"
 
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/app/modules/log/payload"
+	"github.com/adamnasrudin03/go-template/app/modules/log/dto"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 	"github.com/stretchr/testify/mock"
 )
 
 func (srv *LogServiceTestSuite) Test_logSrv_GetList() {
-	input := &payload.ListLogReq{
+	input := &dto.ListLogReq{
 		UserID:     1,
 		UsePreload: true,
 		BasedFilter: models.BasedFilter{
@@ -22,7 +22,7 @@ func (srv *LogServiceTestSuite) Test_logSrv_GetList() {
 	}
 	input.BasedFilter = input.BasedFilter.DefaultQuery()
 
-	inputErr := &payload.ListLogReq{
+	inputErr := &dto.ListLogReq{
 		UserID:     1,
 		UsePreload: true,
 		BasedFilter: models.BasedFilter{
@@ -51,10 +51,10 @@ func (srv *LogServiceTestSuite) Test_logSrv_GetList() {
 		},
 	}
 
-	records := []payload.LogRes{}
+	records := []dto.LogRes{}
 	for i := 0; i < len(logs); i++ {
 		data := logs[i]
-		temp := payload.LogRes{
+		temp := dto.LogRes{
 			ID:        data.ID,
 			DateTime:  data.LogDateTime,
 			Name:      data.Name,
@@ -68,10 +68,10 @@ func (srv *LogServiceTestSuite) Test_logSrv_GetList() {
 	}
 
 	logsLessThanLimit := logs[:1]
-	recordsLessThanLimit := []payload.LogRes{}
+	recordsLessThanLimit := []dto.LogRes{}
 	for i := 0; i < len(logsLessThanLimit); i++ {
 		data := logsLessThanLimit[i]
-		temp := payload.LogRes{
+		temp := dto.LogRes{
 			ID:        data.ID,
 			DateTime:  data.LogDateTime,
 			Name:      data.Name,
@@ -87,13 +87,13 @@ func (srv *LogServiceTestSuite) Test_logSrv_GetList() {
 	tests := []struct {
 		name     string
 		mockFunc func()
-		params   *payload.ListLogReq
+		params   *dto.ListLogReq
 		want     *helpers.Pagination
 		wantErr  bool
 	}{
 		{
 			name: "invalid params user id",
-			params: &payload.ListLogReq{
+			params: &dto.ListLogReq{
 				UserID: 0,
 			},
 			want:    nil,
@@ -101,7 +101,7 @@ func (srv *LogServiceTestSuite) Test_logSrv_GetList() {
 		},
 		{
 			name: "invalid order_by",
-			params: &payload.ListLogReq{
+			params: &dto.ListLogReq{
 				UserID: 1,
 				BasedFilter: models.BasedFilter{
 					OrderBy: "invalid",
@@ -140,7 +140,7 @@ func (srv *LogServiceTestSuite) Test_logSrv_GetList() {
 			mockFunc: func() {
 				srv.repoLog.On("GetList", mock.Anything, *inputErr).Return(logs, nil).Once()
 
-				paramsTotal := payload.ListLogReq{
+				paramsTotal := dto.ListLogReq{
 					UserID:      inputErr.UserID,
 					UsePreload:  inputErr.UsePreload,
 					BasedFilter: inputErr.BasedFilter,
@@ -160,7 +160,7 @@ func (srv *LogServiceTestSuite) Test_logSrv_GetList() {
 			mockFunc: func() {
 				srv.repoLog.On("GetList", mock.Anything, *input).Return(logs, nil).Once()
 
-				paramsTotal := payload.ListLogReq{
+				paramsTotal := dto.ListLogReq{
 					UserID:      input.UserID,
 					UsePreload:  inputErr.UsePreload,
 					BasedFilter: input.BasedFilter,

@@ -3,7 +3,7 @@ package delivery
 import (
 	"net/http"
 
-	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
+	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 
 	"github.com/gin-gonic/gin"
@@ -12,7 +12,7 @@ import (
 func (c *userDelivery) Register(ctx *gin.Context) {
 	var (
 		opName = "UserDelivery-Register"
-		input  payload.RegisterReq
+		input  dto.RegisterReq
 	)
 
 	userID := ctx.MustGet("id").(uint64)

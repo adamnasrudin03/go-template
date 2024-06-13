@@ -6,13 +6,13 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/adamnasrudin03/go-template/app/modules/log/payload"
+	"github.com/adamnasrudin03/go-template/app/modules/log/dto"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 	"github.com/gin-gonic/gin"
 	"github.com/xuri/excelize/v2"
 )
 
-func (srv *logSrv) Download(ctx *gin.Context, params *payload.ListLogReq) (err error) {
+func (srv *logSrv) Download(ctx *gin.Context, params *dto.ListLogReq) (err error) {
 	opName := "LogService-Download"
 	defer helpers.PanicRecover(opName)
 

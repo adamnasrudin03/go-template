@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
+	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 	"github.com/stretchr/testify/mock"
 )
@@ -19,8 +19,8 @@ func (srv *UserServiceTestSuite) Test_userService_Update() {
 	tests := []struct {
 		name     string
 		envVars  map[string]string
-		input    payload.UpdateReq
-		mockFunc func(input payload.UpdateReq)
+		input    dto.UpdateReq
+		mockFunc func(input dto.UpdateReq)
 		wantRes  *models.User
 		wantErr  bool
 	}{
@@ -33,12 +33,12 @@ func (srv *UserServiceTestSuite) Test_userService_Update() {
 		{
 			name:    "user not found",
 			envVars: reqEnv,
-			input: payload.UpdateReq{
+			input: dto.UpdateReq{
 				ID:        1,
 				UpdatedBy: 1,
 			},
-			mockFunc: func(input payload.UpdateReq) {
-				srv.repo.On("GetDetail", mock.Anything, payload.DetailReq{ID: input.ID, Columns: "id"}).
+			mockFunc: func(input dto.UpdateReq) {
+				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{ID: input.ID, Columns: "id"}).
 					Return(nil, nil).Once()
 
 			},
@@ -48,7 +48,7 @@ func (srv *UserServiceTestSuite) Test_userService_Update() {
 		{
 			name:    "duplicate username",
 			envVars: reqEnv,
-			input: payload.UpdateReq{
+			input: dto.UpdateReq{
 				ID:        1,
 				Name:      "Hello world",
 				Role:      models.ADMIN,
@@ -56,15 +56,15 @@ func (srv *UserServiceTestSuite) Test_userService_Update() {
 				Username:  "hello-world",
 				UpdatedBy: 1,
 			},
-			mockFunc: func(input payload.UpdateReq) {
-				srv.repo.On("GetDetail", mock.Anything, payload.DetailReq{
+			mockFunc: func(input dto.UpdateReq) {
+				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
 					ID: input.ID, Columns: "id"}).
 					Return(&models.User{ID: 1}, nil).Once()
 				// check duplicate
-				srv.repo.On("GetDetail", mock.Anything, payload.DetailReq{
+				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
 					Columns: "id", NotID: input.ID, Email: input.Email}).
 					Return(nil, nil).Once()
-				srv.repo.On("GetDetail", mock.Anything, payload.DetailReq{
+				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
 					Columns: "id", NotID: input.ID, Username: input.Username}).
 					Return(&models.User{ID: 1}, nil).Once()
 
@@ -75,7 +75,7 @@ func (srv *UserServiceTestSuite) Test_userService_Update() {
 		{
 			name:    "failed update data",
 			envVars: reqEnv,
-			input: payload.UpdateReq{
+			input: dto.UpdateReq{
 				ID:        1,
 				Name:      "Hello world",
 				Role:      models.ADMIN,
@@ -83,15 +83,15 @@ func (srv *UserServiceTestSuite) Test_userService_Update() {
 				Username:  "hello-world",
 				UpdatedBy: 1,
 			},
-			mockFunc: func(input payload.UpdateReq) {
-				srv.repo.On("GetDetail", mock.Anything, payload.DetailReq{
+			mockFunc: func(input dto.UpdateReq) {
+				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
 					ID: input.ID, Columns: "id"}).
 					Return(&models.User{ID: 1}, nil).Once()
 				// check duplicate
-				srv.repo.On("GetDetail", mock.Anything, payload.DetailReq{
+				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
 					Columns: "id", NotID: input.ID, Email: input.Email}).
 					Return(nil, nil).Once()
-				srv.repo.On("GetDetail", mock.Anything, payload.DetailReq{
+				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
 					Columns: "id", NotID: input.ID, Username: input.Username}).
 					Return(nil, nil).Once()
 
@@ -105,7 +105,7 @@ func (srv *UserServiceTestSuite) Test_userService_Update() {
 		{
 			name:    "get detail data after updated",
 			envVars: reqEnv,
-			input: payload.UpdateReq{
+			input: dto.UpdateReq{
 				ID:        1,
 				Name:      "Hello world",
 				Role:      models.ADMIN,
@@ -113,15 +113,15 @@ func (srv *UserServiceTestSuite) Test_userService_Update() {
 				Username:  "hello-world",
 				UpdatedBy: 1,
 			},
-			mockFunc: func(input payload.UpdateReq) {
-				srv.repo.On("GetDetail", mock.Anything, payload.DetailReq{
+			mockFunc: func(input dto.UpdateReq) {
+				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
 					ID: input.ID, Columns: "id"}).
 					Return(&models.User{ID: 1}, nil).Once()
 				// check duplicate
-				srv.repo.On("GetDetail", mock.Anything, payload.DetailReq{
+				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
 					Columns: "id", NotID: input.ID, Email: input.Email}).
 					Return(nil, nil).Once()
-				srv.repo.On("GetDetail", mock.Anything, payload.DetailReq{
+				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
 					Columns: "id", NotID: input.ID, Username: input.Username}).
 					Return(nil, nil).Once()
 
@@ -129,7 +129,7 @@ func (srv *UserServiceTestSuite) Test_userService_Update() {
 				// update
 				srv.repo.On("UpdateSpecificField", mock.Anything, user).
 					Return(nil).Once()
-				srv.repo.On("GetDetail", mock.Anything, payload.DetailReq{ID: input.ID}).
+				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{ID: input.ID}).
 					Return(nil, errors.New("failed get detail data after updated")).Once()
 			},
 			wantRes: nil,
@@ -138,7 +138,7 @@ func (srv *UserServiceTestSuite) Test_userService_Update() {
 		{
 			name:    "success",
 			envVars: reqEnv,
-			input: payload.UpdateReq{
+			input: dto.UpdateReq{
 				ID:        1,
 				Name:      "Hello world",
 				Role:      models.ADMIN,
@@ -146,15 +146,15 @@ func (srv *UserServiceTestSuite) Test_userService_Update() {
 				Username:  "hello-world",
 				UpdatedBy: 1,
 			},
-			mockFunc: func(input payload.UpdateReq) {
-				srv.repo.On("GetDetail", mock.Anything, payload.DetailReq{
+			mockFunc: func(input dto.UpdateReq) {
+				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
 					ID: input.ID, Columns: "id"}).
 					Return(&models.User{ID: 1}, nil).Once()
 				// check duplicate
-				srv.repo.On("GetDetail", mock.Anything, payload.DetailReq{
+				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
 					Columns: "id", NotID: input.ID, Email: input.Email}).
 					Return(nil, nil).Once()
-				srv.repo.On("GetDetail", mock.Anything, payload.DetailReq{
+				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
 					Columns: "id", NotID: input.ID, Username: input.Username}).
 					Return(nil, nil).Once()
 
@@ -162,7 +162,7 @@ func (srv *UserServiceTestSuite) Test_userService_Update() {
 				// update
 				srv.repo.On("UpdateSpecificField", mock.Anything, user).
 					Return(nil).Once()
-				srv.repo.On("GetDetail", mock.Anything, payload.DetailReq{ID: input.ID}).
+				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{ID: input.ID}).
 					Return(&user, nil).Once()
 				srv.repo.On("CreateCache", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
 				srv.repo.On("InsertLog", mock.Anything, mock.Anything).Return(nil).Once()

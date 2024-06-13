@@ -5,11 +5,11 @@ import (
 	"errors"
 
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
+	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
 	"gorm.io/gorm"
 )
 
-func (r *userRepo) GetDetail(ctx context.Context, input payload.DetailReq) (res *models.User, err error) {
+func (r *userRepo) GetDetail(ctx context.Context, input dto.DetailReq) (res *models.User, err error) {
 	const opName = "UserRepository-GetDetail"
 
 	column := "*"
@@ -31,8 +31,8 @@ func (r *userRepo) GetDetail(ctx context.Context, input payload.DetailReq) (res 
 }
 
 // whereGetDetail sets the where clause for the GetDetail function based on the
-// input payload.
-func (r *userRepo) whereGetDetail(db *gorm.DB, input payload.DetailReq) *gorm.DB {
+// input dto.
+func (r *userRepo) whereGetDetail(db *gorm.DB, input dto.DetailReq) *gorm.DB {
 	// Input is strongly typed
 	if input.ID > 0 {
 		db = db.Where("id = ?", input.ID)

@@ -2,15 +2,15 @@ package service
 
 import (
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/app/modules/log/payload"
+	"github.com/adamnasrudin03/go-template/app/modules/log/dto"
 )
 
-func (srv *logSrv) convertModelsToListResponse(data []models.Log) []payload.LogRes {
+func (srv *logSrv) convertModelsToListResponse(data []models.Log) []dto.LogRes {
 	var (
-		records = []payload.LogRes{}
+		records = []dto.LogRes{}
 	)
 	for i := 0; i < len(data); i++ {
-		temp := payload.LogRes{
+		temp := dto.LogRes{
 			ID:        data[i].ID,
 			DateTime:  data[i].LogDateTime,
 			Name:      data[i].Name,

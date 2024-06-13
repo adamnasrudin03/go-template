@@ -1,4 +1,4 @@
-package payload
+package dto
 
 type RegisterUserReq struct {
 	Name     string `json:"name" validate:"required"`

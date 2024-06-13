@@ -15,14 +15,14 @@ func (srv *logSrv) CreateByMessage(ctx context.Context, message string) (err err
 		return helpers.ErrIsRequired("Pesan", "Message")
 	}
 
-	payload := models.Log{}
-	err = json.Unmarshal([]byte(message), &payload)
+	dto := models.Log{}
+	err = json.Unmarshal([]byte(message), &dto)
 	if err != nil {
 		srv.Logger.Errorf("%v Unmarshal error: %v ", opName, err)
 		return helpers.ErrUnmarshalJSON()
 	}
 
-	err = srv.Repo.Create(ctx, payload)
+	err = srv.Repo.Create(ctx, dto)
 	if err != nil {
 		srv.Logger.Errorf("%v error create db: %v ", opName, err)
 		return helpers.ErrCreatedDB()

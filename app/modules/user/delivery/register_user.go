@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
+	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 
 	"github.com/gin-gonic/gin"
@@ -14,7 +14,7 @@ import (
 func (c *userDelivery) RegisterUser(ctx *gin.Context) {
 	var (
 		opName = "UserDelivery-RegisterUser"
-		input  payload.RegisterUserReq
+		input  dto.RegisterUserReq
 	)
 	validate := validator.New()
 	err := ctx.ShouldBindJSON(&input)

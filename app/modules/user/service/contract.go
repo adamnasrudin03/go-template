@@ -5,19 +5,19 @@ import (
 
 	"github.com/adamnasrudin03/go-template/app/configs"
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/app/modules/user/payload"
+	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
 	"github.com/adamnasrudin03/go-template/app/modules/user/repository"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 	"github.com/sirupsen/logrus"
 )
 
 type UserService interface {
-	Register(ctx context.Context, input payload.RegisterReq) (res *models.User, err error)
-	Login(ctx context.Context, input payload.LoginReq) (res *payload.LoginRes, err error)
-	GetDetail(ctx context.Context, input payload.DetailReq) (*models.User, error)
-	ChangePassword(ctx context.Context, input payload.ChangePasswordReq) error
-	Update(ctx context.Context, input payload.UpdateReq) (res *models.User, err error)
-	GetList(ctx context.Context, params *payload.ListUserReq) (*helpers.Pagination, error)
+	Register(ctx context.Context, input dto.RegisterReq) (res *models.User, err error)
+	Login(ctx context.Context, input dto.LoginReq) (res *dto.LoginRes, err error)
+	GetDetail(ctx context.Context, input dto.DetailReq) (*models.User, error)
+	ChangePassword(ctx context.Context, input dto.ChangePasswordReq) error
+	Update(ctx context.Context, input dto.UpdateReq) (res *models.User, err error)
+	GetList(ctx context.Context, params *dto.ListUserReq) (*helpers.Pagination, error)
 }
 
 type userService struct {
