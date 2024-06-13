@@ -7,6 +7,7 @@ import (
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/auth/dto"
 	"github.com/adamnasrudin03/go-template/app/modules/auth/repository"
+	cacheRepo "github.com/adamnasrudin03/go-template/app/modules/cache/repository"
 	logRepo "github.com/adamnasrudin03/go-template/app/modules/log/repository"
 	userRepo "github.com/adamnasrudin03/go-template/app/modules/user/repository"
 	"github.com/sirupsen/logrus"
@@ -18,11 +19,12 @@ type AuthService interface {
 }
 
 type AuthSrv struct {
-	Repo     repository.AuthRepository
-	RepoUser userRepo.UserRepository
-	RepoLog  logRepo.LogRepository
-	Cfg      *configs.Configs
-	Logger   *logrus.Logger
+	Repo      repository.AuthRepository
+	RepoCache cacheRepo.CacheRepository
+	RepoUser  userRepo.UserRepository
+	RepoLog   logRepo.LogRepository
+	Cfg       *configs.Configs
+	Logger    *logrus.Logger
 }
 
 func NewAuthService(

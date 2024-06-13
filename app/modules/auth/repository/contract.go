@@ -13,9 +13,6 @@ import (
 )
 
 type AuthRepository interface {
-	CreateCache(ctx context.Context, key string, data interface{})
-	GetCache(ctx context.Context, key string, res interface{})
-	DelCache(ctx context.Context, key string) error
 	Register(ctx context.Context, input models.User) (res *models.User, err error)
 	Login(ctx context.Context, input dto.LoginReq) (res *models.User, er error)
 }

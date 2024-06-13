@@ -27,11 +27,12 @@ func WiringService(repo *Repositories, cache *driver.RedisClient, cfg *configs.C
 
 func regAuthSrv(repo *Repositories, cfg *configs.Configs, logger *logrus.Logger) authSrv.AuthService {
 	params := authSrv.AuthSrv{
-		Repo:     repo.Auth,
-		RepoUser: repo.User,
-		RepoLog:  repo.Log,
-		Cfg:      cfg,
-		Logger:   logger,
+		Repo:      repo.Auth,
+		RepoCache: repo.Cache,
+		RepoUser:  repo.User,
+		RepoLog:   repo.Log,
+		Cfg:       cfg,
+		Logger:    logger,
 	}
 	return authSrv.NewAuthService(params)
 }

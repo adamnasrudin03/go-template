@@ -6,6 +6,7 @@ import (
 
 	"github.com/adamnasrudin03/go-template/app/configs"
 	"github.com/adamnasrudin03/go-template/app/modules/auth/repository/mocks"
+	mocksCache "github.com/adamnasrudin03/go-template/app/modules/cache/repository/mocks"
 	mocksLog "github.com/adamnasrudin03/go-template/app/modules/log/repository/mocks"
 	mocksUser "github.com/adamnasrudin03/go-template/app/modules/user/repository/mocks"
 	"github.com/adamnasrudin03/go-template/pkg/driver"
@@ -14,11 +15,12 @@ import (
 
 type AuthServiceTestSuite struct {
 	suite.Suite
-	repo     *mocks.AuthRepository
-	repoUser *mocksUser.UserRepository
-	repoLog  *mocksLog.LogRepository
-	ctx      context.Context
-	service  AuthService
+	repo      *mocks.AuthRepository
+	repoCache *mocksCache.CacheRepository
+	repoUser  *mocksUser.UserRepository
+	repoLog   *mocksLog.LogRepository
+	ctx       context.Context
+	service   AuthService
 }
 
 func (srv *AuthServiceTestSuite) SetupTest() {
@@ -29,14 +31,16 @@ func (srv *AuthServiceTestSuite) SetupTest() {
 	srv.ctx = context.Background()
 
 	srv.repo = &mocks.AuthRepository{}
+	srv.repoCache = &mocksCache.CacheRepository{}
 	srv.repoUser = &mocksUser.UserRepository{}
 	srv.repoLog = &mocksLog.LogRepository{}
 	params := AuthSrv{
-		Repo:     srv.repo,
-		RepoUser: srv.repoUser,
-		RepoLog:  srv.repoLog,
-		Cfg:      cfg,
-		Logger:   logger,
+		Repo:      srv.repo,
+		RepoCache: srv.repoCache,
+		RepoUser:  srv.repoUser,
+		RepoLog:   srv.repoLog,
+		Cfg:       cfg,
+		Logger:    logger,
 	}
 
 	srv.service = NewAuthService(params)

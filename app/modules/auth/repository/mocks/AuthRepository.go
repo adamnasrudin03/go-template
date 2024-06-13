@@ -16,34 +16,6 @@ type AuthRepository struct {
 	mock.Mock
 }
 
-// CreateCache provides a mock function with given fields: ctx, key, data
-func (_m *AuthRepository) CreateCache(ctx context.Context, key string, data interface{}) {
-	_m.Called(ctx, key, data)
-}
-
-// DelCache provides a mock function with given fields: ctx, key
-func (_m *AuthRepository) DelCache(ctx context.Context, key string) error {
-	ret := _m.Called(ctx, key)
-
-	if len(ret) == 0 {
-		panic("no return value specified for DelCache")
-	}
-
-	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, string) error); ok {
-		r0 = rf(ctx, key)
-	} else {
-		r0 = ret.Error(0)
-	}
-
-	return r0
-}
-
-// GetCache provides a mock function with given fields: ctx, key, res
-func (_m *AuthRepository) GetCache(ctx context.Context, key string, res interface{}) {
-	_m.Called(ctx, key, res)
-}
-
 // Login provides a mock function with given fields: ctx, input
 func (_m *AuthRepository) Login(ctx context.Context, input dto.LoginReq) (*models.User, error) {
 	ret := _m.Called(ctx, input)
