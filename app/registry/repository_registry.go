@@ -21,18 +21,9 @@ type Repositories struct {
 
 func WiringRepository(db *gorm.DB, cache *driver.RedisClient, cfg *configs.Configs, logger *logrus.Logger) *Repositories {
 	return &Repositories{
-		Auth:  regAuthRepo(db, cache, cfg, logger),
+		Auth:  authRepo.NewAuthRepository(db, cfg, logger),
 		Cache: cacheRepo.NewCacheRepository(*cache, cfg, logger),
-		User:  userRepo.NewUserRepository(db, *cache, cfg, logger),
+		User:  userRepo.NewUserRepository(db, cfg, logger),
 		Log:   logRepo.NewLogRepository(db, cfg, logger),
 	}
-}
-
-func regAuthRepo(db *gorm.DB, cache *driver.RedisClient, cfg *configs.Configs, logger *logrus.Logger) authRepo.AuthRepository {
-	return authRepo.NewAuthRepository(authRepo.AuthRepo{
-		DB:     db,
-		Cache:  *cache,
-		Cfg:    cfg,
-		Logger: logger,
-	})
 }

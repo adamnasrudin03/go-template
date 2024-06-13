@@ -6,7 +6,6 @@ import (
 	"github.com/adamnasrudin03/go-template/app/configs"
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/auth/dto"
-	"github.com/adamnasrudin03/go-template/pkg/driver"
 
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
@@ -19,13 +18,18 @@ type AuthRepository interface {
 
 type AuthRepo struct {
 	DB     *gorm.DB
-	Cache  driver.RedisClient
 	Cfg    *configs.Configs
 	Logger *logrus.Logger
 }
 
 func NewAuthRepository(
-	params AuthRepo,
+	db *gorm.DB,
+	cfg *configs.Configs,
+	logger *logrus.Logger,
 ) AuthRepository {
-	return &params
+	return &AuthRepo{
+		DB:     db,
+		Cfg:    cfg,
+		Logger: logger,
+	}
 }
