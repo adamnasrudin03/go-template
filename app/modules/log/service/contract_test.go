@@ -25,7 +25,7 @@ func (srv *LogServiceTestSuite) SetupTest() {
 
 	srv.repoLog = &mocks.LogRepository{}
 
-	srv.service = NewLogService(srv.repoLog, logger)
+	srv.service = NewLogService(srv.repoLog, cfg, logger)
 	srv.ctx = context.Background()
 }
 

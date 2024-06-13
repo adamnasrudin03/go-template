@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 
+	"github.com/adamnasrudin03/go-template/app/configs"
 	"github.com/adamnasrudin03/go-template/app/modules/log/dto"
 	"github.com/adamnasrudin03/go-template/app/modules/log/repository"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
@@ -18,15 +19,18 @@ type LogService interface {
 
 type logSrv struct {
 	Repo   repository.LogRepository
+	Cfg    *configs.Configs
 	Logger *logrus.Logger
 }
 
 func NewLogService(
 	logRepo repository.LogRepository,
+	cfg *configs.Configs,
 	logger *logrus.Logger,
 ) LogService {
 	return &logSrv{
 		Repo:   logRepo,
+		Cfg:    cfg,
 		Logger: logger,
 	}
 }
