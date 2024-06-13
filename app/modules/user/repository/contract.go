@@ -23,6 +23,7 @@ type UserRepository interface {
 	UpdateSpecificField(ctx context.Context, input models.User) (err error)
 	InsertLog(ctx context.Context, input models.Log) (err error)
 	GetList(ctx context.Context, params dto.ListUserReq) (res []models.User, err error)
+	CheckIsDuplicate(ctx context.Context, input dto.DetailReq) (err error)
 }
 
 type userRepo struct {

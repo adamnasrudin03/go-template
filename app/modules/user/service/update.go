@@ -25,7 +25,7 @@ func (srv *userService) Update(ctx context.Context, input dto.UpdateReq) (res *m
 		return nil, err
 	}
 
-	err = srv.checkIsNotDuplicate(ctx, dto.DetailReq{
+	err = srv.userRepository.CheckIsDuplicate(ctx, dto.DetailReq{
 		Email:    input.Email,
 		Username: input.Username,
 		NotID:    input.ID,

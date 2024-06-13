@@ -34,62 +34,6 @@ func (srv *userService) getDetail(ctx context.Context, input dto.DetailReq) (*mo
 	return res, nil
 }
 
-func (srv *userService) checkIsNotDuplicate(ctx context.Context, input dto.DetailReq) (err error) {
-	err = input.Validate()
-	if err != nil {
-		return err
-	}
-
-	err = srv.checkIsExistEmail(ctx, input)
-	if err != nil {
-		return err
-	}
-
-	err = srv.checkIsExistUsername(ctx, input)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (srv *userService) checkIsExistEmail(ctx context.Context, input dto.DetailReq) (err error) {
-	const opName = "UserService-checkIsExistEmail"
-	checkUser := new(models.User)
-	if len(input.Email) > 0 {
-		checkUser, _ = srv.userRepository.GetDetail(ctx, dto.DetailReq{Columns: "id", NotID: input.NotID, Email: input.Email})
-		if checkUser != nil && checkUser.ID > 0 {
-			srv.Logger.Errorf("%v Email has be registered", opName)
-			return helpers.NewError(helpers.ErrConflict, helpers.NewResponseMultiLang(
-				helpers.MultiLanguages{
-					ID: "Surel Sudah Terdafar",
-					EN: "Email Already Registered",
-				},
-			))
-		}
-	}
-
-	return nil
-}
-
-func (srv *userService) checkIsExistUsername(ctx context.Context, input dto.DetailReq) (err error) {
-	const opName = "UserService-checkIsExistUsername"
-	checkUser := new(models.User)
-	if len(input.Username) > 0 {
-		checkUser, _ = srv.userRepository.GetDetail(ctx, dto.DetailReq{Columns: "id", NotID: input.NotID, Username: input.Username})
-		if checkUser != nil && checkUser.ID > 0 {
-			srv.Logger.Errorf("%v Username has be registered", opName)
-			return helpers.NewError(helpers.ErrConflict, helpers.NewResponseMultiLang(
-				helpers.MultiLanguages{
-					ID: "Username Sudah Terdafar",
-					EN: "Username Already Registered",
-				},
-			))
-		}
-	}
-	return nil
-}
-
 func (srv *userService) convertModelsToListResponse(data []models.User) []dto.UserRes {
 	var records = []dto.UserRes{}
 

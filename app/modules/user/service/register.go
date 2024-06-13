@@ -31,7 +31,7 @@ func (srv *userService) Register(ctx context.Context, input dto.RegisterReq) (re
 		},
 	}
 
-	err = srv.checkIsNotDuplicate(ctx, dto.DetailReq{
+	err = srv.userRepository.CheckIsDuplicate(ctx, dto.DetailReq{
 		Email:    input.Email,
 		Username: input.Username,
 	})

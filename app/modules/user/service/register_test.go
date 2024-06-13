@@ -34,27 +34,6 @@ func (srv *UserServiceTestSuite) Test_userService_Register() {
 			wantErr: true,
 		},
 		{
-			name:    "duplicated email",
-			envVars: reqEnv,
-			input: dto.RegisterReq{
-				Name:      "Hello world",
-				Role:      models.ADMIN,
-				Email:     "hello-world@email.com",
-				Username:  "hello-world",
-				Password:  "password",
-				CreatedBy: 1,
-				UpdatedBy: 1,
-			},
-			mockFunc: func(params dto.RegisterReq) {
-				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
-					Columns: "id", Email: params.Email}).
-					Return(&models.User{ID: 1}, nil).Once()
-
-			},
-			wantRes: nil,
-			wantErr: true,
-		},
-		{
 			name:    "duplicated username",
 			envVars: reqEnv,
 			input: dto.RegisterReq{
@@ -67,12 +46,10 @@ func (srv *UserServiceTestSuite) Test_userService_Register() {
 				UpdatedBy: 1,
 			},
 			mockFunc: func(params dto.RegisterReq) {
-				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
-					Columns: "id", Email: params.Email}).
-					Return(nil, nil).Once()
-				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
-					Columns: "id", Username: params.Username}).
-					Return(&models.User{ID: 1}, nil).Once()
+
+				srv.repo.On("CheckIsDuplicate", mock.Anything, dto.DetailReq{
+					Email:    params.Email,
+					Username: params.Username}).Return(errors.New("duplicated username")).Once()
 
 			},
 			wantRes: nil,
@@ -91,12 +68,9 @@ func (srv *UserServiceTestSuite) Test_userService_Register() {
 				UpdatedBy: 1,
 			},
 			mockFunc: func(params dto.RegisterReq) {
-				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
-					Columns: "id", Email: params.Email}).
-					Return(nil, nil).Once()
-				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
-					Columns: "id", Username: params.Username}).
-					Return(nil, nil).Once()
+				srv.repo.On("CheckIsDuplicate", mock.Anything, dto.DetailReq{
+					Email:    params.Email,
+					Username: params.Username}).Return(nil).Once()
 
 				user := models.User{
 					Name:     params.Name,
@@ -127,12 +101,9 @@ func (srv *UserServiceTestSuite) Test_userService_Register() {
 				UpdatedBy: 1,
 			},
 			mockFunc: func(params dto.RegisterReq) {
-				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
-					Columns: "id", Email: params.Email}).
-					Return(nil, nil).Once()
-				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
-					Columns: "id", Username: params.Username}).
-					Return(nil, nil).Once()
+				srv.repo.On("CheckIsDuplicate", mock.Anything, dto.DetailReq{
+					Email:    params.Email,
+					Username: params.Username}).Return(nil).Once()
 
 				user := models.User{
 					Name:     params.Name,

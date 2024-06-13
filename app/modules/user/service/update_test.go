@@ -60,13 +60,11 @@ func (srv *UserServiceTestSuite) Test_userService_Update() {
 				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
 					ID: input.ID, Columns: "id"}).
 					Return(&models.User{ID: 1}, nil).Once()
-				// check duplicate
-				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
-					Columns: "id", NotID: input.ID, Email: input.Email}).
-					Return(nil, nil).Once()
-				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
-					Columns: "id", NotID: input.ID, Username: input.Username}).
-					Return(&models.User{ID: 1}, nil).Once()
+
+				srv.repo.On("CheckIsDuplicate", mock.Anything, dto.DetailReq{
+					NotID:    input.ID,
+					Email:    input.Email,
+					Username: input.Username}).Return(errors.New("duplicate username")).Once()
 
 			},
 			wantRes: nil,
@@ -87,13 +85,11 @@ func (srv *UserServiceTestSuite) Test_userService_Update() {
 				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
 					ID: input.ID, Columns: "id"}).
 					Return(&models.User{ID: 1}, nil).Once()
-				// check duplicate
-				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
-					Columns: "id", NotID: input.ID, Email: input.Email}).
-					Return(nil, nil).Once()
-				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
-					Columns: "id", NotID: input.ID, Username: input.Username}).
-					Return(nil, nil).Once()
+
+				srv.repo.On("CheckIsDuplicate", mock.Anything, dto.DetailReq{
+					NotID:    input.ID,
+					Email:    input.Email,
+					Username: input.Username}).Return(nil).Once()
 
 				// update
 				srv.repo.On("UpdateSpecificField", mock.Anything, input.ConvertToUser()).
@@ -117,13 +113,11 @@ func (srv *UserServiceTestSuite) Test_userService_Update() {
 				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
 					ID: input.ID, Columns: "id"}).
 					Return(&models.User{ID: 1}, nil).Once()
-				// check duplicate
-				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
-					Columns: "id", NotID: input.ID, Email: input.Email}).
-					Return(nil, nil).Once()
-				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
-					Columns: "id", NotID: input.ID, Username: input.Username}).
-					Return(nil, nil).Once()
+
+				srv.repo.On("CheckIsDuplicate", mock.Anything, dto.DetailReq{
+					NotID:    input.ID,
+					Email:    input.Email,
+					Username: input.Username}).Return(nil).Once()
 
 				user := input.ConvertToUser()
 				// update
@@ -150,13 +144,11 @@ func (srv *UserServiceTestSuite) Test_userService_Update() {
 				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
 					ID: input.ID, Columns: "id"}).
 					Return(&models.User{ID: 1}, nil).Once()
-				// check duplicate
-				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
-					Columns: "id", NotID: input.ID, Email: input.Email}).
-					Return(nil, nil).Once()
-				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{
-					Columns: "id", NotID: input.ID, Username: input.Username}).
-					Return(nil, nil).Once()
+
+				srv.repo.On("CheckIsDuplicate", mock.Anything, dto.DetailReq{
+					NotID:    input.ID,
+					Email:    input.Email,
+					Username: input.Username}).Return(nil).Once()
 
 				user := input.ConvertToUser()
 				// update

@@ -25,7 +25,7 @@ func (r *userRepo) GetDetail(ctx context.Context, input dto.DetailReq) (res *mod
 		}
 
 		r.Logger.Errorf("%v error get db: %v ", opName, err)
-		return
+		return nil, err
 	}
 	return res, nil
 }
