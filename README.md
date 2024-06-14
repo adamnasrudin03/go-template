@@ -25,6 +25,8 @@
 | GET    | yes  | /api/v1/users/:id                 | Detail User                                                           |
 | GET    | yes  | /api/v1/users                     | List User, auth only admin or super admin (root)                      |
 | PATCH  | yes  | /api/v1/users/change-password/:id | Change Password                                                       |
+| GET    | yes  | /api/v1/users/send-email-verify   | Send OTP Email verified                                               |
+| POST   | yes  | /api/v1/users/verified-email      | Verified email with otp                                               |
 | GET    | yes  | /api/v1/logs                      | List log activity history                                             |
 | GET    | yes  | /api/v1/logs/download             | Download xlx List log activity history                                |
 | GET    | no   | /api/v1/message/translate/id      | Translate text to language id (indonesia)                             |

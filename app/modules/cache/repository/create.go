@@ -13,7 +13,7 @@ func (r *cacheRepo) CreateCache(ctx context.Context, key string, data interface{
 		err    error
 	)
 	if ttl == 0 || ttl <= models.TimeDurationZero {
-		ttl = time.Duration(r.Cfg.Redis.DefaultCacheTimeOut) * time.Minute
+		ttl = r.Cfg.Redis.DefaultCacheTimeOut
 	}
 
 	err = r.Cache.Set(key, data, ttl)

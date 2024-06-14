@@ -2,6 +2,9 @@ package helpers
 
 import (
 	"encoding/json"
+	"fmt"
+	"math"
+	"math/rand"
 	"net/mail"
 	"strings"
 	"unicode"
@@ -64,4 +67,11 @@ func ToSentenceCase(input string) string {
 // Upper case a string, ex; hello world => HELLO WORLD
 func ToUpper(input string) string {
 	return strings.TrimSpace(strings.ToUpper(input))
+}
+
+// GenerateRandomNumber generates a random number of the specified length (length int) and returns it as a string (string).
+func GenerateRandomNumber(length int) string {
+	max := int(math.Pow10(length))
+	num := rand.Intn(max)
+	return fmt.Sprintf("%0*d", length, num)
 }

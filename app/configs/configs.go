@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/joho/godotenv"
 )
@@ -31,6 +32,8 @@ func GetInstance() *Configs {
 				SecretKey:    getEnv("JWT_SECRET", "MySecretKey"),
 				ExpiredToken: GetExpiredToken(),
 				UseRabbitMQ:  UseRabbitMQ(),
+				OtpLength:    GetOtpLength(),
+				OtpExpired:   GetOtpExpired(),
 			},
 			DB: DbConfig{
 				Host:        getEnv("DB_HOST", "127.0.0.1"),
@@ -56,6 +59,13 @@ func GetInstance() *Configs {
 				Port:     GetRabbitPort(),
 				Username: getEnv("RABBIT_USERNAME", "GUEST"),
 				Password: getEnv("RABBIT_PASSWORD", "GUEST"),
+			},
+			Email: EmailConfig{
+				Host:         getEnv("MAIL_HOST", "smtp.gmail.com"),
+				Port:         GetEmailPort(),
+				AuthEmail:    getEnv("MAIL_AUTH_EMAIL", ""),
+				AuthPassword: getEnv("MAIL_AUTH_PASSWORD", ""),
+				Sender:       getEnv("MAIL_SENDER", ""),
 			},
 		}
 		lock.Unlock()
@@ -140,13 +150,13 @@ func GetRedisMinIdleConn() int {
 
 	return intVar
 }
-func GetRedisDefaultCacheTimeOut() int {
+func GetRedisDefaultCacheTimeOut() time.Duration {
 	intVar, err := strconv.Atoi(getEnv("CACHE_DEFAULT_TIMEOUT", "5"))
 	if err != nil {
-		return 5
+		return 5 * time.Minute
 	}
 
-	return intVar
+	return time.Duration(intVar) * time.Minute
 }
 
 func GetRabbitPort() int {
@@ -165,4 +175,31 @@ func UseRabbitMQ() bool {
 	}
 
 	return res
+}
+
+func GetEmailPort() int {
+	intVar, err := strconv.Atoi(getEnv("MAIL_PORT", "587"))
+	if err != nil {
+		return 587
+	}
+
+	return intVar
+}
+
+func GetOtpLength() int {
+	intVar, err := strconv.Atoi(getEnv("OTP_LENGTH", "6"))
+	if err != nil {
+		return 6
+	}
+
+	return intVar
+}
+
+func GetOtpExpired() time.Duration {
+	intVar, err := strconv.Atoi(getEnv("OTP_EXPIRED", "1"))
+	if err != nil {
+		return 1 * time.Minute
+	}
+
+	return time.Duration(intVar) * time.Minute
 }

@@ -14,13 +14,14 @@ import (
 
 // User represents the model for an user
 type User struct {
-	ID       uint64 `json:"id" gorm:"primaryKey"`
-	Name     string `json:"name" gorm:"not null"`
-	Role     string `json:"role" gorm:"not null;default:'USER'"`
-	Username string `json:"username" gorm:"not null;uniqueIndex"`
-	Email    string `json:"email" gorm:"not null;uniqueIndex"`
-	Password string `json:"password,omitempty" gorm:"not null"`
-	Salt     string `json:"salt,omitempty" gorm:"not null"`
+	ID              uint64     `json:"id" gorm:"primaryKey"`
+	Name            string     `json:"name" gorm:"not null"`
+	Role            string     `json:"role" gorm:"not null;default:'USER'"`
+	Username        string     `json:"username" gorm:"not null;uniqueIndex"`
+	Email           string     `json:"email" gorm:"not null;uniqueIndex"`
+	EmailVerifiedAt *time.Time `json:"email_verified_at"  gorm:"null"`
+	Password        string     `json:"password,omitempty" gorm:"not null"`
+	Salt            string     `json:"salt,omitempty" gorm:"not null"`
 	DefaultModel
 }
 

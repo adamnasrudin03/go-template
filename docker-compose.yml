@@ -78,6 +78,13 @@ services:
       - RABBIT_PORT=5672
       - RABBIT_USERNAME=rabbitmq
       - RABBIT_PASSWORD=rabbitmq
+      - OTP_LENGTH=6
+      - OTP_EXPIRED=3 # In Minutes
+      - MAIL_HOST=smtp.gmail.com
+      - MAIL_PORT=587  
+      - MAIL_AUTH_EMAIL=yourEmail@gmail.com
+      - MAIL_AUHT_PASSWORD=aplicationPassword
+      - MAIL_SENDER=Admin Go-Template <yourEmail@gmail.com>
 
 networks:
   my_network:

@@ -17,5 +17,7 @@ func (r routes) userRouter(rg *gin.RouterGroup, userDelivery delivery.UserDelive
 		users.GET("/:id", middlewares.AuthorizationMustBe([]string{}), userDelivery.GetDetail)
 		users.GET("", middlewares.AuthorizationMustBe([]string{models.ROOT, models.ADMIN}), userDelivery.GetList)
 		users.PATCH("/change-password/:id", middlewares.AuthorizationMustBe([]string{}), userDelivery.ChangePassword)
+		users.GET("/send-email-verify", middlewares.AuthorizationMustBe([]string{}), userDelivery.SendEmailVerify)
+		users.POST("/verified-email", middlewares.AuthorizationMustBe([]string{}), userDelivery.VerifiedEmail)
 	}
 }

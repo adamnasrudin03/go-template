@@ -1,5 +1,7 @@
 package configs
 
+import "time"
+
 type Configs struct {
 	App      AppConfig
 	DB       DbConfig
@@ -9,12 +11,14 @@ type Configs struct {
 }
 
 type AppConfig struct {
-	Name         string `json:"name"`
-	Env          string `json:"env"`
-	Port         string `json:"port"`
-	ExpiredToken int    `json:"expired_token"`
-	SecretKey    string `json:"secret_key"`
-	UseRabbitMQ  bool   `json:"use_rabbit_mq"`
+	Name         string        `json:"name"`
+	Env          string        `json:"env"`
+	Port         string        `json:"port"`
+	ExpiredToken int           `json:"expired_token"`
+	SecretKey    string        `json:"secret_key"`
+	UseRabbitMQ  bool          `json:"use_rabbit_mq"`
+	OtpLength    int           `json:"otp_length"`
+	OtpExpired   time.Duration `json:"otp_expired"`
 }
 
 type DbConfig struct {
@@ -28,15 +32,15 @@ type DbConfig struct {
 }
 
 type RedisConfig struct {
-	Host                string `json:"host"`
-	Port                int    `json:"port"`
-	Password            string `json:"password"`
-	Database            int    `json:"database"`
-	Master              string `json:"master"`
-	PoolSize            int    `json:"pool_size"`
-	PoolTimeout         int    `json:"pool_timeout"`
-	MinIdleConn         int    `json:"min_idle_conn"`
-	DefaultCacheTimeOut int    `json:"default_cache_time_out"`
+	Host                string        `json:"host"`
+	Port                int           `json:"port"`
+	Password            string        `json:"password"`
+	Database            int           `json:"database"`
+	Master              string        `json:"master"`
+	PoolSize            int           `json:"pool_size"`
+	PoolTimeout         int           `json:"pool_timeout"`
+	MinIdleConn         int           `json:"min_idle_conn"`
+	DefaultCacheTimeOut time.Duration `json:"default_cache_time_out"`
 }
 
 type RabbitMQConfig struct {
@@ -47,9 +51,9 @@ type RabbitMQConfig struct {
 }
 
 type EmailConfig struct {
-	Host     string `json:"host"`
-	Port     int    `json:"port"`
-	Username string `json:"username"`
-	Password string `json:"password"`
-	From     string `json:"from"`
+	Host         string `json:"host"`
+	Port         int    `json:"port"`
+	AuthEmail    string `json:"auth_email"`
+	AuthPassword string `json:"auth_password"`
+	Sender       string `json:"sender"`
 }

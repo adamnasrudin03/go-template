@@ -2,10 +2,12 @@ package service
 
 import (
 	"context"
+	"time"
 
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
+	"github.com/google/uuid"
 )
 
 func (srv *UserSrv) getDetail(ctx context.Context, input dto.DetailReq) (*models.User, error) {
@@ -31,6 +33,10 @@ func (srv *UserSrv) getDetail(ctx context.Context, input dto.DetailReq) (*models
 		return nil, helpers.ErrDataNotFound("Pengguna", "User")
 	}
 
+	if input.Columns == "" {
+		go srv.RepoCache.CreateCache(context.Background(), models.GenerateKeyCacheUserDetail(res.ID), res, time.Minute*5)
+	}
+
 	return res, nil
 }
 
@@ -51,4 +57,42 @@ func (srv *UserSrv) convertModelsToListResponse(data []models.User) []dto.UserRe
 	}
 
 	return records
+}
+
+func (srv *UserSrv) generateOTP() (resp dto.VerifyOtpRes, err error) {
+	const opName = "UserService-generateOTP"
+	reqID, err := uuid.NewV7()
+	if err != nil {
+		srv.Logger.Errorf("%v error generate uuid: %v", opName, err)
+		return dto.VerifyOtpRes{}, helpers.ErrGenerateOtp()
+	}
+
+	resp = dto.VerifyOtpRes{
+		RequestID: reqID.String(),
+		Otp:       helpers.GenerateRandomNumber(srv.Cfg.App.OtpLength),
+	}
+
+	if resp.Otp == "" {
+		return dto.VerifyOtpRes{}, helpers.ErrGenerateOtp()
+	}
+
+	return resp, nil
+}
+
+func (srv *UserSrv) checkOTP(otp []byte, reqOtp string) error {
+	sourceOtp := string(otp)
+	if sourceOtp == "" {
+		return helpers.ErrOtpExpired()
+	}
+
+	if sourceOtp != reqOtp {
+		return helpers.ErrOtpInvalid()
+	}
+
+	return nil
+}
+
+func (srv *UserSrv) checkEmailIsVerified(user models.User) bool {
+	verifiedAt := helpers.CheckTimePointerValue(user.EmailVerifiedAt)
+	return !verifiedAt.IsZero()
 }

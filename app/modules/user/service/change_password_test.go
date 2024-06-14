@@ -44,6 +44,7 @@ func (srv *UserServiceTestSuite) Test_userService_ChangePassword() {
 				key := models.GenerateKeyCacheUserDetail(input.ID)
 				srv.repoCache.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(nil).Once()
 				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{ID: 1}).Return(nil, nil).Once()
+				srv.repoCache.On("CreateCache", mock.Anything, key, mock.Anything, time.Minute*5).Return(nil).Once()
 
 			},
 			wantErr: true,
@@ -66,6 +67,7 @@ func (srv *UserServiceTestSuite) Test_userService_ChangePassword() {
 				}
 				user.Password, _ = helpers.HashPassword("password123")
 				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{ID: 1}).Return(&user, nil).Once()
+				srv.repoCache.On("CreateCache", mock.Anything, key, mock.Anything, time.Minute*5).Return(nil).Once()
 
 			},
 			wantErr: true,
@@ -91,6 +93,7 @@ func (srv *UserServiceTestSuite) Test_userService_ChangePassword() {
 				}
 				user.Password, _ = helpers.HashPassword(user.Password)
 				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{ID: input.ID}).Return(&user, nil).Once()
+				srv.repoCache.On("CreateCache", mock.Anything, key, mock.Anything, time.Minute*5).Return(nil).Once()
 				srv.repo.On("Updates", mock.Anything, mock.Anything).Return(nil, errors.New("invalid update")).Once()
 
 			},
@@ -117,6 +120,7 @@ func (srv *UserServiceTestSuite) Test_userService_ChangePassword() {
 				}
 				user.Password, _ = helpers.HashPassword(user.Password)
 				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{ID: 1}).Return(&user, nil).Once()
+				srv.repoCache.On("CreateCache", mock.Anything, key, mock.Anything, time.Minute*5).Return(nil).Once()
 				srv.repo.On("Updates", mock.Anything, mock.Anything).Return(&user, nil).Once()
 				srv.repoCache.On("CreateCache", mock.Anything, key, mock.Anything, time.Minute*5).Return(nil).Once()
 				srv.repoLog.On("CreateLogActivity", mock.Anything, mock.Anything).Return(nil).Once()

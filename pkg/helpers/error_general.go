@@ -40,3 +40,31 @@ func ErrUnmarshalJSON() *ResponseError {
 		EN: "Failed to unmarshal JSON",
 	}))
 }
+
+func ErrOtpExpired() *ResponseError {
+	return NewError(ErrValidation, NewResponseMultiLang(MultiLanguages{
+		ID: "Kode OTP sudah kedaluwarsa",
+		EN: "OTP code has expired",
+	}))
+}
+
+func ErrGenerateOtp() *ResponseError {
+	return NewError(ErrUnknown, NewResponseMultiLang(MultiLanguages{
+		ID: "Gagal membuat kode OTP",
+		EN: "Failed to generate OTP code",
+	}))
+}
+
+func ErrOtpInvalid() *ResponseError {
+	return NewError(ErrValidation, NewResponseMultiLang(MultiLanguages{
+		ID: "Kode OTP tidak valid",
+		EN: "Invalid OTP code",
+	}))
+}
+
+func ErrEmailIsVerified() *ResponseError {
+	return NewError(ErrValidation, NewResponseMultiLang(MultiLanguages{
+		ID: "Email sudah terverifikasi",
+		EN: "Email is already verified",
+	}))
+}

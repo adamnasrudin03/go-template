@@ -39,11 +39,12 @@ func regAuthSrv(repo *Repositories, cfg *configs.Configs, logger *logrus.Logger)
 
 func regUserSrv(repo *Repositories, cfg *configs.Configs, logger *logrus.Logger) userSrv.UserService {
 	params := userSrv.UserSrv{
-		Repo:      repo.User,
-		RepoCache: repo.Cache,
-		RepoLog:   repo.Log,
-		Cfg:       cfg,
-		Logger:    logger,
+		Repo:        repo.User,
+		RepoCache:   repo.Cache,
+		RepoLog:     repo.Log,
+		RepoMessage: repo.Message,
+		Cfg:         cfg,
+		Logger:      logger,
 	}
 	return userSrv.NewUserService(params)
 }

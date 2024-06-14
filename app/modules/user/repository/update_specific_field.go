@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/adamnasrudin03/go-template/app/models"
+	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
 func (r *userRepo) UpdateSpecificField(ctx context.Context, input models.User) (err error) {
@@ -25,6 +26,10 @@ func (r *userRepo) UpdateSpecificField(ctx context.Context, input models.User) (
 	}
 	if input.UpdatedBy > 0 {
 		update["updated_by"] = input.UpdatedBy
+	}
+
+	if !helpers.CheckTimePointerValue(input.EmailVerifiedAt).IsZero() {
+		update["email_verified_at"] = input.EmailVerifiedAt
 	}
 
 	update["updated_at"] = time.Now()

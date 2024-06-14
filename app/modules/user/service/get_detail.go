@@ -50,9 +50,6 @@ func (srv *UserSrv) GetDetail(ctx context.Context, input dto.DetailReq) (*models
 		return nil, err
 	}
 
-	key = models.GenerateKeyCacheUserDetail(res.ID)
-	go srv.RepoCache.CreateCache(context.Background(), key, res, time.Minute*5)
-
 	res.ConvertToResponse()
 	return res, nil
 }
