@@ -13,7 +13,7 @@ import (
 func (srv *UserSrv) ChangePassword(ctx context.Context, input dto.ChangePasswordReq) error {
 	const opName = "UserService-ChangePassword"
 	var (
-		key  = fmt.Sprintf("%v-%d", models.CacheUserDetail, input.ID)
+		key  = models.GenerateKeyCacheUserDetail(input.ID)
 		user = new(models.User)
 		err  error
 	)

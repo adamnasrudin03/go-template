@@ -13,7 +13,7 @@ import (
 func (srv *UserSrv) GetDetail(ctx context.Context, input dto.DetailReq) (*models.User, error) {
 	const opName = "UserService-GetDetail"
 	var (
-		key = fmt.Sprintf("%v-%d", models.CacheUserDetail, input.ID)
+		key = models.GenerateKeyCacheUserDetail(input.ID)
 		res = new(models.User)
 		err error
 	)
@@ -50,7 +50,7 @@ func (srv *UserSrv) GetDetail(ctx context.Context, input dto.DetailReq) (*models
 		return nil, err
 	}
 
-	key = fmt.Sprintf("%v-%d", models.CacheUserDetail, res.ID)
+	key = models.GenerateKeyCacheUserDetail(res.ID)
 	go srv.RepoCache.CreateCache(context.Background(), key, res, time.Minute*5)
 
 	res.ConvertToResponse()

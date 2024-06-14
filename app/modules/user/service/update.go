@@ -51,7 +51,7 @@ func (srv *UserSrv) Update(ctx context.Context, input dto.UpdateReq) (res *model
 	go func(dataLog models.User) {
 		newCtx := context.Background()
 		now := time.Now()
-		srv.RepoCache.CreateCache(newCtx, fmt.Sprintf("%v-%d", models.CacheUserDetail, dataLog.ID), dataLog, time.Minute*5)
+		srv.RepoCache.CreateCache(newCtx, models.GenerateKeyCacheUserDetail(dataLog.ID), dataLog, time.Minute*5)
 		logData := models.Log{
 			Name:        fmt.Sprintf("Updated data user %s(%s)", dataLog.Name, dataLog.Email),
 			Action:      models.Updated,

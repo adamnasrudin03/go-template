@@ -2,7 +2,6 @@ package service
 
 import (
 	"errors"
-	"fmt"
 	"os"
 	"reflect"
 	"strings"
@@ -51,7 +50,7 @@ func (srv *UserServiceTestSuite) Test_userService_GetDetail() {
 			},
 			mockFunc: func() {
 				defer srv.repoLog.On("CreateLogActivity", mock.Anything, mock.Anything).Return(nil).Once()
-				key := fmt.Sprintf("%v-%d", models.CacheUserDetail, 1)
+				key := models.GenerateKeyCacheUserDetail(1)
 				res := models.User{
 					ID: 1,
 				}
@@ -76,7 +75,7 @@ func (srv *UserServiceTestSuite) Test_userService_GetDetail() {
 			},
 			mockFunc: func() {
 				defer srv.repoLog.On("CreateLogActivity", mock.Anything, mock.Anything).Return(nil).Once()
-				key := fmt.Sprintf("%v-%d", models.CacheUserDetail, 101)
+				key := models.GenerateKeyCacheUserDetail(101)
 
 				srv.repoCache.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(nil).Once()
 				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{ID: 101}).Return(nil, errors.New("failed")).Once()
@@ -93,7 +92,7 @@ func (srv *UserServiceTestSuite) Test_userService_GetDetail() {
 			},
 			mockFunc: func() {
 				defer srv.repoLog.On("CreateLogActivity", mock.Anything, mock.Anything).Return(nil).Once()
-				key := fmt.Sprintf("%v-%d", models.CacheUserDetail, 101)
+				key := models.GenerateKeyCacheUserDetail(101)
 
 				srv.repoCache.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(nil).Once()
 				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{ID: 101}).Return(nil, nil).Once()
@@ -110,7 +109,7 @@ func (srv *UserServiceTestSuite) Test_userService_GetDetail() {
 			},
 			mockFunc: func() {
 				defer srv.repoLog.On("CreateLogActivity", mock.Anything, mock.Anything).Return(nil).Once()
-				key := fmt.Sprintf("%v-%d", models.CacheUserDetail, 1)
+				key := models.GenerateKeyCacheUserDetail(1)
 
 				srv.repoCache.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(nil).Once()
 				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{ID: 1}).Return(&user, nil).Once()
