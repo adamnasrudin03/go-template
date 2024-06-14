@@ -23,9 +23,7 @@ func (srv *UserSrv) VerifiedEmail(ctx context.Context, req *dto.VerifyOtpReq) (e
 		return err
 	}
 
-	srv.RepoCache.GetCache(ctx, keyUser, user)
-	useCache := user != nil && user.ID > 0
-	if !useCache {
+	if ok := srv.RepoCache.GetCache(ctx, keyUser, user); !ok {
 		user, err = srv.getDetail(ctx, dto.DetailReq{ID: req.UserID})
 		if err != nil {
 			srv.Logger.Errorf("%v error check data: %v", opName, err)

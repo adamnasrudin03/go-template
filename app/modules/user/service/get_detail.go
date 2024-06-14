@@ -39,15 +39,12 @@ func (srv *UserSrv) GetDetail(ctx context.Context, input dto.DetailReq) (*models
 		return nil, err
 	}
 
-	srv.RepoCache.GetCache(ctx, key, res)
-	if res != nil && res.ID > 0 {
-		return res, nil
-	}
-
-	res, err = srv.getDetail(ctx, input)
-	if err != nil {
-		srv.Logger.Errorf("%v error: %v ", opName, err)
-		return nil, err
+	if ok := srv.RepoCache.GetCache(ctx, key, res); !ok {
+		res, err = srv.getDetail(ctx, input)
+		if err != nil {
+			srv.Logger.Errorf("%v error: %v ", opName, err)
+			return nil, err
+		}
 	}
 
 	res.ConvertToResponse()

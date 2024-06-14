@@ -56,7 +56,7 @@ func (srv *UserServiceTestSuite) Test_userService_GetDetail() {
 				}
 				srv.repoCache.On("GetCache", mock.Anything, key, &models.User{
 					ID: 0,
-				}).Return(nil).Run(func(args mock.Arguments) {
+				}).Return(true).Run(func(args mock.Arguments) {
 					target := args.Get(2).(*models.User)
 					*target = res
 				}).Once()
@@ -77,7 +77,7 @@ func (srv *UserServiceTestSuite) Test_userService_GetDetail() {
 				defer srv.repoLog.On("CreateLogActivity", mock.Anything, mock.Anything).Return(nil).Once()
 				key := models.GenerateKeyCacheUserDetail(101)
 
-				srv.repoCache.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(nil).Once()
+				srv.repoCache.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(false).Once()
 				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{ID: 101}).Return(nil, errors.New("failed")).Once()
 
 			},
@@ -94,7 +94,7 @@ func (srv *UserServiceTestSuite) Test_userService_GetDetail() {
 				defer srv.repoLog.On("CreateLogActivity", mock.Anything, mock.Anything).Return(nil).Once()
 				key := models.GenerateKeyCacheUserDetail(101)
 
-				srv.repoCache.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(nil).Once()
+				srv.repoCache.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(false).Once()
 				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{ID: 101}).Return(nil, nil).Once()
 
 			},
@@ -111,7 +111,7 @@ func (srv *UserServiceTestSuite) Test_userService_GetDetail() {
 				defer srv.repoLog.On("CreateLogActivity", mock.Anything, mock.Anything).Return(nil).Once()
 				key := models.GenerateKeyCacheUserDetail(1)
 
-				srv.repoCache.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(nil).Once()
+				srv.repoCache.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(false).Once()
 				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{ID: 1}).Return(&user, nil).Once()
 				srv.repoCache.On("CreateCache", mock.Anything, key, &user, time.Minute*5).Return(nil).Once()
 			},

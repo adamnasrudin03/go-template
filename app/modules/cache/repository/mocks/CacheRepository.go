@@ -39,8 +39,21 @@ func (_m *CacheRepository) DelCache(ctx context.Context, key string) error {
 }
 
 // GetCache provides a mock function with given fields: ctx, key, res
-func (_m *CacheRepository) GetCache(ctx context.Context, key string, res interface{}) {
-	_m.Called(ctx, key, res)
+func (_m *CacheRepository) GetCache(ctx context.Context, key string, res interface{}) bool {
+	ret := _m.Called(ctx, key, res)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetCache")
+	}
+
+	var r0 bool
+	if rf, ok := ret.Get(0).(func(context.Context, string, interface{}) bool); ok {
+		r0 = rf(ctx, key, res)
+	} else {
+		r0 = ret.Get(0).(bool)
+	}
+
+	return r0
 }
 
 // NewCacheRepository creates a new instance of CacheRepository. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.

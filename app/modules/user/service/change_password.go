@@ -24,9 +24,7 @@ func (srv *UserSrv) ChangePassword(ctx context.Context, input dto.ChangePassword
 		return err
 	}
 
-	srv.RepoCache.GetCache(ctx, key, user)
-	useCache := user != nil && user.ID > 0
-	if !useCache {
+	if ok := srv.RepoCache.GetCache(ctx, key, user); !ok {
 		user, err = srv.getDetail(ctx, dto.DetailReq{ID: input.ID})
 		if err != nil {
 			srv.Logger.Errorf("%v error: %v ", opName, err)

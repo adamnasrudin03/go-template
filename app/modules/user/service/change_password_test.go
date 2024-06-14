@@ -42,7 +42,7 @@ func (srv *UserServiceTestSuite) Test_userService_ChangePassword() {
 			},
 			mockFunc: func(input dto.ChangePasswordReq) {
 				key := models.GenerateKeyCacheUserDetail(input.ID)
-				srv.repoCache.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(nil).Once()
+				srv.repoCache.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(false).Once()
 				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{ID: 1}).Return(nil, nil).Once()
 				srv.repoCache.On("CreateCache", mock.Anything, key, mock.Anything, time.Minute*5).Return(nil).Once()
 
@@ -60,7 +60,7 @@ func (srv *UserServiceTestSuite) Test_userService_ChangePassword() {
 			},
 			mockFunc: func(input dto.ChangePasswordReq) {
 				key := models.GenerateKeyCacheUserDetail(input.ID)
-				srv.repoCache.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(nil).Once()
+				srv.repoCache.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(false).Once()
 				user := models.User{
 					ID:   1,
 					Name: "Hello World",
@@ -84,7 +84,7 @@ func (srv *UserServiceTestSuite) Test_userService_ChangePassword() {
 			},
 			mockFunc: func(input dto.ChangePasswordReq) {
 				key := models.GenerateKeyCacheUserDetail(input.ID)
-				srv.repoCache.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(nil).Once()
+				srv.repoCache.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(false).Once()
 
 				user := models.User{
 					ID:       1,
@@ -111,7 +111,7 @@ func (srv *UserServiceTestSuite) Test_userService_ChangePassword() {
 			},
 			mockFunc: func(input dto.ChangePasswordReq) {
 				key := models.GenerateKeyCacheUserDetail(input.ID)
-				srv.repoCache.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(nil).Once()
+				srv.repoCache.On("GetCache", mock.Anything, key, &models.User{ID: 0}).Return(false).Once()
 
 				user := models.User{
 					ID:       1,

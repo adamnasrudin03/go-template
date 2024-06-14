@@ -18,9 +18,7 @@ func (srv *UserSrv) SendEmailVerify(ctx context.Context, userID uint64) (*dto.Ve
 		err     error
 	)
 
-	srv.RepoCache.GetCache(ctx, keyUser, user)
-	useCache := user != nil && user.ID > 0
-	if !useCache {
+	if ok := srv.RepoCache.GetCache(ctx, keyUser, user); !ok {
 		user, err = srv.getDetail(ctx, dto.DetailReq{ID: userID})
 		if err != nil {
 			srv.Logger.Errorf("%v error check data: %v", opName, err)
@@ -40,7 +38,6 @@ func (srv *UserSrv) SendEmailVerify(ctx context.Context, userID uint64) (*dto.Ve
 
 	err = srv.RepoMessage.SendEmail(ctx, messageDto.SendEmailReq{
 		To:      []string{user.Email},
-		Cc:      []string{user.Email},
 		Subject: models.SubjectEmailVerify,
 		Message: models.GenerateMessageEmailVerify(user.Name, resp.Otp, srv.Cfg.App.OtpExpired),
 	})

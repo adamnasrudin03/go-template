@@ -12,7 +12,7 @@ import (
 
 type CacheRepository interface {
 	CreateCache(ctx context.Context, key string, data interface{}, ttl time.Duration)
-	GetCache(ctx context.Context, key string, res interface{})
+	GetCache(ctx context.Context, key string, res interface{}) bool
 	DelCache(ctx context.Context, key string) error
 }
 
