@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sync"
 	"time"
 
 	"github.com/adamnasrudin03/go-template/app/configs"
@@ -21,10 +22,13 @@ var (
 	err    error
 	cfg    = configs.GetInstance()
 	logger = driver.Logger(cfg)
+	mu     = &sync.Mutex{}
 )
 
 // SetupDbConnection is creating a new connection to our database
 func SetupDbConnection() *gorm.DB {
+	mu.Lock()
+	defer mu.Unlock()
 	logLevel := gormLogger.Silent
 	if cfg.App.Env == "dev" {
 		logLevel = gormLogger.Info
@@ -55,6 +59,16 @@ func SetupDbConnection() *gorm.DB {
 	db, err = gorm.Open(postgres.Open(dsn), gormConfig)
 	if err != nil {
 		logger.Panicf("Failed to create a connection to database , %v", err)
+		return nil
+	}
+
+	sqlDB, err := db.DB()
+	if err != nil {
+		logger.Panicf("Failed to check connection to database , %v", err)
+		return nil
+	}
+	if err := sqlDB.Ping(); err != nil {
+		logger.Panicf("Failed to ping connection to database , %v", err)
 		return nil
 	}
 
