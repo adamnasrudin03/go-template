@@ -35,6 +35,7 @@ func (c *CustomConfigClientRequest) SetTimeout(defaultTimeout int) int {
 
 // GetHTTPRequestJSON ...
 func GetHTTPRequestJSON(ctx context.Context, method string, url string, body io.Reader, headers ...map[string]string) (res []byte, statusCode int, err error) {
+	defer PanicRecover("helpers-GetHTTPRequestJSON")
 	req, err := http.NewRequest(method, url, body)
 	if err != nil {
 		return nil, http.StatusBadRequest, err
@@ -73,6 +74,7 @@ func GetHTTPRequestJSON(ctx context.Context, method string, url string, body io.
 
 // GetHTTPRequestSkipVerify ...
 func GetHTTPRequestSkipVerify(ctx context.Context, method string, url string, body io.Reader, customTimeOut int, headers ...map[string]string) (res []byte, statusCode int, err error) {
+	defer PanicRecover("helpers-GetHTTPRequestSkipVerify")
 	req, err := http.NewRequest(method, url, body)
 	if err != nil {
 		return nil, http.StatusBadRequest, err

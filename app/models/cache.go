@@ -7,17 +7,12 @@ import (
 
 const (
 	TimeDurationZero = time.Duration(0) * time.Second
-	TimeDuration5Min = time.Duration(5) * time.Minute
-
-	// key
-	cacheUserDetail = "cache-user-detail"
-	cacheOtp        = "cache-otp"
 )
 
 func GenerateKeyCacheUserDetail(userID uint64) string {
-	return fmt.Sprintf("%s-%d", cacheUserDetail, userID)
+	return fmt.Sprintf("cache-user-detail-%d", userID)
 }
 
 func GenerateKeyCacheOtp(userID uint64, requestID string) string {
-	return fmt.Sprintf("%s-user-%d-request-%s", cacheOtp, userID, requestID)
+	return fmt.Sprintf("cache-otp-user-%d-request-%s", userID, requestID)
 }

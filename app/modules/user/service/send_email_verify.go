@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/adamnasrudin03/go-template/app/models"
+	messageDto "github.com/adamnasrudin03/go-template/app/modules/message/dto"
 	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
@@ -37,19 +38,18 @@ func (srv *UserSrv) SendEmailVerify(ctx context.Context, userID uint64) (*dto.Ve
 		return nil, err
 	}
 
-	keyOtp := models.GenerateKeyCacheOtp(userID, resp.RequestID)
-	srv.RepoCache.CreateCache(ctx, keyOtp, []byte(resp.Otp), srv.Cfg.App.OtpExpired)
-	srv.Logger.Infof("request id: %v => otp: %v", resp.RequestID, resp.Otp)
-	// err = srv.RepoMessage.SendEmail(ctx, messageDto.SendEmailReq{
-	// 	To:      []string{user.Email},
-	// 	Subject: models.SubjectEmailVerify,
-	// 	Message: "Your OTP: " + otp,
-	// })
-	// if err != nil {
-	// 	srv.Logger.Errorf("%v error send email: %v", opName, err)
-	// 	return nil, err
-	// }
+	err = srv.RepoMessage.SendEmail(ctx, messageDto.SendEmailReq{
+		To:      []string{user.Email},
+		Cc:      []string{user.Email},
+		Subject: models.SubjectEmailVerify,
+		Message: models.GenerateMessageEmailVerify(user.Name, resp.Otp, srv.Cfg.App.OtpExpired),
+	})
+	if err != nil {
+		srv.Logger.Errorf("%v error send email: %v", opName, err)
+		return nil, err
+	}
 
+	srv.RepoCache.CreateCache(ctx, models.GenerateKeyCacheOtp(userID, resp.RequestID), []byte(resp.Otp), srv.Cfg.App.OtpExpired)
 	resp.Otp = ""
 	return &resp, nil
 }

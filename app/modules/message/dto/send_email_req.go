@@ -35,6 +35,11 @@ func (m *SendEmailReq) Validate() error {
 		return helpers.ErrIsRequired("Pesan Surat", "Message Mail")
 	}
 
+	m.From = strings.TrimSpace(m.From)
+	if len(m.From) == 0 {
+		return helpers.ErrIsRequired("Pengirim", "From")
+	}
+
 	m.Body = "From: " + m.From + "\n" +
 		"To: " + strings.Join(m.To, ",") + "\n" +
 		"Cc: " + strings.Join(m.Cc, ",") + "\n" +

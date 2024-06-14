@@ -1,10 +1,7 @@
 package delivery
 
 import (
-	"net/http"
-
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,5 +11,4 @@ func (c *msgDelivery) Consume(ctx *gin.Context) {
 			go c.consumeRabbitMQ(v)
 		}
 	}
-	helpers.RenderJSON(ctx.Writer, http.StatusOK, "Request Success")
 }

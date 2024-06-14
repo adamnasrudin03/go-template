@@ -23,3 +23,11 @@ func ErrCreatedDB() *ResponseError {
 			EN: "An error occurred while creating db",
 		}))
 }
+
+func ErrFailedSendEmail() *ResponseError {
+	return NewError(ErrDatabase, NewResponseMultiLang(
+		MultiLanguages{
+			ID: "Gagal mengirim surel",
+			EN: "Failed to send email",
+		}))
+}

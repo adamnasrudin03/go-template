@@ -9,6 +9,7 @@ import (
 // and sets the status code of the response to statusCode. It returns an error
 // if there was an error during the operation.
 func WriteJSON(w http.ResponseWriter, statusCode int, v interface{}) error {
+	defer PanicRecover("helpers-WriteJSON")
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
 	d, err := json.Marshal(v)

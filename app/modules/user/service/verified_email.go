@@ -44,13 +44,22 @@ func (srv *UserSrv) VerifiedEmail(ctx context.Context, req *dto.VerifyOtpReq) (e
 	}
 
 	now := time.Now()
-	user.EmailVerifiedAt = &now
-	err = srv.Repo.UpdateSpecificField(ctx, models.User{ID: user.ID, EmailVerifiedAt: &now})
+	err = srv.Repo.UpdateSpecificField(ctx, models.User{
+		ID:              user.ID,
+		EmailVerifiedAt: &now,
+		DefaultModel:    models.DefaultModel{UpdatedBy: req.UserID}})
 	if err != nil {
 		srv.Logger.Errorf("%v error update data: %v", opName, err)
 		return helpers.ErrUpdatedDB()
 	}
 
-	go srv.RepoCache.CreateCache(context.Background(), keyUser, user, time.Minute*5)
+	user.EmailVerifiedAt = &now
+	user.UpdatedBy = req.UserID
+	go func(usr models.User, params dto.VerifyOtpReq) {
+		newCtx := context.Background()
+		srv.RepoCache.DelCache(newCtx, models.GenerateKeyCacheOtp(req.UserID, req.RequestID))
+		srv.RepoCache.CreateCache(newCtx, models.GenerateKeyCacheUserDetail(usr.ID), usr, time.Minute*5)
+	}(*user, *req)
+
 	return nil
 }

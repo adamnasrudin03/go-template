@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -34,4 +35,21 @@ func StartDateString(t string) time.Time {
 // it will return ex 2009-11-10 23:59:59
 func EndDateString(t string) time.Time {
 	return StartDateString(t).Add(23 * time.Hour).Add(59 * time.Minute).Add(59 * time.Second)
+}
+
+func ConvertDurationToString(d time.Duration) string {
+	res := ""
+	if d.Hours() > 0 {
+		res = res + fmt.Sprintf("%v hours ", d.Hours())
+	}
+
+	if d.Minutes() > 0 {
+		res = res + fmt.Sprintf("%v minutes ", d.Minutes())
+	}
+
+	if d.Seconds() > 0 {
+		res = res + fmt.Sprintf("%v seconds ", d.Seconds())
+	}
+
+	return res
 }

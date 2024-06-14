@@ -14,10 +14,7 @@ func (r *messageRepo) SendEmail(ctx context.Context, params dto.SendEmailReq) (e
 	const opName = "MessageRepository-SendEmail"
 	defer helpers.PanicRecover(opName)
 
-	if params.From == "" {
-		params.From = r.Cfg.Email.Sender
-	}
-
+	params.From = r.Cfg.Email.Sender
 	err = params.Validate()
 	if err != nil {
 		r.Logger.Errorf("%v error validate: %v ", opName, err)
@@ -26,14 +23,11 @@ func (r *messageRepo) SendEmail(ctx context.Context, params dto.SendEmailReq) (e
 
 	addr := fmt.Sprintf("%v:%v", r.Cfg.Email.Host, r.Cfg.Email.Port)
 	auth := smtp.PlainAuth("", r.Cfg.Email.AuthEmail, r.Cfg.Email.AuthPassword, r.Cfg.Email.Host)
-
 	err = smtp.SendMail(addr, auth, r.Cfg.Email.AuthEmail, append(params.To, params.Cc...), []byte(params.Body))
-
 	if err != nil {
 		r.Logger.Errorf("%v error: %v ", opName, err)
-		return helpers.ErrDB()
+		return helpers.ErrFailedSendEmail()
 	}
 
-	r.Logger.Infof("%v success send email to %v", opName, params.To)
 	return nil
 }

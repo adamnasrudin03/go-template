@@ -37,6 +37,8 @@ func defaultTargetLang(s string) string {
 }
 
 func Translate(source, sourceLang, targetLang string) (string, error) {
+	defer PanicRecover("helpers-Translate")
+
 	var (
 		translation []interface{}
 		text        []string

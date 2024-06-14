@@ -19,7 +19,7 @@ type User struct {
 	Role            string     `json:"role" gorm:"not null;default:'USER'"`
 	Username        string     `json:"username" gorm:"not null;uniqueIndex"`
 	Email           string     `json:"email" gorm:"not null;uniqueIndex"`
-	EmailVerifiedAt *time.Time `json:"email_verified_at"  gorm:"null"`
+	EmailVerifiedAt *time.Time `json:"email_verified_at"  gorm:"null; default:null"`
 	Password        string     `json:"password,omitempty" gorm:"not null"`
 	Salt            string     `json:"salt,omitempty" gorm:"not null"`
 	DefaultModel
