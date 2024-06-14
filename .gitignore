@@ -27,3 +27,4 @@ db/
 .vscode
 __debug*
 coverage.txt
+logrus.log
