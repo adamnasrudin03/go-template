@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/adamnasrudin03/go-template/app/configs"
@@ -11,18 +12,9 @@ import (
 	"github.com/adamnasrudin03/go-template/pkg/driver"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 
 	"gorm.io/gorm"
-)
-
-var (
-	cfg                  = configs.GetInstance()
-	logger               = driver.Logger(cfg)
-	cache                = driver.Redis(cfg)
-	db          *gorm.DB = database.SetupDbConnection()
-	repo                 = registry.WiringRepository(db, &cache, cfg, logger)
-	services             = registry.WiringService(repo, &cache, cfg, logger)
-	controllers          = registry.WiringDelivery(services, cfg, logger)
 )
 
 func init() {
@@ -31,6 +23,20 @@ func init() {
 }
 
 func main() {
+	if err := godotenv.Load(); err != nil {
+		log.Fatalln("Failed to load env file")
+	}
+
+	var (
+		cfg                  = configs.GetInstance()
+		logger               = driver.Logger(cfg)
+		cache                = driver.Redis(cfg)
+		db          *gorm.DB = database.SetupDbConnection()
+		repo                 = registry.WiringRepository(db, &cache, cfg, logger)
+		services             = registry.WiringService(repo, &cache, cfg, logger)
+		controllers          = registry.WiringDelivery(services, cfg, logger)
+	)
+
 	defer database.CloseDbConnection(db)
 
 	if cfg.App.UseRabbitMQ {
