@@ -83,8 +83,8 @@ services:
       - MAIL_HOST=smtp.gmail.com
       - MAIL_PORT=587  
       - MAIL_AUTH_EMAIL=yourEmail@gmail.com
-      - MAIL_AUTH_PASSWORD="aplicationPassword"
-      - MAIL_SENDER="Admin Go-Template <yourEmail@gmail.com>""
+      - MAIL_AUTH_PASSWORD=
+      - MAIL_SENDER="Admin Go-Template <yourEmail@gmail.com>"
 
 networks:
   my_network:

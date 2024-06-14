@@ -26,7 +26,7 @@ func GetInstance() *Configs {
 
 		configs = &Configs{
 			App: AppConfig{
-				Name:         getEnv("APP_NAME", "movie-festival"),
+				Name:         getEnv("APP_NAME", "go-template"),
 				Env:          getEnv("APP_ENV", "dev"),
 				Port:         getEnv("APP_PORT", "8000"),
 				SecretKey:    getEnv("JWT_SECRET", "MySecretKey"),
@@ -40,7 +40,7 @@ func GetInstance() *Configs {
 				Port:        getEnv("DB_PORT", "5432"),
 				DbName:      getEnv("DB_NAME", "movie_festival_db"),
 				Username:    getEnv("DB_USER", "postgres"),
-				Password:    getEnv("DB_PASS", "postgres"),
+				Password:    getEnv("DB_PASS", ""),
 				DbIsMigrate: getEnv("DB_IS_MIGRATE", "true") == "true",
 			},
 			Redis: RedisConfig{
@@ -58,7 +58,7 @@ func GetInstance() *Configs {
 				Host:     getEnv("RABBIT_HOST", "127.0.0.1"),
 				Port:     GetRabbitPort(),
 				Username: getEnv("RABBIT_USERNAME", "GUEST"),
-				Password: getEnv("RABBIT_PASSWORD", "GUEST"),
+				Password: getEnv("RABBIT_PASSWORD", ""),
 			},
 			Email: EmailConfig{
 				Host:         getEnv("MAIL_HOST", "smtp.gmail.com"),
