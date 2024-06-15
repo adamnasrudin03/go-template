@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "43515ec8-2fdf-42de-b415-3dabac92b7bc",
 		"name": "go-template",
-		"description": "This basic REST API service uses the main features of Golang: user, log, translate message and auth with bearer tokens",
+		"description": "This basic REST API service uses the main features of Golang: user, log, translate message and auth with bearer tokens\n\n[this repository project](https://github.com/adamnasrudin03/go-template?tab=readme-ov-file)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "10619265"
 	},
@@ -200,7 +200,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\": \"Adam admin 1\",\n\t\"username\": \"admin-adam1\",\n\t\"email\": \"admin1@gmail.com\",\n\t\"role\": \"ADMIN\",\n\t\"password\": \"password123\"\n}",
+							"raw": "{\n\t\"name\": \"Adam admin 12\",\n\t\"username\": \"admin-adam12\",\n\t\"email\": \"admin12@gmail.com\",\n\t\"role\": \"ADMIN\",\n\t\"password\": \"password123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -405,7 +405,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"User new\",\n  \"email\": \"user-new1@gmail.com\",\n  \"username\": \"user-new1\",\n  \"password\": \"password123\"\n}",
+							"raw": "{\n  \"name\": \"User new13\",\n  \"email\": \"user-new13@gmail.com\",\n  \"username\": \"user-new13\",\n  \"password\": \"password123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1353,6 +1353,355 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"status\": \"Conflict\",\n    \"code\": 13,\n    \"message\": {\n        \"id\": \"Surel Sudah Terdafar\",\n        \"en\": \"Email Already Registered\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Send verified otp",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token-root}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/users/send-email-verify",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"users",
+								"send-email-verify"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base-url}}/users/send-email-verify",
+									"host": [
+										"{{base-url}}"
+									],
+									"path": [
+										"users",
+										"send-email-verify"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 14 Jun 2024 08:16:01 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "81"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"Success\",\n    \"data\": {\n        \"request_id\": \"019015d1-3cef-7e4d-9588-bbc91f976bef\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Verified Email",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token-root}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"request_id\": \"019019e0-4486-754c-8734-e73f886afb42\",\r\n    \"otp\": \"911395\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/users/verified-email",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"users",
+								"verified-email"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"request_id\": \"019015d1-3cef-7e4d-9588-bbc91f976bef\",\r\n    \"otp\": \"459784\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base-url}}/users/verified-email",
+									"host": [
+										"{{base-url}}"
+									],
+									"path": [
+										"users",
+										"verified-email"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 14 Jun 2024 08:17:41 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "55"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"Success\",\n    \"message\": \"Success Verified Email\"\n}"
+						},
+						{
+							"name": "Invalid Otp",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"request_id\": \"019015d1-3cef-7e4d-9588-bbc91f976bef\",\r\n    \"otp\": \"123456\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base-url}}/users/verified-email",
+									"host": [
+										"{{base-url}}"
+									],
+									"path": [
+										"users",
+										"verified-email"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 14 Jun 2024 08:18:36 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "98"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"Bad Request\",\n    \"code\": 15,\n    \"message\": {\n        \"id\": \"Kode OTP tidak valid\",\n        \"en\": \"Invalid OTP code\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Request reset password",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/users/request-reset-password/:user_id",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"users",
+								"request-reset-password",
+								":user_id"
+							],
+							"variable": [
+								{
+									"key": "user_id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Failed send email",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base-url}}/users/request-reset-password/:user_id",
+									"host": [
+										"{{base-url}}"
+									],
+									"path": [
+										"users",
+										"request-reset-password",
+										":user_id"
+									],
+									"variable": [
+										{
+											"key": "user_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "Unprocessable Entity",
+							"code": 422,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 15 Jun 2024 03:11:43 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "111"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"Unprocessable Entity\",\n    \"code\": 12,\n    \"message\": {\n        \"id\": \"Gagal mengirim surel\",\n        \"en\": \"Failed to send email\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Validate Reset Password",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"request_id\": \"019019e1-1abf-748a-afaa-16431fbe0805\",\r\n    \"otp\": \"230981\",\r\n    \"new_password\": \"rahasia123\",\r\n    \"confirm_password\": \"rahasia123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/users/validate-reset-password/:user_id",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"users",
+								"validate-reset-password",
+								":user_id"
+							],
+							"variable": [
+								{
+									"key": "user_id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"request_id\": \"019019e1-1abf-748a-afaa-16431fbe0805\",\r\n    \"otp\": \"230981\",\r\n    \"new_password\": \"rahasia123\",\r\n    \"confirm_password\": \"rahasia123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base-url}}/users/validate-reset-password/:user_id",
+									"host": [
+										"{{base-url}}"
+									],
+									"path": [
+										"users",
+										"validate-reset-password",
+										":user_id"
+									],
+									"variable": [
+										{
+											"key": "user_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 15 Jun 2024 03:13:26 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "60"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"Success\",\n    \"message\": \"Reset Password Successfully\"\n}"
 						}
 					]
 				}

@@ -48,9 +48,6 @@
 ### Collection Using Postman
 - ./go-template.postman_collection.json
   
-### Collection Using Insomnia
-- ./go-template.insomnia_collection.json
-  
 ### Installation
 - Clone this repo
 
