@@ -22,6 +22,10 @@ func (m *VerifyOtpReq) Validate() (err error) {
 		return helpers.ErrIsRequired("ID Permintaan", "Request ID")
 	}
 
+	if !helpers.IsValidUUID(m.RequestID) {
+		return helpers.ErrInvalidFormat("ID Permintaan", "Request ID")
+	}
+
 	m.Otp = strings.TrimSpace(m.Otp)
 	if len(m.Otp) == 0 {
 		return helpers.ErrIsRequired("Otp", "Otp")

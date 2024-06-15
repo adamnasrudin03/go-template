@@ -55,7 +55,7 @@ func (srv *UserSrv) VerifiedEmail(ctx context.Context, req *dto.VerifyOtpReq) (e
 	user.UpdatedBy = req.UserID
 	go func(usr models.User, params dto.VerifyOtpReq) {
 		newCtx := context.Background()
-		srv.RepoCache.DelCache(newCtx, models.GenerateKeyCacheOtp(req.UserID, req.RequestID))
+		srv.RepoCache.DelCache(newCtx, models.GenerateKeyCacheOtp(params.UserID, params.RequestID))
 		srv.RepoCache.CreateCache(newCtx, models.GenerateKeyCacheUserDetail(usr.ID), usr, time.Minute*5)
 	}(*user, *req)
 
