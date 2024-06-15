@@ -31,13 +31,13 @@ func main() {
 		cfg                  = configs.GetInstance()
 		logger               = driver.Logger(cfg)
 		cache                = driver.Redis(cfg)
-		db          *gorm.DB = database.SetupDbConnection()
+		db          *gorm.DB = database.SetupDbConnection(cfg, logger)
 		repo                 = registry.WiringRepository(db, &cache, cfg, logger)
 		services             = registry.WiringService(repo, &cache, cfg, logger)
 		controllers          = registry.WiringDelivery(services, cfg, logger)
 	)
 
-	defer database.CloseDbConnection(db)
+	defer database.CloseDbConnection(db, logger)
 
 	if cfg.App.UseRabbitMQ {
 		go controllers.Message.Consume(&gin.Context{})

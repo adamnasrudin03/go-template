@@ -9,8 +9,8 @@ import (
 
 	"github.com/adamnasrudin03/go-template/app/configs"
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/pkg/driver"
 	"github.com/adamnasrudin03/go-template/pkg/seeders"
+	"github.com/sirupsen/logrus"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -18,15 +18,13 @@ import (
 )
 
 var (
-	db     *gorm.DB
-	err    error
-	cfg    = configs.GetInstance()
-	logger = driver.Logger(cfg)
-	mu     = &sync.Mutex{}
+	db  *gorm.DB
+	err error
+	mu  = &sync.Mutex{}
 )
 
 // SetupDbConnection is creating a new connection to our database
-func SetupDbConnection() *gorm.DB {
+func SetupDbConnection(cfg *configs.Configs, logger *logrus.Logger) *gorm.DB {
 	mu.Lock()
 	defer mu.Unlock()
 	logLevel := gormLogger.Silent
@@ -89,7 +87,7 @@ func SetupDbConnection() *gorm.DB {
 }
 
 // CloseDbConnection method is closing a connection between your app and your db
-func CloseDbConnection(db *gorm.DB) {
+func CloseDbConnection(db *gorm.DB, logger *logrus.Logger) {
 	dbSQL, err := db.DB()
 	if err != nil {
 		logger.Panicf("Failed to close connection from database, %v", err)

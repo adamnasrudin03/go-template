@@ -14,55 +14,53 @@ var (
 )
 
 func GetInstance() *Configs {
-	if configs == nil {
-		lock.Lock()
+	lock.Lock()
 
-		configs = &Configs{
-			App: AppConfig{
-				Name:         getEnv("APP_NAME", "go-template"),
-				Env:          getEnv("APP_ENV", "dev"),
-				Port:         getEnv("APP_PORT", "8000"),
-				SecretKey:    getEnv("JWT_SECRET", "MySecretKey"),
-				ExpiredToken: GetExpiredToken(),
-				UseRabbitMQ:  UseRabbitMQ(),
-				OtpLength:    GetOtpLength(),
-				OtpExpired:   GetOtpExpired(),
-			},
-			DB: DbConfig{
-				Host:        getEnv("DB_HOST", "127.0.0.1"),
-				Port:        getEnv("DB_PORT", "5432"),
-				DbName:      getEnv("DB_NAME", "movie_festival_db"),
-				Username:    getEnv("DB_USER", "postgres"),
-				Password:    getEnv("DB_PASS", ""),
-				DbIsMigrate: getEnv("DB_IS_MIGRATE", "true") == "true",
-			},
-			Redis: RedisConfig{
-				Host:                getEnv("REDIS_HOST", "127.0.0.1"),
-				Port:                GetRedisPort(),
-				Password:            getEnv("REDIS_PASSWORD", ""),
-				Database:            GetRedisDatabase(),
-				Master:              getEnv("REDIS_MASTER", "master"),
-				PoolSize:            GetRedisPoolSize(),
-				PoolTimeout:         GetRedisPoolTimeout(),
-				MinIdleConn:         GetRedisMinIdleConn(),
-				DefaultCacheTimeOut: GetRedisDefaultCacheTimeOut(),
-			},
-			RabbitMQ: RabbitMQConfig{
-				Host:     getEnv("RABBIT_HOST", "127.0.0.1"),
-				Port:     GetRabbitPort(),
-				Username: getEnv("RABBIT_USERNAME", "GUEST"),
-				Password: getEnv("RABBIT_PASSWORD", ""),
-			},
-			Email: EmailConfig{
-				Host:         getEnv("MAIL_HOST", "smtp.gmail.com"),
-				Port:         GetEmailPort(),
-				AuthEmail:    getEnv("MAIL_AUTH_EMAIL", ""),
-				AuthPassword: getEnv("MAIL_AUTH_PASSWORD", ""),
-				Sender:       getEnv("MAIL_SENDER", ""),
-			},
-		}
-		lock.Unlock()
+	configs = &Configs{
+		App: AppConfig{
+			Name:         getEnv("APP_NAME", "go-template"),
+			Env:          getEnv("APP_ENV", "dev"),
+			Port:         getEnv("APP_PORT", "8000"),
+			SecretKey:    getEnv("JWT_SECRET", "MySecretKey"),
+			ExpiredToken: GetExpiredToken(),
+			UseRabbitMQ:  UseRabbitMQ(),
+			OtpLength:    GetOtpLength(),
+			OtpExpired:   GetOtpExpired(),
+		},
+		DB: DbConfig{
+			Host:        getEnv("DB_HOST", "127.0.0.1"),
+			Port:        getEnv("DB_PORT", "5432"),
+			DbName:      getEnv("DB_NAME", "my_db"),
+			Username:    getEnv("DB_USER", "postgres"),
+			Password:    getEnv("DB_PASS", ""),
+			DbIsMigrate: getEnv("DB_IS_MIGRATE", "true") == "true",
+		},
+		Redis: RedisConfig{
+			Host:                getEnv("REDIS_HOST", "127.0.0.1"),
+			Port:                GetRedisPort(),
+			Password:            getEnv("REDIS_PASSWORD", ""),
+			Database:            GetRedisDatabase(),
+			Master:              getEnv("REDIS_MASTER", "master"),
+			PoolSize:            GetRedisPoolSize(),
+			PoolTimeout:         GetRedisPoolTimeout(),
+			MinIdleConn:         GetRedisMinIdleConn(),
+			DefaultCacheTimeOut: GetRedisDefaultCacheTimeOut(),
+		},
+		RabbitMQ: RabbitMQConfig{
+			Host:     getEnv("RABBIT_HOST", "127.0.0.1"),
+			Port:     GetRabbitPort(),
+			Username: getEnv("RABBIT_USERNAME", "GUEST"),
+			Password: getEnv("RABBIT_PASSWORD", ""),
+		},
+		Email: EmailConfig{
+			Host:         getEnv("MAIL_HOST", "smtp.gmail.com"),
+			Port:         GetEmailPort(),
+			AuthEmail:    getEnv("MAIL_AUTH_EMAIL", ""),
+			AuthPassword: getEnv("MAIL_AUTH_PASSWORD", ""),
+			Sender:       getEnv("MAIL_SENDER", ""),
+		},
 	}
+	lock.Unlock()
 
 	return configs
 }
