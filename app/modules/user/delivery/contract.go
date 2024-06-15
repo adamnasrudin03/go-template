@@ -14,6 +14,8 @@ type UserDelivery interface {
 	GetList(ctx *gin.Context)
 	SendEmailVerify(ctx *gin.Context)
 	VerifiedEmail(ctx *gin.Context)
+	SendEmailResetPass(ctx *gin.Context)
+	ResetPassword(ctx *gin.Context)
 }
 
 type userDelivery struct {

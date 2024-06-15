@@ -68,3 +68,10 @@ func ErrEmailIsVerified() *ResponseError {
 		EN: "Email is already verified",
 	}))
 }
+
+func ErrEmailNotVerified() *ResponseError {
+	return NewError(ErrValidation, NewResponseMultiLang(MultiLanguages{
+		ID: "Email belum terverifikasi",
+		EN: "Email has not been verified",
+	}))
+}

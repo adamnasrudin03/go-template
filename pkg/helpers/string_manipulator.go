@@ -8,6 +8,8 @@ import (
 	"net/mail"
 	"strings"
 	"unicode"
+
+	"github.com/google/uuid"
 )
 
 func PrettyStruct(data interface{}) (string, error) {
@@ -22,6 +24,11 @@ func PrettyStruct(data interface{}) (string, error) {
 // example here: https://go.dev/play/p/j4B4v01Qolw
 func IsValidEmail(email string) bool {
 	_, err := mail.ParseAddress(email)
+	return err == nil
+}
+
+func IsValidUUID(input string) bool {
+	_, err := uuid.Parse(input)
 	return err == nil
 }
 

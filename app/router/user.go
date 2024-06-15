@@ -20,4 +20,10 @@ func (r routes) userRouter(rg *gin.RouterGroup, userDelivery delivery.UserDelive
 		users.GET("/send-email-verify", middlewares.AuthorizationMustBe([]string{}), userDelivery.SendEmailVerify)
 		users.POST("/verified-email", middlewares.AuthorizationMustBe([]string{}), userDelivery.VerifiedEmail)
 	}
+
+	usersNoAuth := rg.Group("/users")
+	{
+		usersNoAuth.GET("/request-reset-password/:id", userDelivery.SendEmailResetPass)
+		usersNoAuth.PATCH("/validate-reset-password/:id", userDelivery.ResetPassword)
+	}
 }

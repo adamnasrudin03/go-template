@@ -15,22 +15,24 @@
 - Deploy using Docker. (See <a href="https://docs.docker.com/desktop/" target="_blank">Docker Installation</a>)
 
 ## Feature
-| Method | Auth | Endpoint                          | Dec                                                                   |
-| ------ | ---- | --------------------------------- | --------------------------------------------------------------------- |
-| GET    | no   | /                                 | Welcome API                                                           |
-| POST   | no   | /api/v1/auth/sign-up              | Register user with role USER                                          |
-| POST   | yes  | /api/v1/root/auth/sign-up         | Register user with role USER or ADMIN, auth with super admin (root)   |
-| POST   | no   | /api/v1/auth/sign-in              | Login                                                                 |
-| PATCH  | yes  | /api/v1/users/:id                 | Update User                                                           |
-| GET    | yes  | /api/v1/users/:id                 | Detail User                                                           |
-| GET    | yes  | /api/v1/users                     | List User, auth only admin or super admin (root)                      |
-| PATCH  | yes  | /api/v1/users/change-password/:id | Change Password                                                       |
-| GET    | yes  | /api/v1/users/send-email-verify   | Send OTP Email verified                                               |
-| POST   | yes  | /api/v1/users/verified-email      | Verified email with otp                                               |
-| GET    | yes  | /api/v1/logs                      | List log activity history                                             |
-| GET    | yes  | /api/v1/logs/download             | Download xlx List log activity history                                |
-| GET    | no   | /api/v1/message/translate/id      | Translate text to language id (indonesia)                             |
-| GET    | no   | /api/v1/message/consumer          | Trigger manual consume queue rabbitMQ                                 |
+| Method | Auth | Endpoint                                   | Dec                                                                   |
+| ------ | ---- | -------------------------------------------| --------------------------------------------------------------------- |
+| GET    | no   | /                                          | Welcome API                                                           |
+| POST   | no   | /api/v1/auth/sign-up                       | Register user with role USER                                          |
+| POST   | yes  | /api/v1/root/auth/sign-up                  | Register user with role USER or ADMIN, auth with super admin (root)   |
+| POST   | no   | /api/v1/auth/sign-in                       | Login                                                                 |
+| PATCH  | yes  | /api/v1/users/:id                          | Update User                                                           |
+| GET    | yes  | /api/v1/users/:id                          | Detail User                                                           |
+| GET    | yes  | /api/v1/users                              | List User, auth only admin or super admin (root)                      |
+| PATCH  | yes  | /api/v1/users/change-password/:id          | Change Password                                                       |
+| GET    | yes  | /api/v1/users/send-email-verify            | Send OTP Email verified                                               |
+| POST   | yes  | /api/v1/users/verified-email               | Verified email with otp                                               |
+| GET    | NO   | /api/v1/users/request-reset-password/:id   | Send OTP Email forgot password                                        |
+| PATCH  | NO   | /api/v1/users/validate-reset-password/:id  | Verified Reset password                                               |
+| GET    | yes  | /api/v1/logs                               | List log activity history                                             |
+| GET    | yes  | /api/v1/logs/download                      | Download xlx List log activity history                                |
+| GET    | no   | /api/v1/message/translate/id               | Translate text to language id (indonesia)                             |
+| GET    | no   | /api/v1/message/consumer                   | Trigger manual consume queue rabbitMQ                                 |
 
 ### Role
 - ROOT  (role super admin) = create a user the first time the project is run, <a href="https://github.com/adamnasrudin03/go-template/blob/main/pkg/seeders/user.go#L14" target="_blank"> check here </a> 
@@ -92,8 +94,9 @@
 
 
 
-<br clear="both"> </br>
 ### Connect with me
   <a href="https://www.linkedin.com/in/adam-nasrudin/" target="_blank">
-    <img src="https://img.shields.io/static/v1?message=LinkedIn&logo=linkedin&label=&color=0077B5&logoColor=white&labelColor=&style=for-the-badge" height="35" alt="linkedin logo"  />
+    <img 
+        src="https://img.shields.io/static/v1?message=LinkedIn&logo=linkedin&label=&color=0077B5&logoColor=white&labelColor=&style=for-the-badge" 
+        height="35" alt="linkedin logo"  />
   </a>

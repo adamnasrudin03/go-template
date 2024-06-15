@@ -21,6 +21,8 @@ type UserService interface {
 	GetList(ctx context.Context, params *dto.ListUserReq) (*helpers.Pagination, error)
 	SendEmailVerify(ctx context.Context, userID uint64) (*dto.VerifyOtpRes, error)
 	VerifiedEmail(ctx context.Context, req *dto.VerifyOtpReq) (err error)
+	SendEmailResetPass(ctx context.Context, userID uint64) (*dto.VerifyOtpRes, error)
+	ResetPassword(ctx context.Context, input *dto.ResetPasswordReq) (err error)
 }
 
 type UserSrv struct {
