@@ -1,11 +1,14 @@
 package configs
 
 import (
+	"log"
 	"os"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/joho/godotenv"
 )
 
 var (
@@ -15,6 +18,11 @@ var (
 
 func GetInstance() *Configs {
 	lock.Lock()
+
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatalf("failed when load environment %s", err.Error())
+	}
 
 	configs = &Configs{
 		App: AppConfig{
