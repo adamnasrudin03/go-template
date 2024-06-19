@@ -18,6 +18,7 @@ var (
 
 func GetInstance() *Configs {
 	lock.Lock()
+	defer lock.Unlock()
 
 	err := godotenv.Load()
 	if err != nil {
@@ -68,7 +69,6 @@ func GetInstance() *Configs {
 			Sender:       getEnv("MAIL_SENDER", ""),
 		},
 	}
-	lock.Unlock()
 
 	return configs
 }
