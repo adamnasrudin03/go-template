@@ -1,5 +1,5 @@
 # go-template
- This basic REST API service uses the main features of Golang: user, log, translate message and auth with bearer tokens.
+ This project is an example of a REST API project using the Go language and the implementation of other tools, such as Auth with JWT, Logger API, Cache, ORM SQL, Message Broker, Export Excel File, OTP Mechanism, Deploy with Docker, Clean Code (smell code checker by CodeScene), Unit Test, and so on.
 
 
 ## Technology Used
