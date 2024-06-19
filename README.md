@@ -1,5 +1,5 @@
 # go-template
- This project is an example of a REST API project using the Go language and the implementation of other tools, such as Auth with JWT, Logger API, Cache, ORM SQL, Message Broker, Export Excel File, OTP Mechanism, Deploy with Docker, Clean Code (smell code checker by CodeScene), Unit Test, and so on.
+ This project is an example of a REST API project using the Go language and the implementation of other tools, such as Auth with JWT, Basic Auth, Logger API, Cache, ORM SQL, Message Broker, Export Excel File, OTP Mechanism, Deploy with Docker, Clean Code (smell code checker by CodeScene), Unit Test, and so on.
 
 
 ## Technology Used
@@ -12,6 +12,7 @@
 - ORM Library using GORM. (See <a href="https://gorm.io/docs/index.html" target="_blank">GORM Guides</a>)
 - Auth using Golang-JWT. (See <a href="https://github.com/golang-jwt/jwt" target="_blank">Golang-JWT Guides</a>)
 - Message Broker using RabbitMQ. (See <a href="https://www.rabbitmq.com/docs/download/" target="_blank">RabbitMQ Installation</a>)
+- Clean Code check using CodeScene. (See <a href="https://marketplace.visualstudio.com/items?itemName=CodeScene.codescene-vscode" target="_blank">CodeScene</a>)
 - Deploy using Docker. (See <a href="https://docs.docker.com/desktop/" target="_blank">Docker Installation</a>)
 
 ## Feature
@@ -31,8 +32,8 @@
 | PATCH  | no   | /api/v1/users/validate-reset-password/:id  | Verified Reset password                                               |
 | GET    | yes  | /api/v1/logs                               | List log activity history                                             |
 | GET    | yes  | /api/v1/logs/download                      | Download xlx List log activity history                                |
-| GET    | no   | /api/v1/message/translate/id               | Translate text to language id (indonesia)                             |
-| GET    | no   | /api/v1/message/consumer                   | Trigger manual consume queue rabbitMQ                                 |
+| GET    | yes  | /api/v1/message/translate/id               | Translate text to language id (indonesia)                             |
+| GET    | yes  | /api/v1/message/consumer                   | Trigger manual consume queue rabbitMQ                                 |
 
 ### Role
 - ROOT  (role super admin) = create a user the first time the project is run, <a href="https://github.com/adamnasrudin03/go-template/blob/main/pkg/seeders/user.go#L14" target="_blank"> check here </a> 

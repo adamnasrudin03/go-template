@@ -11,14 +11,16 @@ type Configs struct {
 }
 
 type AppConfig struct {
-	Name         string        `json:"name"`
-	Env          string        `json:"env"`
-	Port         string        `json:"port"`
-	ExpiredToken int           `json:"expired_token"`
-	SecretKey    string        `json:"secret_key"`
-	UseRabbitMQ  bool          `json:"use_rabbit_mq"`
-	OtpLength    int           `json:"otp_length"`
-	OtpExpired   time.Duration `json:"otp_expired"`
+	Name          string        `json:"name"`
+	Env           string        `json:"env"`
+	Port          string        `json:"port"`
+	ExpiredToken  int           `json:"expired_token"`
+	SecretKey     string        `json:"secret_key"`
+	UseRabbitMQ   bool          `json:"use_rabbit_mq"`
+	OtpLength     int           `json:"otp_length"`
+	OtpExpired    time.Duration `json:"otp_expired"`
+	BasicUsername string        `json:"basic_username"`
+	BasicPassword string        `json:"basic_password"`
 }
 
 type DbConfig struct {

@@ -1979,6 +1979,21 @@
 						"disableCookies": false
 					},
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "user-go-template",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "Secret123",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -1992,7 +2007,76 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "Invalid auth",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base-url}}/message/consumer",
+									"host": [
+										"{{base-url}}"
+									],
+									"path": [
+										"message",
+										"consumer"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 19 Jun 2024 09:02:11 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "93"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"Unauthorized\",\n    \"code\": 11,\n    \"message\": {\n        \"id\": \"Token tidak valid\",\n        \"en\": \"Invalid token\"\n    }\n}"
+						},
+						{
+							"name": "success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base-url}}/message/consumer",
+									"host": [
+										"{{base-url}}"
+									],
+									"path": [
+										"message",
+										"consumer"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 19 Jun 2024 09:02:59 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
 				},
 				{
 					"name": "translate text id",
@@ -2014,6 +2098,21 @@
 						"disableCookies": false
 					},
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "Secret123",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "user-go-template",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -2036,7 +2135,50 @@
 					},
 					"response": [
 						{
-							"name": "success",
+							"name": "Invalid auth",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base-url}}/message/translate/id?original_text=Hello World",
+									"host": [
+										"{{base-url}}"
+									],
+									"path": [
+										"message",
+										"translate",
+										"id"
+									],
+									"query": [
+										{
+											"key": "original_text",
+											"value": "Hello World"
+										}
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 19 Jun 2024 08:57:04 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "93"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"Unauthorized\",\n    \"code\": 11,\n    \"message\": {\n        \"id\": \"Token tidak valid\",\n        \"en\": \"Invalid token\"\n    }\n}"
+						},
+						{
+							"name": "Success",
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
@@ -2068,7 +2210,7 @@
 								},
 								{
 									"key": "Date",
-									"value": "Thu, 06 Jun 2024 07:12:17 GMT"
+									"value": "Wed, 19 Jun 2024 09:01:10 GMT"
 								},
 								{
 									"key": "Content-Length",

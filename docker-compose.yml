@@ -57,6 +57,8 @@ services:
       - APP_PORT=8000
       - JWT_SECRET=MySecretKey
       - EXPIRED_TOKEN=7 # In Days
+      - BASIC_USERNAME=user-go-template
+      - BASIC_PASSWORD=
       - DB_USER=postgres
       - DB_PASS=postgres
       - DB_HOST=localhost # Change IP address

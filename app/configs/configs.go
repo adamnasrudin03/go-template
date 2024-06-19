@@ -19,14 +19,16 @@ func GetInstance() *Configs {
 
 	configs = &Configs{
 		App: AppConfig{
-			Name:         getEnv("APP_NAME", "go-template"),
-			Env:          getEnv("APP_ENV", "dev"),
-			Port:         getEnv("APP_PORT", "8000"),
-			SecretKey:    getEnv("JWT_SECRET", "MySecretKey"),
-			ExpiredToken: GetExpiredToken(),
-			UseRabbitMQ:  UseRabbitMQ(),
-			OtpLength:    GetOtpLength(),
-			OtpExpired:   GetOtpExpired(),
+			Name:          getEnv("APP_NAME", "go-template"),
+			Env:           getEnv("APP_ENV", "dev"),
+			Port:          getEnv("APP_PORT", "8000"),
+			SecretKey:     getEnv("JWT_SECRET", "MySecretKey"),
+			ExpiredToken:  GetExpiredToken(),
+			UseRabbitMQ:   UseRabbitMQ(),
+			OtpLength:     GetOtpLength(),
+			OtpExpired:    GetOtpExpired(),
+			BasicUsername: getEnv("BASIC_USERNAME", "user1"),
+			BasicPassword: getEnv("BASIC_PASSWORD", "Secret123"),
 		},
 		DB: DbConfig{
 			Host:        getEnv("DB_HOST", "127.0.0.1"),
