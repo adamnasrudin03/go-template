@@ -19,21 +19,3 @@ type Pagination struct {
 	Meta Meta
 	Data interface{}
 }
-
-type MultiLanguages struct {
-	ID string `json:"id"`
-	EN string `json:"en"`
-}
-
-func (e *MultiLanguages) Error() string {
-	if e.EN != "" {
-		return e.EN
-	} else if e.ID != "" {
-		return e.ID
-	}
-	return "something went wrong"
-}
-
-func NewResponseMultiLang(languages MultiLanguages) *MultiLanguages {
-	return &languages
-}
