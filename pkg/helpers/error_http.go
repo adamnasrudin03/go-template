@@ -25,11 +25,3 @@ func (m *ResponseErrorHttp) GetMessageEN() string {
 	}
 	return message
 }
-
-func ErrRouteNotFound() *ResponseError {
-	return NewError(ErrNoFound, NewResponseMultiLang(
-		MultiLanguages{
-			ID: "Rute tidak ditemukan",
-			EN: "Route not found",
-		}))
-}

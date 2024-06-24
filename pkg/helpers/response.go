@@ -1,75 +1,51 @@
 package helpers
 
 import (
-	"fmt"
-	"log"
+	"encoding/json"
 	"net/http"
-	"strings"
-
-	"github.com/go-playground/validator/v10"
-	"golang.org/x/text/language"
 )
 
-// StatusMapping maps HTTP status code to a descriptive string.
-// The returned string can be used as the 'status' field in ResponseDefault.
-func StatusMapping(statusCode int) string {
-	mappings := map[int]string{
-		http.StatusOK:                  "Success",
-		http.StatusCreated:             "Created",
-		http.StatusBadRequest:          "Bad Request",
-		http.StatusConflict:            "Conflict",
-		http.StatusUnauthorized:        "Unauthorized",
-		http.StatusForbidden:           "Forbidden",
-		http.StatusNotFound:            "Not Found",
-		http.StatusInternalServerError: "Internal Server Error",
+// WriteJSON writes the JSON representation of v to the response writer w,
+// and sets the status code of the response to statusCode. It returns an error
+// if there was an error during the operation.
+func WriteJSON(w http.ResponseWriter, statusCode int, v interface{}) error {
+	defer PanicRecover("helpers-WriteJSON")
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(statusCode)
+	d, err := json.Marshal(v)
+	if err != nil {
+		return err
 	}
-	status := mappings[statusCode]
-	if status == "" {
-		statusCode = StatusErrorMapping(statusCode)
-		status = mappings[statusCode]
-	}
-
-	status = strings.TrimSpace(status)
-	if status == "" {
-		status = http.StatusText(statusCode)
-	}
-	return status
+	_, err = w.Write(d)
+	return err
 }
 
-// FormatValidationError func which holds errors during user input validation
-func FormatValidationError(err error) error {
-	var (
-		msgIdn  string
-		msgEnUs string
-	)
-
-	for _, e := range err.(validator.ValidationErrors) {
-		if msgEnUs != "" {
-			msgEnUs = fmt.Sprintf("%v, ", strings.TrimSpace(msgEnUs))
-		}
-
-		if e.Tag() == "email" {
-			msgEnUs = msgEnUs + fmt.Sprintf("%v must be type %v", e.Field(), e.Tag())
-		} else {
-			msgEnUs = msgEnUs + fmt.Sprintf("%v is %v %v", e.Field(), e.Tag(), e.Param())
-		}
-
-		if e.Param() != "" && e.Type().Name() == "string" {
-			msgEnUs = msgEnUs + " character"
-		}
-
+func RenderJSON(w http.ResponseWriter, statusCode int, v interface{}) {
+	if val, isErr := v.(error); isErr {
+		statusCode = StatusCodeMapping(statusCode, val)
+		_ = WriteJSON(w, statusCode, val)
+		return
 	}
 
-	msgEnUs = strings.TrimSpace(msgEnUs) + "."
-	langTo := language.Indonesian.String()
-	msgIdn, errTranslate := Translate(msgEnUs, Auto, langTo)
-	if errTranslate != nil {
-		msgIdn = msgEnUs
-		log.Printf("Translate Text %v to %v error: %v \n", Auto, langTo, errTranslate)
+	var resp ResponseDefault
+	switch data := v.(type) {
+	case *Pagination:
+		paginate := data
+		resp = ResponseDefault{
+			Status: StatusMapping(statusCode),
+			Meta:   paginate.Meta,
+			Data:   paginate.Data,
+		}
+	case string:
+		resp = ResponseDefault{
+			Status:  StatusMapping(statusCode),
+			Message: v.(string),
+		}
+	default:
+		resp = ResponseDefault{
+			Status: StatusMapping(statusCode),
+			Data:   data,
+		}
 	}
-
-	return NewError(ErrValidation, NewResponseMultiLang(MultiLanguages{
-		ID: msgIdn,
-		EN: msgEnUs,
-	}))
+	_ = WriteJSON(w, statusCode, resp)
 }

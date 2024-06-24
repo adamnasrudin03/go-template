@@ -1,8 +1,12 @@
 package helpers
 
 import (
+	"fmt"
 	"log"
-	"net/http"
+	"strings"
+
+	"github.com/go-playground/validator/v10"
+	"golang.org/x/text/language"
 )
 
 type ResponseError struct {
@@ -42,32 +46,40 @@ func (e *ResponseError) Error() string {
 	return e.Err.Error()
 }
 
-func StatusErrorMapping(code int) int {
-	statusCode := 0
-	switch code {
-	case int(ErrForbidden):
-		statusCode = http.StatusForbidden
-	case int(ErrUnauthorized):
-		statusCode = http.StatusUnauthorized
-	case int(ErrDatabase):
-		statusCode = http.StatusUnprocessableEntity
-	case int(ErrFromUseCase):
-		statusCode = http.StatusUnprocessableEntity
-	case int(ErrConflict):
-		statusCode = http.StatusConflict
-	case int(ErrValidation):
-		statusCode = http.StatusBadRequest
-	case int(ErrNoFound):
-		statusCode = http.StatusNotFound
-	default:
-		statusCode = http.StatusInternalServerError
+// FormatValidationError func which holds errors during user input validation
+func FormatValidationError(err error) error {
+	var (
+		msgIdn  string
+		msgEnUs string
+	)
+
+	for _, e := range err.(validator.ValidationErrors) {
+		if msgEnUs != "" {
+			msgEnUs = fmt.Sprintf("%v, ", strings.TrimSpace(msgEnUs))
+		}
+
+		if e.Tag() == "email" {
+			msgEnUs = msgEnUs + fmt.Sprintf("%v must be type %v", e.Field(), e.Tag())
+		} else {
+			msgEnUs = msgEnUs + fmt.Sprintf("%v is %v %v", e.Field(), e.Tag(), e.Param())
+		}
+
+		if e.Param() != "" && e.Type().Name() == "string" {
+			msgEnUs = msgEnUs + " character"
+		}
+
 	}
 
-	return statusCode
-}
-
-func PanicRecover(opName string) {
-	if r := recover(); r != nil {
-		log.Printf("%v panic recover: %v \n", opName, r)
+	msgEnUs = strings.TrimSpace(msgEnUs) + "."
+	langTo := language.Indonesian.String()
+	msgIdn, errTranslate := Translate(msgEnUs, Auto, langTo)
+	if errTranslate != nil {
+		msgIdn = msgEnUs
+		log.Printf("Translate Text %v to %v error: %v \n", Auto, langTo, errTranslate)
 	}
+
+	return NewError(ErrValidation, NewResponseMultiLang(MultiLanguages{
+		ID: msgIdn,
+		EN: msgEnUs,
+	}))
 }

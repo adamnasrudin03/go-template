@@ -27,11 +27,10 @@ func ErrDataNotFound(id, en string) *ResponseError {
 }
 
 func ErrNotAccess() *ResponseError {
-	errMsg := MultiLanguages{
+	return NewError(ErrForbidden, NewResponseMultiLang(MultiLanguages{
 		ID: "Tidak ada akses untuk data ini",
 		EN: "You don't have access to this data",
-	}
-	return NewError(ErrForbidden, NewResponseMultiLang(errMsg))
+	}))
 }
 
 func ErrUnmarshalJSON() *ResponseError {
@@ -41,37 +40,30 @@ func ErrUnmarshalJSON() *ResponseError {
 	}))
 }
 
-func ErrOtpExpired() *ResponseError {
-	return NewError(ErrValidation, NewResponseMultiLang(MultiLanguages{
-		ID: "Kode OTP sudah kedaluwarsa",
-		EN: "OTP code has expired",
-	}))
-}
-
-func ErrGenerateOtp() *ResponseError {
+func ErrFailedTranslateText() *ResponseError {
 	return NewError(ErrUnknown, NewResponseMultiLang(MultiLanguages{
-		ID: "Gagal membuat kode OTP",
-		EN: "Failed to generate OTP code",
+		ID: "Gagal menerjemahkan teks",
+		EN: "Failed to translate text",
 	}))
 }
 
-func ErrOtpInvalid() *ResponseError {
-	return NewError(ErrValidation, NewResponseMultiLang(MultiLanguages{
-		ID: "Kode OTP tidak valid",
-		EN: "Invalid OTP code",
+func ErrRouteNotFound() *ResponseError {
+	return NewError(ErrNoFound, NewResponseMultiLang(MultiLanguages{
+		ID: "Rute tidak ditemukan",
+		EN: "Route not found",
 	}))
 }
-
-func ErrEmailIsVerified() *ResponseError {
-	return NewError(ErrValidation, NewResponseMultiLang(MultiLanguages{
-		ID: "Email sudah terverifikasi",
-		EN: "Email is already verified",
-	}))
+func ErrGetRequest() *ResponseError {
+	return NewError(ErrValidation, NewResponseMultiLang(
+		MultiLanguages{
+			ID: "Gagal membaca request data",
+			EN: "Failed to parse data",
+		}))
 }
 
-func ErrEmailNotVerified() *ResponseError {
+func ErrCannotUpdateData() *ResponseError {
 	return NewError(ErrValidation, NewResponseMultiLang(MultiLanguages{
-		ID: "Email belum terverifikasi",
-		EN: "Email has not been verified",
+		ID: "Tidak diperbolehkan mengubah data",
+		EN: "Changing data is not allowed",
 	}))
 }

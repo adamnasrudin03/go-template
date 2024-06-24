@@ -14,10 +14,8 @@ func ErrInvalid(id, en string) *ResponseError {
 }
 
 func ErrInvalidFormat(id, en string) *ResponseError {
-	errMsg := MultiLanguages{
+	return NewError(ErrValidation, NewResponseMultiLang(MultiLanguages{
 		ID: fmt.Sprintf("Format %s tidak valid", id),
 		EN: fmt.Sprintf("Invalid %s format", en),
-	}
-
-	return NewError(ErrValidation, NewResponseMultiLang(errMsg))
+	}))
 }
