@@ -30,19 +30,23 @@ func StatusErrorMapping(code int) int {
 }
 
 // StatusMapping maps HTTP status code to a descriptive string.
-// The returned string can be used as the 'status' field in ResponseDefault.
+// It returns the descriptive string that can be used as the 'status' field in ResponseDefault.
 func StatusMapping(statusCode int) string {
-	mappingsCustomStatus := map[int]string{ // status custom not following standard http status code text
+	// Custom status codes that are not following standard HTTP status code text
+	mappingsCustomStatus := map[int]string{
 		http.StatusOK: "Success",
 	}
-	status := ""
-	if statusCode >= 200 && statusCode < 300 {
-		status = mappingsCustomStatus[statusCode]
-		if status == "" {
-			status = http.StatusText(statusCode)
-		}
+
+	// Get the descriptive string for the custom status code
+	status := mappingsCustomStatus[statusCode]
+
+	// If the status code is not a custom status, get the standard descriptive string for the status code
+	if status == "" {
+		status = http.StatusText(statusCode)
 	}
 
+	// If the standard descriptive string is empty, the status code is not a standard HTTP status code
+	// Map the status code to a HTTP status code for error responses and get the descriptive string for the error status code
 	if status == "" {
 		statusCode = StatusErrorMapping(statusCode)
 		status = http.StatusText(statusCode)
