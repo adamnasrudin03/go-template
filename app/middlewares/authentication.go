@@ -22,7 +22,7 @@ var (
 
 func Authentication() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		claims, err := helpers.VerifyToken(c)
+		claims, err := VerifyToken(c)
 		if err != nil {
 			helpers.RenderJSON(c.Writer, http.StatusUnauthorized, err)
 			c.Abort()

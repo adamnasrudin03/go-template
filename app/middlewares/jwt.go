@@ -1,13 +1,11 @@
-package helpers
+package middlewares
 
 import (
 	"fmt"
-	"log"
 	"strings"
 	"time"
 
-	"github.com/adamnasrudin03/go-template/app/configs"
-
+	"github.com/adamnasrudin03/go-template/pkg/helpers"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 )
@@ -20,8 +18,6 @@ type JWTClaims struct {
 	Email    string `json:"email"`
 	jwt.StandardClaims
 }
-
-var cfg = configs.GetInstance()
 
 func GenerateToken(params JWTClaims) (string, error) {
 	now := time.Now().Unix()
@@ -44,9 +40,9 @@ func GenerateToken(params JWTClaims) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := token.SignedString([]byte(cfg.App.SecretKey))
 	if err != nil {
-		log.Printf("failed generate token: %v \n", err)
-		err = NewError(ErrUnauthorized, NewResponseMultiLang(
-			MultiLanguages{
+		logger.Errorf("failed generate token: %v", err)
+		err = helpers.NewError(helpers.ErrUnauthorized, helpers.NewResponseMultiLang(
+			helpers.MultiLanguages{
 				ID: "Gagal melakukan signed token string",
 				EN: "Failed to get signed token string",
 			},
@@ -62,8 +58,8 @@ func ExtractToken(ctx *gin.Context) (tokenString string, err error) {
 	bearer := strings.HasPrefix(headerToken, "Bearer")
 
 	if !bearer {
-		err = NewError(ErrUnauthorized, NewResponseMultiLang(
-			MultiLanguages{
+		err = helpers.NewError(helpers.ErrUnauthorized, helpers.NewResponseMultiLang(
+			helpers.MultiLanguages{
 				ID: "Bearer token tidak ditemukan",
 				EN: "Bearer token not found",
 			},
@@ -72,8 +68,8 @@ func ExtractToken(ctx *gin.Context) (tokenString string, err error) {
 	}
 
 	if len(headerToken) <= 7 {
-		err = NewError(ErrUnauthorized, NewResponseMultiLang(
-			MultiLanguages{
+		err = helpers.NewError(helpers.ErrUnauthorized, helpers.NewResponseMultiLang(
+			helpers.MultiLanguages{
 				ID: "Token tidak ditemukan",
 				EN: "Token not found",
 			},
@@ -92,9 +88,9 @@ func VerifyToken(ctx *gin.Context) (interface{}, error) {
 
 	token, err := jwt.ParseWithClaims(tokenString, &JWTClaims{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			log.Printf("failed unexpected signing method : %v \n", err)
-			err = NewError(ErrUnauthorized, NewResponseMultiLang(
-				MultiLanguages{
+			logger.Errorf("failed unexpected signing method : %v", err)
+			err = helpers.NewError(helpers.ErrUnauthorized, helpers.NewResponseMultiLang(
+				helpers.MultiLanguages{
 					ID: fmt.Sprintf("metode penandatanganan yang tidak terduga: %v", token.Header["alg"]),
 					EN: fmt.Sprintf("unexpected signing method: %v", token.Header["alg"]),
 				},
@@ -113,8 +109,8 @@ func VerifyToken(ctx *gin.Context) (interface{}, error) {
 
 	claims, ok := token.Claims.(*JWTClaims)
 	if !ok {
-		err = NewError(ErrUnauthorized, NewResponseMultiLang(
-			MultiLanguages{
+		err = helpers.NewError(helpers.ErrUnauthorized, helpers.NewResponseMultiLang(
+			helpers.MultiLanguages{
 				ID: "Gagal melakukan parse claims",
 				EN: "Failed to parse claims",
 			},
@@ -141,27 +137,27 @@ func extractErrorJwtValidation(err error, tokenString string) error {
 	if ve, ok := err.(*jwt.ValidationError); ok {
 		var errorCustom error
 		msgErr := err.Error()
-		msgErrID, errTrs := Translate(err.Error(), Auto, LangID)
+		msgErrID, errTrs := helpers.Translate(err.Error(), helpers.Auto, helpers.LangID)
 		if errTrs != nil || msgErrID == "" {
 			msgErrID = msgErr
 		}
 
-		errorCustom = NewError(ErrUnauthorized, NewResponseMultiLang(
-			MultiLanguages{
+		errorCustom = helpers.NewError(helpers.ErrUnauthorized, helpers.NewResponseMultiLang(
+			helpers.MultiLanguages{
 				ID: fmt.Sprintf("Gagal melakukan parsing token, Error: %s", msgErrID),
 				EN: fmt.Sprintf("Failed to parse token, Error: %s", msgErr),
 			},
 		))
 		if ve.Errors&jwt.ValidationErrorMalformed != 0 {
-			errorCustom = NewError(ErrUnauthorized, NewResponseMultiLang(
-				MultiLanguages{
+			errorCustom = helpers.NewError(helpers.ErrUnauthorized, helpers.NewResponseMultiLang(
+				helpers.MultiLanguages{
 					ID: fmt.Sprintf("Format token tidak benar: %s ", tokenString),
 					EN: fmt.Sprintf("Invalid token format: %s", tokenString),
 				},
 			))
 		} else if ve.Errors&(jwt.ValidationErrorExpired|jwt.ValidationErrorNotValidYet) != 0 {
-			errorCustom = NewError(ErrUnauthorized, NewResponseMultiLang(
-				MultiLanguages{
+			errorCustom = helpers.NewError(helpers.ErrUnauthorized, helpers.NewResponseMultiLang(
+				helpers.MultiLanguages{
 					ID: "Token telah kadaluarsa",
 					EN: "Token has been expired",
 				},
@@ -171,9 +167,9 @@ func extractErrorJwtValidation(err error, tokenString string) error {
 		return errorCustom
 	}
 
-	log.Printf("unknown token error : %v \n", err)
-	err = NewError(ErrUnauthorized, NewResponseMultiLang(
-		MultiLanguages{
+	logger.Errorf("unknown token error : %v", err)
+	err = helpers.NewError(helpers.ErrUnauthorized, helpers.NewResponseMultiLang(
+		helpers.MultiLanguages{
 			ID: "Token tidak benar",
 			EN: "Invalid token",
 		},

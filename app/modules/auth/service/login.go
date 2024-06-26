@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/adamnasrudin03/go-template/app/middlewares"
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/auth/dto"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
@@ -25,7 +26,7 @@ func (srv *AuthSrv) Login(ctx context.Context, input dto.LoginReq) (res *dto.Log
 	}
 
 	res = &dto.LoginRes{}
-	res.Token, err = helpers.GenerateToken(helpers.JWTClaims{
+	res.Token, err = middlewares.GenerateToken(middlewares.JWTClaims{
 		ID:       user.ID,
 		Name:     user.Name,
 		Role:     user.Role,
