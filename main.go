@@ -25,6 +25,7 @@ func init() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatalln("Failed to load env file")
 	}
+
 }
 
 func main() {

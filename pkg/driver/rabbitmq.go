@@ -21,7 +21,7 @@ var (
 
 func (r *RabbitMQ) Publish() {
 
-	conn, ch := ConnectMQ(cfg)
+	conn, ch := ConnectMQ(cfg, "")
 	defer CloseMQ(conn, ch)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -51,7 +51,7 @@ func (r *RabbitMQ) Publish() {
 
 func (r *RabbitMQ) Consume() {
 
-	conn, ch := ConnectMQ(cfg)
+	conn, ch := ConnectMQ(cfg, "")
 	defer CloseMQ(conn, ch)
 
 	msgs, err := ch.Consume(

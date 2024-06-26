@@ -9,7 +9,8 @@ import (
 )
 
 func (srv *MessageSrv) consumeRabbitMQ(queueName string) {
-	conn, ch := driver.ConnectMQ(srv.Cfg)
+	const opName = "MessageService-consumeRabbitMQ"
+	conn, ch := driver.ConnectMQ(srv.Cfg, opName)
 	defer driver.CloseMQ(conn, ch)
 
 	msgs, err := ch.Consume(
@@ -22,7 +23,7 @@ func (srv *MessageSrv) consumeRabbitMQ(queueName string) {
 		nil,                                   // argsW
 	)
 	if err != nil {
-		srv.Logger.Warnf("Failed to consume a queue: %v", err)
+		srv.Logger.Warnf("%s Failed to consume a queue: %v", opName, err)
 		return
 	}
 
@@ -35,13 +36,13 @@ func (srv *MessageSrv) consumeRabbitMQ(queueName string) {
 			case models.QueueInsertLog:
 				srv.createLog(ctx, d, string(d.Body))
 			default:
-				srv.Logger.Warnf("Unknown queue: %s", d.RoutingKey)
+				srv.Logger.Warnf("%s Unknown queue: %s", opName, d.RoutingKey)
 				d.Nack(false, false)
 			}
 		}
 	}()
 
-	srv.Logger.Info("RabbitMQ Waiting for messages. To exit press CTRL+C")
+	srv.Logger.Infof("%s RabbitMQ Waiting for messages. To exit press CTRL+C", opName)
 	<-k
 
 }

@@ -34,22 +34,22 @@ func Redis(config *configs.Configs) RedisClient {
 	return redisClient
 }
 
-func ConnectMQ(config *configs.Configs) (*amqp.Connection, *amqp.Channel) {
+func ConnectMQ(config *configs.Configs, opName string) (*amqp.Connection, *amqp.Channel) {
 	addrs := fmt.Sprintf("amqp://%s:%s@%s:%d", config.RabbitMQ.Username, config.RabbitMQ.Password, config.RabbitMQ.Host, config.RabbitMQ.Port)
 
 	conn, err := amqp.Dial(addrs)
 	if err != nil {
-		logger.Panicf("Failed to connect to RabbitMQ: %v", err)
+		logger.Panicf("%v Failed to connect to RabbitMQ: %v", opName, err)
 		return nil, nil
 	}
 
 	ch, err := conn.Channel()
 	if err != nil {
-		logger.Panicf("Failed to open a channel: %v", err)
+		logger.Panicf("%v Failed to open a channel: %v", opName, err)
 		return nil, nil
 	}
 
-	logger.Info("Connection RabbitMQ Success!")
+	logger.Infof("%v Connection RabbitMQ Success!", opName)
 	return conn, ch
 }
 
