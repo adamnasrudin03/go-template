@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"time"
@@ -11,7 +12,6 @@ import (
 	"github.com/adamnasrudin03/go-template/pkg/database"
 	"github.com/adamnasrudin03/go-template/pkg/driver"
 	"github.com/adamnasrudin03/go-template/pkg/helpers"
-	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 
 	"gorm.io/gorm"
@@ -20,13 +20,14 @@ import (
 func init() {
 	// set timezone local
 	time.Local = helpers.TimeZoneJakarta()
-}
 
-func main() {
+	// load env
 	if err := godotenv.Load(); err != nil {
 		log.Fatalln("Failed to load env file")
 	}
+}
 
+func main() {
 	var (
 		cfg                  = configs.GetInstance()
 		logger               = driver.Logger(cfg)
@@ -40,7 +41,7 @@ func main() {
 	defer database.CloseDbConnection(db, logger)
 
 	if cfg.App.UseRabbitMQ {
-		go controllers.Message.Consume(&gin.Context{})
+		go services.Msg.Consume(context.Background())
 	}
 
 	r := router.NewRoutes(*controllers)

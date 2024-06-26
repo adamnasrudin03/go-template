@@ -22,6 +22,6 @@ func WiringDelivery(srv *Services, cfg *configs.Configs, logger *logrus.Logger) 
 		Auth:    authDelivery.NewAuthDelivery(srv.Auth, logger),
 		User:    userDelivery.NewUserDelivery(srv.User, logger),
 		Log:     logDelivery.NewLogDelivery(srv.Log, logger),
-		Message: messageDelivery.NewMessageDelivery(srv.Msg, srv.Log, cfg, logger),
+		Message: messageDelivery.NewMessageDelivery(srv.Msg, cfg, logger),
 	}
 }

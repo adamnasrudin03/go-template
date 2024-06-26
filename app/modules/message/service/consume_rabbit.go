@@ -1,4 +1,4 @@
-package delivery
+package service
 
 import (
 	"context"
@@ -6,12 +6,10 @@ import (
 
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/pkg/driver"
-	"github.com/rabbitmq/amqp091-go"
 )
 
-func (c *msgDelivery) consumeRabbitMQ(queueName string) {
-
-	conn, ch := driver.ConnectMQ(c.Cfg)
+func (srv *MessageSrv) consumeRabbitMQ(queueName string) {
+	conn, ch := driver.ConnectMQ(srv.Cfg)
 	defer driver.CloseMQ(conn, ch)
 
 	msgs, err := ch.Consume(
@@ -24,7 +22,7 @@ func (c *msgDelivery) consumeRabbitMQ(queueName string) {
 		nil,                                   // argsW
 	)
 	if err != nil {
-		c.Logger.Warnf("Failed to consume a queue: %v", err)
+		srv.Logger.Warnf("Failed to consume a queue: %v", err)
 		return
 	}
 
@@ -35,26 +33,15 @@ func (c *msgDelivery) consumeRabbitMQ(queueName string) {
 		for d := range msgs {
 			switch d.RoutingKey {
 			case models.QueueInsertLog:
-				c.createLog(ctx, d, string(d.Body))
+				srv.createLog(ctx, d, string(d.Body))
 			default:
-				c.Logger.Warnf("Unknown queue: %s", d.RoutingKey)
+				srv.Logger.Warnf("Unknown queue: %s", d.RoutingKey)
 				d.Nack(false, false)
 			}
 		}
 	}()
 
-	c.Logger.Info("RabbitMQ Waiting for messages. To exit press CTRL+C")
+	srv.Logger.Info("RabbitMQ Waiting for messages. To exit press CTRL+C")
 	<-k
 
-}
-
-func (c *msgDelivery) createLog(ctx context.Context, d amqp091.Delivery, message string) {
-	err := c.LogSrv.CreateByMessage(ctx, message)
-	if err != nil {
-		c.Logger.Warnf("Consume queue %s, failed to process	a message: %v", d.RoutingKey, err)
-		d.Nack(false, false)
-	} else {
-		c.Logger.Infof("Consume queue %s, successfully processed:  %s", d.RoutingKey, d.Body)
-		d.Ack(false)
-	}
 }
