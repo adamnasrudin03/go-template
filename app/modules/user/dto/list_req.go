@@ -3,8 +3,9 @@ package dto
 import (
 	"strings"
 
+	help "github.com/adamnasrudin03/go-helpers"
+	response_mapper "github.com/adamnasrudin03/go-helpers/response-mapper/v1"
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
 type ListUserReq struct {
@@ -17,16 +18,16 @@ type ListUserReq struct {
 
 func (m *ListUserReq) Validate() error {
 	m.Search = strings.TrimSpace(m.Search)
-	m.Role = helpers.ToUpper(m.Role)
-	m.SortBy = helpers.ToLower(m.SortBy)
-	m.OrderBy = helpers.ToUpper(m.OrderBy)
+	m.Role = help.ToUpper(m.Role)
+	m.SortBy = help.ToLower(m.SortBy)
+	m.OrderBy = help.ToUpper(m.OrderBy)
 	if len(m.OrderBy) > 0 && !models.IsValidOrderBy[m.OrderBy] {
-		return helpers.ErrInvalid("order_by", "order_by")
+		return response_mapper.ErrInvalid("order_by", "order_by")
 	}
 
 	m.BasedFilter.DefaultQuery()
 
-	m.UserRole = helpers.ToUpper(m.UserRole)
+	m.UserRole = help.ToUpper(m.UserRole)
 	if m.UserRole != models.ROOT {
 		m.NotIncRoleRoot = true
 	}

@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
+	help "github.com/adamnasrudin03/go-helpers"
 	"gorm.io/gorm"
 )
 
@@ -55,7 +55,7 @@ func (m *Log) BeforeCreate(tx *gorm.DB) (err error) {
 }
 
 func (m *Log) ToString() string {
-	temp, err := helpers.SafeJsonMarshal(m)
+	temp, err := help.SafeJsonMarshal(m)
 	if err != nil {
 		log.Printf("models.Log.ToString() error: %v ", err)
 		return ""

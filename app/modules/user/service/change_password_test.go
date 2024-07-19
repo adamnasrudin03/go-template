@@ -5,9 +5,10 @@ import (
 	"testing"
 	"time"
 
+	help "github.com/adamnasrudin03/go-helpers"
+
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -65,7 +66,7 @@ func (srv *UserServiceTestSuite) Test_userService_ChangePassword() {
 					ID:   1,
 					Name: "Hello World",
 				}
-				user.Password, _ = helpers.HashPassword("password123")
+				user.Password, _ = help.HashPassword("password123")
 				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{ID: 1}).Return(&user, nil).Once()
 				srv.repoCache.On("CreateCache", mock.Anything, key, mock.Anything, time.Minute*5).Return(nil).Once()
 
@@ -91,7 +92,7 @@ func (srv *UserServiceTestSuite) Test_userService_ChangePassword() {
 					Name:     "Hello World",
 					Password: input.Password,
 				}
-				user.Password, _ = helpers.HashPassword(user.Password)
+				user.Password, _ = help.HashPassword(user.Password)
 				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{ID: input.ID}).Return(&user, nil).Once()
 				srv.repoCache.On("CreateCache", mock.Anything, key, mock.Anything, time.Minute*5).Return(nil).Once()
 				srv.repo.On("Updates", mock.Anything, mock.Anything).Return(nil, errors.New("invalid update")).Once()
@@ -118,7 +119,7 @@ func (srv *UserServiceTestSuite) Test_userService_ChangePassword() {
 					Name:     "Hello World",
 					Password: input.Password,
 				}
-				user.Password, _ = helpers.HashPassword(user.Password)
+				user.Password, _ = help.HashPassword(user.Password)
 				srv.repo.On("GetDetail", mock.Anything, dto.DetailReq{ID: 1}).Return(&user, nil).Once()
 				srv.repoCache.On("CreateCache", mock.Anything, key, mock.Anything, time.Minute*5).Return(nil).Once()
 				srv.repo.On("Updates", mock.Anything, mock.Anything).Return(&user, nil).Once()

@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"strconv"
 
+	response_mapper "github.com/adamnasrudin03/go-helpers/response-mapper/v1"
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
 	"github.com/gin-gonic/gin"
 )
 
@@ -22,19 +22,19 @@ func (c *userDelivery) ChangePassword(ctx *gin.Context) {
 	ID, err := strconv.ParseUint(ctx.Param("id"), 10, 32)
 	if err != nil {
 		c.Logger.Errorf("%v error parse param: %v ", opName, err)
-		helpers.RenderJSON(ctx.Writer, http.StatusBadRequest, helpers.ErrInvalid("ID Pengguna", "User ID"))
+		response_mapper.RenderJSON(ctx.Writer, http.StatusBadRequest, response_mapper.ErrInvalid("ID Pengguna", "User ID"))
 		return
 	}
 
 	err = ctx.ShouldBindJSON(&input)
 	if err != nil {
 		c.Logger.Errorf("%v error bind json: %v ", opName, err)
-		helpers.RenderJSON(ctx.Writer, http.StatusBadRequest, helpers.ErrGetRequest())
+		response_mapper.RenderJSON(ctx.Writer, http.StatusBadRequest, response_mapper.ErrGetRequest())
 		return
 	}
 
 	if userRole != models.ROOT && userID != ID {
-		helpers.RenderJSON(ctx.Writer, http.StatusForbidden, helpers.ErrCannotHaveAccessUpdateData())
+		response_mapper.RenderJSON(ctx.Writer, http.StatusForbidden, response_mapper.ErrCannotHaveAccessUpdateData())
 		return
 	}
 
@@ -42,9 +42,9 @@ func (c *userDelivery) ChangePassword(ctx *gin.Context) {
 	input.UpdatedBy = userID
 	err = c.Service.ChangePassword(ctx, input)
 	if err != nil {
-		helpers.RenderJSON(ctx.Writer, http.StatusInternalServerError, err)
+		response_mapper.RenderJSON(ctx.Writer, http.StatusInternalServerError, err)
 		return
 	}
 
-	helpers.RenderJSON(ctx.Writer, http.StatusOK, "Password has been changed")
+	response_mapper.RenderJSON(ctx.Writer, http.StatusOK, "Password has been changed")
 }

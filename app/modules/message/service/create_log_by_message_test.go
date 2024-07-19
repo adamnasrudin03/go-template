@@ -4,8 +4,9 @@ import (
 	"testing"
 	"time"
 
+	help "github.com/adamnasrudin03/go-helpers"
+	response_mapper "github.com/adamnasrudin03/go-helpers/response-mapper/v1"
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -20,7 +21,7 @@ func (srv *MessageServiceTestSuite) Test_MessageSrv_CreateByMessage() {
 		UserID:      1,
 		LogDateTime: time.Date(now.Year(), now.Month(), now.Day(), 00, 00, 00, 0, time.UTC),
 	}
-	dtoByte, _ := helpers.SafeJsonMarshal(dto)
+	dtoByte, _ := help.SafeJsonMarshal(dto)
 	inputMessage := string(dtoByte)
 
 	type args struct {
@@ -49,7 +50,7 @@ func (srv *MessageServiceTestSuite) Test_MessageSrv_CreateByMessage() {
 		{
 			name: "err create data to db",
 			mockFunc: func() {
-				srv.repoLog.On("Create", mock.Anything, dto).Return(helpers.ErrCreatedDB()).Once()
+				srv.repoLog.On("Create", mock.Anything, dto).Return(response_mapper.ErrCreatedDB()).Once()
 			},
 			args: args{
 				message: inputMessage,

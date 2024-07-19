@@ -3,8 +3,8 @@ package dto
 import (
 	"strings"
 
+	response_mapper "github.com/adamnasrudin03/go-helpers/response-mapper/v1"
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
 type ListLogReq struct {
@@ -15,13 +15,13 @@ type ListLogReq struct {
 
 func (m *ListLogReq) Validate() error {
 	if m.UserID == 0 {
-		return helpers.ErrIsRequired("ID Pengguna", "User ID")
+		return response_mapper.ErrIsRequired("ID Pengguna", "User ID")
 	}
 
 	m.SortBy = strings.TrimSpace(strings.ToLower(m.SortBy))
 	m.OrderBy = strings.TrimSpace(strings.ToUpper(m.OrderBy))
 	if len(m.OrderBy) > 0 && !models.IsValidOrderBy[m.OrderBy] {
-		return helpers.ErrInvalid("order_by", "order_by")
+		return response_mapper.ErrInvalid("order_by", "order_by")
 	}
 
 	m.BasedFilter.DefaultQuery()

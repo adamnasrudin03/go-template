@@ -6,15 +6,17 @@ import (
 	"net/http"
 	"time"
 
+	help "github.com/adamnasrudin03/go-helpers"
+	response_mapper "github.com/adamnasrudin03/go-helpers/response-mapper/v1"
+
 	"github.com/adamnasrudin03/go-template/app/modules/log/dto"
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
 	"github.com/gin-gonic/gin"
 	"github.com/xuri/excelize/v2"
 )
 
 func (srv *logSrv) Download(ctx *gin.Context, params *dto.ListLogReq) (err error) {
 	opName := "LogService-Download"
-	defer helpers.PanicRecover(opName)
+	defer help.PanicRecover(opName)
 
 	err = params.Validate()
 	if err != nil {
@@ -24,11 +26,11 @@ func (srv *logSrv) Download(ctx *gin.Context, params *dto.ListLogReq) (err error
 	records, err := srv.Repo.GetList(ctx, *params)
 	if err != nil {
 		srv.Logger.Errorf("%v error get records: %v ", opName, err)
-		return helpers.ErrDB()
+		return response_mapper.ErrDB()
 	}
 
 	if len(records) == 0 {
-		return helpers.ErrDataNotFound("Daftar log histori aktifitas pengguna", "List log activity history user")
+		return response_mapper.ErrDataNotFound("Daftar log histori aktifitas pengguna", "List log activity history user")
 	}
 	nameUser := records[0].User.Name
 	emailUser := records[0].User.Email
@@ -75,7 +77,7 @@ func (srv *logSrv) Download(ctx *gin.Context, params *dto.ListLogReq) (err error
 		}
 
 		exportedData := []interface{}{
-			helpers.CheckTimeIsZeroToString(activityTime, helpers.FormatDateTime),
+			help.CheckTimeIsZeroToString(activityTime, help.FormatDateTime),
 			val.Action,
 			val.Name,
 		}

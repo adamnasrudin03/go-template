@@ -3,8 +3,9 @@ package delivery
 import (
 	"net/http"
 
+	help "github.com/adamnasrudin03/go-helpers"
+	response_mapper "github.com/adamnasrudin03/go-helpers/response-mapper/v1"
 	"github.com/adamnasrudin03/go-template/app/modules/message/dto"
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,18 +24,18 @@ func (c *msgDelivery) TranslateLangID(ctx *gin.Context) {
 	}
 
 	if err != nil {
-		helpers.RenderJSON(ctx.Writer, http.StatusBadRequest, helpers.ErrGetRequest())
+		response_mapper.RenderJSON(ctx.Writer, http.StatusBadRequest, response_mapper.ErrGetRequest())
 		return
 	}
 
-	input.TargetLanguage = helpers.LangID
-	text, err := helpers.Translate(input.OriginalText, helpers.Auto, input.TargetLanguage)
+	input.TargetLanguage = help.LangID
+	text, err := help.Translate(input.OriginalText, help.Auto, input.TargetLanguage)
 	if err != nil {
 		c.Logger.Errorf("%v error translate: %v ", opName, err)
-		helpers.RenderJSON(ctx.Writer, http.StatusInternalServerError, helpers.ErrFailedTranslateText())
+		response_mapper.RenderJSON(ctx.Writer, http.StatusInternalServerError, response_mapper.ErrFailedTranslateText())
 		return
 	}
 
 	input.TranslatedText = text
-	helpers.RenderJSON(ctx.Writer, http.StatusOK, input)
+	response_mapper.RenderJSON(ctx.Writer, http.StatusOK, input)
 }

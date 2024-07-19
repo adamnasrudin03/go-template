@@ -3,7 +3,7 @@ package driver
 import (
 	"time"
 
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
+	help "github.com/adamnasrudin03/go-helpers"
 )
 
 func (c *redisCtx) Del(key string) error {
@@ -26,7 +26,7 @@ func (c *redisCtx) Get(key string) (string, error) {
 }
 
 func (c *redisCtx) Set(key string, value interface{}, expDur time.Duration) error {
-	payload, err := helpers.SafeJsonMarshal(value)
+	payload, err := help.SafeJsonMarshal(value)
 	if err != nil {
 		logger.Error(err)
 		return err

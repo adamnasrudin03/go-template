@@ -7,8 +7,8 @@ import (
 
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
 
+	response_mapper "github.com/adamnasrudin03/go-helpers/response-mapper/v1"
 	"github.com/gin-gonic/gin"
 )
 
@@ -27,14 +27,14 @@ func (c *userDelivery) GetDetail(ctx *gin.Context) {
 		tmp, err := strconv.ParseUint(idParam, 10, 32)
 		if err != nil {
 			c.Logger.Errorf("%v error parse param: %v ", opName, err)
-			helpers.RenderJSON(ctx.Writer, http.StatusBadRequest, helpers.ErrInvalid("ID Pengguna", "User ID"))
+			response_mapper.RenderJSON(ctx.Writer, http.StatusBadRequest, response_mapper.ErrInvalid("ID Pengguna", "User ID"))
 			return
 		}
 		ID = tmp
 	}
 
 	if userRole != models.ROOT && userID != ID {
-		helpers.RenderJSON(ctx.Writer, http.StatusForbidden, helpers.ErrCannotHaveAccessResources())
+		response_mapper.RenderJSON(ctx.Writer, http.StatusForbidden, response_mapper.ErrCannotHaveAccessResources())
 		return
 	}
 
@@ -45,9 +45,9 @@ func (c *userDelivery) GetDetail(ctx *gin.Context) {
 
 	if err != nil {
 		c.Logger.Errorf("%v error: %v ", opName, err)
-		helpers.RenderJSON(ctx.Writer, http.StatusInternalServerError, err)
+		response_mapper.RenderJSON(ctx.Writer, http.StatusInternalServerError, err)
 		return
 	}
 
-	helpers.RenderJSON(ctx.Writer, http.StatusOK, res)
+	response_mapper.RenderJSON(ctx.Writer, http.StatusOK, res)
 }

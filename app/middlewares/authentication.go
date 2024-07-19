@@ -5,11 +5,11 @@ import (
 	"net/http"
 	"strings"
 
+	response_mapper "github.com/adamnasrudin03/go-helpers/response-mapper/v1"
 	"github.com/adamnasrudin03/go-template/app/configs"
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/pkg/database"
 	"github.com/adamnasrudin03/go-template/pkg/driver"
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -24,7 +24,7 @@ func Authentication() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		claims, err := VerifyToken(c)
 		if err != nil {
-			helpers.RenderJSON(c.Writer, http.StatusUnauthorized, err)
+			response_mapper.RenderJSON(c.Writer, http.StatusUnauthorized, err)
 			c.Abort()
 			return
 		}
@@ -63,21 +63,21 @@ func authorizationMustBeValidation(c *gin.Context, isRoleValid map[string]bool, 
 
 	err := db.Select("id", "role").Where("id = ? AND email = ?", userID, userEmail).First(&user).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) || user.ID == 0 {
-		err = helpers.NewError(helpers.ErrUnauthorized, helpers.NewResponseMultiLang(
-			helpers.MultiLanguages{
+		err = response_mapper.NewError(response_mapper.ErrUnauthorized, response_mapper.NewResponseMultiLang(
+			response_mapper.MultiLanguages{
 				ID: "Masuk kembali dengan user terdaftar",
 				EN: "Log in again with registered user",
 			},
 		))
-		helpers.RenderJSON(c.Writer, http.StatusUnauthorized, err)
+		response_mapper.RenderJSON(c.Writer, http.StatusUnauthorized, err)
 		c.Abort()
 		return
 	}
 
 	if err != nil {
 		logger.Errorf("Failed to check user log in: %v ", err)
-		helpers.RenderJSON(c.Writer, http.StatusUnauthorized, helpers.NewError(helpers.ErrUnauthorized, helpers.NewResponseMultiLang(
-			helpers.MultiLanguages{
+		response_mapper.RenderJSON(c.Writer, http.StatusUnauthorized, response_mapper.NewError(response_mapper.ErrUnauthorized, response_mapper.NewResponseMultiLang(
+			response_mapper.MultiLanguages{
 				ID: "Gagal mengecek user log in",
 				EN: "Failed to check user log in",
 			},
@@ -87,8 +87,8 @@ func authorizationMustBeValidation(c *gin.Context, isRoleValid map[string]bool, 
 	}
 
 	if !isAllRole && !isRoleValid[user.Role] {
-		err = helpers.ErrCannotHaveAccessResources()
-		helpers.RenderJSON(c.Writer, http.StatusForbidden, err)
+		err = response_mapper.ErrCannotHaveAccessResources()
+		response_mapper.RenderJSON(c.Writer, http.StatusForbidden, err)
 		c.Abort()
 		return
 	}

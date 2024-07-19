@@ -3,7 +3,8 @@ package dto
 import (
 	"strings"
 
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
+	help "github.com/adamnasrudin03/go-helpers"
+	response_mapper "github.com/adamnasrudin03/go-helpers/response-mapper/v1"
 )
 
 type VerifyOtpReq struct {
@@ -14,21 +15,21 @@ type VerifyOtpReq struct {
 
 func (m *VerifyOtpReq) Validate() (err error) {
 	if m.UserID == 0 {
-		return helpers.ErrIsRequired("ID Pengguna", "User ID")
+		return response_mapper.ErrIsRequired("ID Pengguna", "User ID")
 	}
 
 	m.RequestID = strings.TrimSpace(m.RequestID)
 	if len(m.RequestID) == 0 {
-		return helpers.ErrIsRequired("ID Permintaan", "Request ID")
+		return response_mapper.ErrIsRequired("ID Permintaan", "Request ID")
 	}
 
-	if !helpers.IsValidUUID(m.RequestID) {
-		return helpers.ErrInvalidFormat("ID Permintaan", "Request ID")
+	if !help.IsUUID(m.RequestID) {
+		return response_mapper.ErrInvalidFormat("ID Permintaan", "Request ID")
 	}
 
 	m.Otp = strings.TrimSpace(m.Otp)
 	if len(m.Otp) == 0 {
-		return helpers.ErrIsRequired("Otp", "Otp")
+		return response_mapper.ErrIsRequired("Otp", "Otp")
 	}
 
 	return nil

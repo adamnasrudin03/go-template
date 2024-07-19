@@ -4,9 +4,10 @@ import (
 	"context"
 	"errors"
 
+	help "github.com/adamnasrudin03/go-helpers"
+	response_mapper "github.com/adamnasrudin03/go-helpers/response-mapper/v1"
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/auth/dto"
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
 	"gorm.io/gorm"
 )
 
@@ -21,12 +22,12 @@ func (r *AuthRepo) Login(ctx context.Context, input dto.LoginReq) (res *models.U
 		}
 
 		r.Logger.Errorf("%v error get db: %v ", opName, err)
-		return nil, helpers.ErrDB()
+		return nil, response_mapper.ErrDB()
 	}
 
-	if !helpers.PasswordValid(res.Password, input.Password) {
+	if !help.PasswordIsValid(res.Password, input.Password) {
 		r.Logger.Errorf("%v invalid password ", opName)
-		return nil, helpers.ErrInvalid("Kata Sandi", "Password")
+		return nil, response_mapper.ErrInvalid("Kata Sandi", "Password")
 	}
 
 	return res, nil

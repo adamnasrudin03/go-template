@@ -3,8 +3,9 @@ package dto
 import (
 	"strings"
 
+	help "github.com/adamnasrudin03/go-helpers"
+	response_mapper "github.com/adamnasrudin03/go-helpers/response-mapper/v1"
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
 type UpdateReq struct {
@@ -18,17 +19,17 @@ type UpdateReq struct {
 
 func (m *UpdateReq) Validate() error {
 	if m.ID == 0 {
-		return helpers.ErrIsRequired("ID Pengguna", "User ID")
+		return response_mapper.ErrIsRequired("ID Pengguna", "User ID")
 	}
 
 	m.Email = strings.TrimSpace(m.Email)
-	if m.Email != "" && !helpers.IsValidEmail(m.Email) {
-		return helpers.ErrInvalidFormat("Surel", "Email")
+	if m.Email != "" && !help.IsEmail(m.Email) {
+		return response_mapper.ErrInvalidFormat("Surel", "Email")
 	}
 
-	m.Role = helpers.ToUpper(m.Role)
+	m.Role = help.ToUpper(m.Role)
 	if m.Role != "" && !models.IsUserRoleValid[m.Role] {
-		return helpers.ErrInvalidFormat("Peran", "Role")
+		return response_mapper.ErrInvalidFormat("Peran", "Role")
 	}
 
 	if m.UpdatedBy == 0 {
@@ -41,7 +42,7 @@ func (m *UpdateReq) ConvertToUser() models.User {
 	return models.User{
 		ID:       m.ID,
 		Name:     m.Name,
-		Role:     helpers.ToUpper(m.Role),
+		Role:     help.ToUpper(m.Role),
 		Email:    m.Email,
 		Username: m.Username,
 		DefaultModel: models.DefaultModel{

@@ -5,9 +5,10 @@ import (
 	"reflect"
 	"testing"
 
+	help "github.com/adamnasrudin03/go-helpers"
+	response_mapper "github.com/adamnasrudin03/go-helpers/response-mapper/v1"
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -31,7 +32,7 @@ func (srv *UserServiceTestSuite) Test_userService_GetList() {
 		temp := dto.UserRes{
 			ID:        v.ID,
 			Name:      v.Name,
-			Role:      helpers.ToTitle(v.Role),
+			Role:      help.ToTitle(v.Role),
 			Username:  v.Username,
 			Email:     v.Email,
 			CreatedAt: v.CreatedAt,
@@ -44,7 +45,7 @@ func (srv *UserServiceTestSuite) Test_userService_GetList() {
 		name     string
 		params   *dto.ListUserReq
 		mockFunc func(params *dto.ListUserReq)
-		want     *helpers.Pagination
+		want     *response_mapper.Pagination
 		wantErr  bool
 	}{
 		{
@@ -115,8 +116,8 @@ func (srv *UserServiceTestSuite) Test_userService_GetList() {
 
 				srv.repo.On("GetList", mock.Anything, *params).Return(users, nil).Once()
 			},
-			want: &helpers.Pagination{
-				Meta: helpers.Meta{
+			want: &response_mapper.Pagination{
+				Meta: response_mapper.Meta{
 					Page:         1,
 					Limit:        10,
 					TotalRecords: len(records),
@@ -154,8 +155,8 @@ func (srv *UserServiceTestSuite) Test_userService_GetList() {
 					},
 				}, nil).Once()
 			},
-			want: &helpers.Pagination{
-				Meta: helpers.Meta{
+			want: &response_mapper.Pagination{
+				Meta: response_mapper.Meta{
 					Page:         1,
 					Limit:        2,
 					TotalRecords: len(records),

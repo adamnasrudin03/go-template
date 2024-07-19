@@ -3,9 +3,10 @@ package repository
 import (
 	"context"
 
+	response_mapper "github.com/adamnasrudin03/go-helpers/response-mapper/v1"
+
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
 func (r *userRepo) CheckIsDuplicate(ctx context.Context, input dto.DetailReq) (err error) {
@@ -33,8 +34,8 @@ func (r *userRepo) checkIsExistEmail(ctx context.Context, input dto.DetailReq) (
 		checkUser, _ = r.GetDetail(ctx, dto.DetailReq{Columns: "id", NotID: input.NotID, Email: input.Email})
 		if checkUser != nil && checkUser.ID > 0 {
 			r.Logger.Errorf("%v Email has be registered", opName)
-			return helpers.NewError(helpers.ErrConflict, helpers.NewResponseMultiLang(
-				helpers.MultiLanguages{
+			return response_mapper.NewError(response_mapper.ErrConflict, response_mapper.NewResponseMultiLang(
+				response_mapper.MultiLanguages{
 					ID: "Surel Sudah Terdafar",
 					EN: "Email Already Registered",
 				},
@@ -52,8 +53,8 @@ func (r *userRepo) checkIsExistUsername(ctx context.Context, input dto.DetailReq
 		checkUser, _ = r.GetDetail(ctx, dto.DetailReq{Columns: "id", NotID: input.NotID, Username: input.Username})
 		if checkUser != nil && checkUser.ID > 0 {
 			r.Logger.Errorf("%v Username has be registered", opName)
-			return helpers.NewError(helpers.ErrConflict, helpers.NewResponseMultiLang(
-				helpers.MultiLanguages{
+			return response_mapper.NewError(response_mapper.ErrConflict, response_mapper.NewResponseMultiLang(
+				response_mapper.MultiLanguages{
 					ID: "Username Sudah Terdafar",
 					EN: "Username Already Registered",
 				},

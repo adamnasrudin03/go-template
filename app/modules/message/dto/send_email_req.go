@@ -3,7 +3,8 @@ package dto
 import (
 	"strings"
 
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
+	help "github.com/adamnasrudin03/go-helpers"
+	response_mapper "github.com/adamnasrudin03/go-helpers/response-mapper/v1"
 )
 
 type SendEmailReq struct {
@@ -21,7 +22,7 @@ func (m *SendEmailReq) Validate() error {
 		return err
 	}
 	if len(m.To) == 0 {
-		return helpers.ErrIsRequired("Tujuan", "To")
+		return response_mapper.ErrIsRequired("Tujuan", "To")
 	}
 
 	err = m.ValidateCc()
@@ -32,12 +33,12 @@ func (m *SendEmailReq) Validate() error {
 	m.Subject = strings.TrimSpace(m.Subject)
 	m.Message = strings.TrimSpace(m.Message)
 	if len(m.Message) == 0 {
-		return helpers.ErrIsRequired("Pesan Surat", "Message Mail")
+		return response_mapper.ErrIsRequired("Pesan Surat", "Message Mail")
 	}
 
 	m.From = strings.TrimSpace(m.From)
 	if len(m.From) == 0 {
-		return helpers.ErrIsRequired("Pengirim", "From")
+		return response_mapper.ErrIsRequired("Pengirim", "From")
 	}
 
 	m.Body = "From: " + m.From + "\n" +
@@ -57,8 +58,8 @@ func (m *SendEmailReq) ValidateTo() error {
 			continue
 		}
 
-		if !helpers.IsValidEmail(val) {
-			return helpers.ErrInvalidFormat("Tujuan Surel", "To Email")
+		if !help.IsEmail(val) {
+			return response_mapper.ErrInvalidFormat("Tujuan Surel", "To Email")
 		}
 
 		isToExist[val] = true
@@ -79,8 +80,8 @@ func (m *SendEmailReq) ValidateCc() error {
 			continue
 		}
 
-		if !helpers.IsValidEmail(val) {
-			return helpers.ErrInvalidFormat("Cc Surel", "Cc Email")
+		if !help.IsEmail(val) {
+			return response_mapper.ErrInvalidFormat("Cc Surel", "Cc Email")
 		}
 
 		isCcExist[val] = true

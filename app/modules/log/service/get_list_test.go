@@ -5,9 +5,9 @@ import (
 	"reflect"
 	"testing"
 
+	response_mapper "github.com/adamnasrudin03/go-helpers/response-mapper/v1"
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/log/dto"
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -88,7 +88,7 @@ func (srv *LogServiceTestSuite) Test_logSrv_GetList() {
 		name     string
 		mockFunc func()
 		params   *dto.ListLogReq
-		want     *helpers.Pagination
+		want     *response_mapper.Pagination
 		wantErr  bool
 	}{
 		{
@@ -113,7 +113,7 @@ func (srv *LogServiceTestSuite) Test_logSrv_GetList() {
 		{
 			name: "failed get list",
 			mockFunc: func() {
-				srv.repoLog.On("GetList", mock.Anything, *input).Return(nil, helpers.ErrDB()).Once()
+				srv.repoLog.On("GetList", mock.Anything, *input).Return(nil, response_mapper.ErrDB()).Once()
 			},
 			params:  input,
 			want:    nil,
@@ -125,8 +125,8 @@ func (srv *LogServiceTestSuite) Test_logSrv_GetList() {
 				srv.repoLog.On("GetList", mock.Anything, *input).Return(logsLessThanLimit, nil).Once()
 			},
 			params: input,
-			want: &helpers.Pagination{
-				Meta: helpers.Meta{
+			want: &response_mapper.Pagination{
+				Meta: response_mapper.Meta{
 					Page:         input.Page,
 					Limit:        input.Limit,
 					TotalRecords: len(recordsLessThanLimit),
@@ -172,8 +172,8 @@ func (srv *LogServiceTestSuite) Test_logSrv_GetList() {
 				srv.repoLog.On("GetList", mock.Anything, paramsTotal).Return(logs, nil).Once()
 			},
 			params: input,
-			want: &helpers.Pagination{
-				Meta: helpers.Meta{
+			want: &response_mapper.Pagination{
+				Meta: response_mapper.Meta{
 					Page:         input.Page,
 					Limit:        input.Limit,
 					TotalRecords: len(records),

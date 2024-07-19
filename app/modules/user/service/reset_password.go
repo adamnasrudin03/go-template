@@ -4,14 +4,15 @@ import (
 	"context"
 	"time"
 
+	help "github.com/adamnasrudin03/go-helpers"
+	response_mapper "github.com/adamnasrudin03/go-helpers/response-mapper/v1"
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
 func (srv *UserSrv) ResetPassword(ctx context.Context, input *dto.ResetPasswordReq) (err error) {
 	const opName = "UserService-ResetPassword"
-	defer helpers.PanicRecover(opName)
+	defer help.PanicRecover(opName)
 	var (
 		keyUser = models.GenerateKeyCacheUserDetail(input.ID)
 		keyOtp  = models.GenerateKeyCacheForgotPassword(input.ID, input.RequestID)
@@ -32,7 +33,7 @@ func (srv *UserSrv) ResetPassword(ctx context.Context, input *dto.ResetPasswordR
 	}
 
 	if ok := srv.checkEmailIsVerified(*user); !ok {
-		return helpers.ErrEmailNotVerified()
+		return response_mapper.ErrEmailNotVerified()
 	}
 
 	temp := []byte("")
@@ -41,10 +42,10 @@ func (srv *UserSrv) ResetPassword(ctx context.Context, input *dto.ResetPasswordR
 		return err
 	}
 
-	newPass, err := helpers.HashPassword(input.NewPassword)
+	newPass, err := help.HashPassword(input.NewPassword)
 	if err != nil {
 		srv.Logger.Errorf("%v error hash password: %v ", opName, err)
-		return helpers.ErrHashPasswordFailed()
+		return response_mapper.ErrHashPasswordFailed()
 	}
 	user.UpdatedBy = input.UpdatedBy
 	user.Password = newPass
@@ -52,7 +53,7 @@ func (srv *UserSrv) ResetPassword(ctx context.Context, input *dto.ResetPasswordR
 	user, err = srv.Repo.Updates(ctx, *user)
 	if err != nil {
 		srv.Logger.Errorf("%v error: %v ", opName, err)
-		return helpers.ErrUpdatedDB()
+		return response_mapper.ErrUpdatedDB()
 	}
 
 	go func(usr models.User, params dto.ResetPasswordReq) {

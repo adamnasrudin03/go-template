@@ -3,18 +3,19 @@ package service
 import (
 	"context"
 
+	help "github.com/adamnasrudin03/go-helpers"
+	response_mapper "github.com/adamnasrudin03/go-helpers/response-mapper/v1"
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
-func (srv *UserSrv) GetList(ctx context.Context, params *dto.ListUserReq) (*helpers.Pagination, error) {
+func (srv *UserSrv) GetList(ctx context.Context, params *dto.ListUserReq) (*response_mapper.Pagination, error) {
 	var (
 		opName       = "UserService-GetList"
 		records      = []dto.UserRes{}
 		totalRecords = len(records)
 	)
-	defer helpers.PanicRecover(opName)
+	defer help.PanicRecover(opName)
 
 	err := params.Validate()
 	if err != nil {
@@ -24,13 +25,13 @@ func (srv *UserSrv) GetList(ctx context.Context, params *dto.ListUserReq) (*help
 	dataDB, err := srv.Repo.GetList(ctx, *params)
 	if err != nil {
 		srv.Logger.Errorf("%v error get records: %v ", opName, err)
-		return nil, helpers.ErrDB()
+		return nil, response_mapper.ErrDB()
 	}
 
 	records = srv.convertModelsToListResponse(dataDB)
 	totalRecords = len(records)
-	resp := &helpers.Pagination{
-		Meta: helpers.Meta{
+	resp := &response_mapper.Pagination{
+		Meta: response_mapper.Meta{
 			Page:         int(params.Page),
 			Limit:        int(params.Limit),
 			TotalRecords: totalRecords,
@@ -53,7 +54,7 @@ func (srv *UserSrv) GetList(ctx context.Context, params *dto.ListUserReq) (*help
 		totalData, err := srv.Repo.GetList(ctx, *params)
 		if err != nil {
 			srv.Logger.Errorf("%v error get total records: %v ", opName, err)
-			return nil, helpers.ErrDB()
+			return nil, response_mapper.ErrDB()
 		}
 
 		totalRecords = len(totalData)

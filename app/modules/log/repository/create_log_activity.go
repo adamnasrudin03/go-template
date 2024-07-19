@@ -3,14 +3,14 @@ package repository
 import (
 	"context"
 
+	help "github.com/adamnasrudin03/go-helpers"
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/pkg/driver"
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
 func (r *logRepo) CreateLogActivity(ctx context.Context, input models.Log) (err error) {
 	const opName = "LogRepository-CreateLogActivity"
-	defer helpers.PanicRecover(opName)
+	defer help.PanicRecover(opName)
 
 	if r.Cfg.App.UseRabbitMQ {
 		r.Logger.Info("Using insert log activity by rabbitMQ...")

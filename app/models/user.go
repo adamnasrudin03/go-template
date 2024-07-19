@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
-
+	help "github.com/adamnasrudin03/go-helpers"
+	response_mapper "github.com/adamnasrudin03/go-helpers/response-mapper/v1"
 	"gorm.io/gorm"
 )
 
@@ -30,10 +30,10 @@ func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
 		u.Salt = fmt.Sprintf(`%v-%v`, time.Now().Unix(), u.Email)
 	}
 
-	hashedPass, err := helpers.HashPassword(u.Password)
+	hashedPass, err := help.HashPassword(u.Password)
 	if err != nil {
 		log.Printf("failed hash password: %v ", err)
-		return helpers.ErrHashPasswordFailed()
+		return response_mapper.ErrHashPasswordFailed()
 	}
 
 	u.Password = hashedPass
@@ -48,5 +48,5 @@ func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
 func (u *User) ConvertToResponse() {
 	u.Password = ""
 	u.Salt = ""
-	u.Role = strings.ReplaceAll(helpers.ToLower(u.Role), "_", " ")
+	u.Role = strings.ReplaceAll(help.ToLower(u.Role), "_", " ")
 }

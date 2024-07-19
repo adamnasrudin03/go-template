@@ -3,8 +3,9 @@ package dto
 import (
 	"strings"
 
+	help "github.com/adamnasrudin03/go-helpers"
+	response_mapper "github.com/adamnasrudin03/go-helpers/response-mapper/v1"
 	"github.com/adamnasrudin03/go-template/app/models"
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
 type RegisterReq struct {
@@ -19,33 +20,33 @@ type RegisterReq struct {
 
 func (m *RegisterReq) Validate() error {
 	if len(strings.TrimSpace(m.Name)) == 0 {
-		return helpers.ErrIsRequired("Nama", "Name")
+		return response_mapper.ErrIsRequired("Nama", "Name")
 	}
 
 	m.Role = strings.TrimSpace(m.Role)
 	if len(m.Role) == 0 {
-		return helpers.ErrIsRequired("Peran", "Role")
+		return response_mapper.ErrIsRequired("Peran", "Role")
 	}
 	if !models.IsUserRoleValid[m.Role] {
-		return helpers.ErrInvalidFormat("Peran", "Role")
+		return response_mapper.ErrInvalidFormat("Peran", "Role")
 	}
 
 	m.Email = strings.TrimSpace(m.Email)
 	if len(m.Email) == 0 {
-		return helpers.ErrIsRequired("Surel", "Email")
+		return response_mapper.ErrIsRequired("Surel", "Email")
 	}
-	if !helpers.IsValidEmail(m.Email) {
-		return helpers.ErrInvalidFormat("Surel", "Email")
+	if !help.IsEmail(m.Email) {
+		return response_mapper.ErrInvalidFormat("Surel", "Email")
 	}
 
 	m.Password = strings.TrimSpace(m.Password)
 	if len(m.Password) < 4 {
-		return helpers.ErrMinCharacters("Kata Sandi", "Password", "4")
+		return response_mapper.ErrMinCharacters("Kata Sandi", "Password", "4")
 	}
 
 	m.Username = strings.TrimSpace(m.Username)
 	if len(m.Username) < 4 {
-		return helpers.ErrMinCharacters("Nama pengguna", "username", "4")
+		return response_mapper.ErrMinCharacters("Nama pengguna", "username", "4")
 	}
 
 	return nil

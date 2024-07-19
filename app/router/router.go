@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/adamnasrudin03/go-template/app/registry"
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
 
+	response_mapper "github.com/adamnasrudin03/go-helpers/response-mapper/v1"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -25,7 +25,7 @@ func NewRoutes(h registry.Deliveries) routes {
 	r.router.Use(cors.Default())
 
 	r.router.GET("/", func(c *gin.Context) {
-		helpers.RenderJSON(c.Writer, http.StatusOK, "welcome this server")
+		response_mapper.RenderJSON(c.Writer, http.StatusOK, "welcome this server")
 	})
 
 	v1 := r.router.Group("/api/v1")
@@ -40,8 +40,8 @@ func NewRoutes(h registry.Deliveries) routes {
 	// staticFileRoutes.StaticFS("/", http.Dir("public"))
 
 	r.router.NoRoute(func(c *gin.Context) {
-		err = helpers.ErrRouteNotFound()
-		helpers.RenderJSON(c.Writer, http.StatusNotFound, err)
+		err = response_mapper.ErrRouteNotFound()
+		response_mapper.RenderJSON(c.Writer, http.StatusNotFound, err)
 	})
 	return r
 }

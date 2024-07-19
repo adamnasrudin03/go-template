@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
+	help "github.com/adamnasrudin03/go-helpers"
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -163,7 +163,7 @@ func (srv *UserServiceTestSuite) Test_userService_Update() {
 			wantRes: &models.User{
 				ID:       1,
 				Name:     "Hello world",
-				Role:     helpers.ToLower(models.ADMIN),
+				Role:     help.ToLower(models.ADMIN),
 				Email:    "hello-world@email.com",
 				Username: "hello-world",
 				DefaultModel: models.DefaultModel{

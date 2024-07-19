@@ -3,8 +3,8 @@ package delivery
 import (
 	"net/http"
 
+	response_mapper "github.com/adamnasrudin03/go-helpers/response-mapper/v1"
 	"github.com/adamnasrudin03/go-template/app/modules/log/dto"
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
 
 	"github.com/gin-gonic/gin"
 )
@@ -20,7 +20,7 @@ func (c *logDel) GetList(ctx *gin.Context) {
 	err = ctx.ShouldBindQuery(&input)
 	if err != nil {
 		c.Logger.Errorf("%v error bind json: %v ", opName, err)
-		helpers.RenderJSON(ctx.Writer, http.StatusBadRequest, helpers.ErrGetRequest())
+		response_mapper.RenderJSON(ctx.Writer, http.StatusBadRequest, response_mapper.ErrGetRequest())
 		return
 	}
 
@@ -28,9 +28,9 @@ func (c *logDel) GetList(ctx *gin.Context) {
 	res, err := c.Service.GetList(ctx, &input)
 	if err != nil {
 		c.Logger.Errorf("%v error: %v ", opName, err)
-		helpers.RenderJSON(ctx.Writer, http.StatusInternalServerError, err)
+		response_mapper.RenderJSON(ctx.Writer, http.StatusInternalServerError, err)
 		return
 	}
 
-	helpers.RenderJSON(ctx.Writer, http.StatusOK, res)
+	response_mapper.RenderJSON(ctx.Writer, http.StatusOK, res)
 }

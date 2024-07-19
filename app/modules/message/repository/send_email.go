@@ -6,13 +6,14 @@ import (
 
 	"net/smtp"
 
+	help "github.com/adamnasrudin03/go-helpers"
+	response_mapper "github.com/adamnasrudin03/go-helpers/response-mapper/v1"
 	"github.com/adamnasrudin03/go-template/app/modules/message/dto"
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
 func (r *messageRepo) SendEmail(ctx context.Context, params dto.SendEmailReq) (err error) {
 	const opName = "MessageRepository-SendEmail"
-	defer helpers.PanicRecover(opName)
+	defer help.PanicRecover(opName)
 
 	params.From = r.Cfg.Email.Sender
 	err = params.Validate()
@@ -26,7 +27,7 @@ func (r *messageRepo) SendEmail(ctx context.Context, params dto.SendEmailReq) (e
 	err = smtp.SendMail(addr, auth, r.Cfg.Email.AuthEmail, append(params.To, params.Cc...), []byte(params.Body))
 	if err != nil {
 		r.Logger.Errorf("%v error: %v ", opName, err)
-		return helpers.ErrFailedSendEmail()
+		return response_mapper.ErrFailedSendEmail()
 	}
 
 	return nil

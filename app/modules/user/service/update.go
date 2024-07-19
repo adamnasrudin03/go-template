@@ -5,14 +5,15 @@ import (
 	"fmt"
 	"time"
 
+	help "github.com/adamnasrudin03/go-helpers"
+	response_mapper "github.com/adamnasrudin03/go-helpers/response-mapper/v1"
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
 func (srv *UserSrv) Update(ctx context.Context, input dto.UpdateReq) (res *models.User, err error) {
 	const opName = "UserService-Update"
-	defer helpers.PanicRecover(opName)
+	defer help.PanicRecover(opName)
 
 	err = input.Validate()
 	if err != nil {
@@ -37,13 +38,13 @@ func (srv *UserSrv) Update(ctx context.Context, input dto.UpdateReq) (res *model
 	err = srv.Repo.UpdateSpecificField(ctx, input.ConvertToUser())
 	if err != nil {
 		srv.Logger.Errorf("%v error update data: %v", opName, err)
-		return nil, helpers.ErrUpdatedDB()
+		return nil, response_mapper.ErrUpdatedDB()
 	}
 
 	res, err = srv.getDetail(ctx, dto.DetailReq{ID: input.ID})
 	if err != nil {
 		srv.Logger.Errorf("%v error get data: %v", opName, err)
-		return nil, helpers.ErrDB()
+		return nil, response_mapper.ErrDB()
 	}
 
 	res.ConvertToResponse()

@@ -5,15 +5,16 @@ import (
 	"fmt"
 	"time"
 
+	help "github.com/adamnasrudin03/go-helpers"
+	response_mapper "github.com/adamnasrudin03/go-helpers/response-mapper/v1"
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/auth/dto"
 	userDto "github.com/adamnasrudin03/go-template/app/modules/user/dto"
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
 func (srv *AuthSrv) Register(ctx context.Context, input dto.RegisterReq) (res *models.User, err error) {
 	const opName = "AuthService-Register"
-	defer helpers.PanicRecover(opName)
+	defer help.PanicRecover(opName)
 
 	err = input.Validate()
 	if err != nil {
@@ -43,7 +44,7 @@ func (srv *AuthSrv) Register(ctx context.Context, input dto.RegisterReq) (res *m
 	res, err = srv.Repo.Register(ctx, user)
 	if err != nil || res == nil {
 		srv.Logger.Errorf("%v error create data: %v", opName, err)
-		return nil, helpers.ErrCreatedDB()
+		return nil, response_mapper.ErrCreatedDB()
 	}
 
 	res.ConvertToResponse()

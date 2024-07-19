@@ -2,11 +2,13 @@ package service
 
 import (
 	"context"
+	"strconv"
 	"time"
 
+	help "github.com/adamnasrudin03/go-helpers"
+	response_mapper "github.com/adamnasrudin03/go-helpers/response-mapper/v1"
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
 	"github.com/google/uuid"
 )
 
@@ -25,12 +27,12 @@ func (srv *UserSrv) getDetail(ctx context.Context, input dto.DetailReq) (*models
 	res, err = srv.Repo.GetDetail(ctx, input)
 	if err != nil {
 		srv.Logger.Errorf("%v error: %v", opName, err)
-		return nil, helpers.ErrDB()
+		return nil, response_mapper.ErrDB()
 	}
 
 	isExist := res != nil && res.ID > 0
 	if !isExist {
-		return nil, helpers.ErrDataNotFound("Pengguna", "User")
+		return nil, response_mapper.ErrDataNotFound("Pengguna", "User")
 	}
 
 	if input.Columns == "" {
@@ -47,7 +49,7 @@ func (srv *UserSrv) convertModelsToListResponse(data []models.User) []dto.UserRe
 		temp := dto.UserRes{
 			ID:        data[i].ID,
 			Name:      data[i].Name,
-			Role:      helpers.ToTitle(data[i].Role),
+			Role:      help.ToTitle(data[i].Role),
 			Username:  data[i].Username,
 			Email:     data[i].Email,
 			CreatedAt: data[i].CreatedAt,
@@ -64,16 +66,16 @@ func (srv *UserSrv) generateOTP() (resp dto.VerifyOtpRes, err error) {
 	reqID, err := uuid.NewV7()
 	if err != nil {
 		srv.Logger.Errorf("%v error generate uuid: %v", opName, err)
-		return dto.VerifyOtpRes{}, helpers.ErrGenerateOtp()
+		return dto.VerifyOtpRes{}, response_mapper.ErrGenerateOtp()
 	}
 
 	resp = dto.VerifyOtpRes{
 		RequestID: reqID.String(),
-		Otp:       helpers.GenerateRandomNumber(srv.Cfg.App.OtpLength),
+		Otp:       strconv.Itoa(help.GenerateRandomNumber(srv.Cfg.App.OtpLength)),
 	}
 
 	if resp.Otp == "" {
-		return dto.VerifyOtpRes{}, helpers.ErrGenerateOtp()
+		return dto.VerifyOtpRes{}, response_mapper.ErrGenerateOtp()
 	}
 
 	return resp, nil
@@ -82,17 +84,16 @@ func (srv *UserSrv) generateOTP() (resp dto.VerifyOtpRes, err error) {
 func (srv *UserSrv) checkOTP(otp []byte, reqOtp string) error {
 	sourceOtp := string(otp)
 	if sourceOtp == "" {
-		return helpers.ErrOtpExpired()
+		return response_mapper.ErrOtpExpired()
 	}
 
 	if sourceOtp != reqOtp {
-		return helpers.ErrOtpInvalid()
+		return response_mapper.ErrOtpInvalid()
 	}
 
 	return nil
 }
 
 func (srv *UserSrv) checkEmailIsVerified(user models.User) bool {
-	verifiedAt := helpers.CheckTimePointerValue(user.EmailVerifiedAt)
-	return !verifiedAt.IsZero()
+	return !help.CheckTimePointerValue(user.EmailVerifiedAt).IsZero()
 }

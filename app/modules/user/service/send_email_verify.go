@@ -3,15 +3,16 @@ package service
 import (
 	"context"
 
+	help "github.com/adamnasrudin03/go-helpers"
+	response_mapper "github.com/adamnasrudin03/go-helpers/response-mapper/v1"
 	"github.com/adamnasrudin03/go-template/app/models"
 	messageDto "github.com/adamnasrudin03/go-template/app/modules/message/dto"
 	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
 func (srv *UserSrv) SendEmailVerify(ctx context.Context, userID uint64) (*dto.VerifyOtpRes, error) {
 	const opName = "UserService-SendEmailVerify"
-	defer helpers.PanicRecover(opName)
+	defer help.PanicRecover(opName)
 	var (
 		keyUser = models.GenerateKeyCacheUserDetail(userID)
 		user    = new(models.User)
@@ -27,7 +28,7 @@ func (srv *UserSrv) SendEmailVerify(ctx context.Context, userID uint64) (*dto.Ve
 	}
 
 	if ok := srv.checkEmailIsVerified(*user); ok {
-		return nil, helpers.ErrEmailIsVerified()
+		return nil, response_mapper.ErrEmailIsVerified()
 	}
 
 	resp, err := srv.generateOTP()

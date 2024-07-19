@@ -3,7 +3,7 @@ package delivery
 import (
 	"net/http"
 
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
+	response_mapper "github.com/adamnasrudin03/go-helpers/response-mapper/v1"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,9 +17,9 @@ func (c *userDelivery) SendEmailVerify(ctx *gin.Context) {
 	resp, err := c.Service.SendEmailVerify(ctx, userID)
 	if err != nil {
 		c.Logger.Errorf("%v error: %v ", opName, err)
-		helpers.RenderJSON(ctx.Writer, http.StatusInternalServerError, err)
+		response_mapper.RenderJSON(ctx.Writer, http.StatusInternalServerError, err)
 		return
 	}
 
-	helpers.RenderJSON(ctx.Writer, http.StatusOK, resp)
+	response_mapper.RenderJSON(ctx.Writer, http.StatusOK, resp)
 }

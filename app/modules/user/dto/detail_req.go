@@ -3,7 +3,7 @@ package dto
 import (
 	"strings"
 
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
+	response_mapper "github.com/adamnasrudin03/go-helpers/response-mapper/v1"
 )
 
 type DetailReq struct {
@@ -25,8 +25,8 @@ func (m *DetailReq) Validate() error {
 
 	isNotRequired := m.ID == 0 && m.NotID == 0 && m.Email == "" && m.Name == "" && m.Role == "" && m.Username == ""
 	if isNotRequired {
-		return helpers.NewError(helpers.ErrValidation, helpers.NewResponseMultiLang(
-			helpers.MultiLanguages{
+		return response_mapper.NewError(response_mapper.ErrValidation, response_mapper.NewResponseMultiLang(
+			response_mapper.MultiLanguages{
 				ID: "Harap masukkan minimal satu parameter yang diperlukan",
 				EN: "Please provide at least one required parameter",
 			},

@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
+	help "github.com/adamnasrudin03/go-helpers"
 	"github.com/adamnasrudin03/go-template/app/models"
 	"github.com/adamnasrudin03/go-template/app/modules/user/dto"
-	"github.com/adamnasrudin03/go-template/pkg/helpers"
 )
 
 func (srv *UserSrv) GetDetail(ctx context.Context, input dto.DetailReq) (*models.User, error) {
@@ -19,7 +19,7 @@ func (srv *UserSrv) GetDetail(ctx context.Context, input dto.DetailReq) (*models
 	)
 
 	defer func() {
-		helpers.PanicRecover(opName)
+		help.PanicRecover(opName)
 		go func(dataLog dto.DetailReq) {
 			now := time.Now()
 			logData := models.Log{
